@@ -1,0 +1,13 @@
+h1 profile of {{ vm.user.username }}
+h3 First name: {{ vm.user.first_name }}
+h3 Last name: {{ vm.user.last_name }}
+hr
+
+div(ng-show='vm.myProfile')
+  h3 it is your profile
+  a(href='/settings') PROFILE SETTINGS
+  br
+  a(href='/albums') MANAGE ALBUMS
+  br
+hr
+h2 albums & photos list

@@ -4,10 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var passport = require('passport');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var album = require('./routes/album');
+var auth = require('./routes/auth');
 
 var app = express();
 
@@ -22,10 +25,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules'))); //temp
+app.use(session({
+  secret: 'blog',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use('/', routes);
+// middleware to restrict access for unauthorised users
+function requireLogin(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
 app.use('/album', album);
-app.use('/users', users);
+app.use('/users', requireLogin, users);
+app.use('/auth', auth);
+app.use('/', routes); //has to be the last
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

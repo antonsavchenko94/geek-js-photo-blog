@@ -4,16 +4,24 @@ var User = require('../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  User.find({}, function(err, users) {
+    if (err) {
+      console.log(err);
+      next(err);
+    }
+
+    res.send({users: users});
+  });
 });
 
-router.post('/', function(req, res, next) {
-  console.log(req.body);
-  User.create(req.body, function (err, user) {
-    if(err) {
-      return next(err)
+router.get('/:username', function(req, res, next) {
+  User.findOne({username: req.params.username}, '-password', function(err, user) {
+    if (err) {
+      console.log(err);
+      next(err);
     }
-    res.send(user);
+
+    res.send({user: user});
   });
 });
 

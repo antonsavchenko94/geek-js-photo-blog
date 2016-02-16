@@ -1,9 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+// render partial views
+router.get('/partials/:name', function (req, res) {
+  res.render('partials/' + req.params.name);
+});
+
+// render "container page"
+router.get('*', function(req, res, next) {
+  res.render('index');
 });
 
 module.exports = router;
