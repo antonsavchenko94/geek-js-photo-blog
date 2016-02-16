@@ -1,0 +1,4 @@
+h2 Choose user to view his/her profile
+input(ng-model="searchUser" placeholder="Search")
+div(ng-repeat='user in vm.users | filter:searchUser')
+   a(href='/user/{{ user.username }}') {{ user.username }}

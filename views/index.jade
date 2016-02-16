@@ -1,5 +1,23 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 Photoblog
+  div(ng-app='blog')
+    div(ng-controller='AppController')
+      header(ng-show='user')
+        a(href='/') Home
+        br
+        a(href='/user/{{ user.username }}') Profile
+        br
+        a(href='/user') Find user
+        br
+        a(href='/logout') Logout
+      header(ng-hide='user')
+        a(href='/') Home
+        br
+        a(href='/login' ng-hide='user') Login
+        br
+        a(href='/register' ng-hide='user') Register
+      hr
+
+      ng-view
