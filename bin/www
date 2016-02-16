@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('photo_blog:server');
 var http = require('http');
+var mongoose = require('mongoose');
 
 /**
  * Get port from environment and store in Express.
@@ -86,5 +87,62 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  initDB(function () {
+    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
+  });
+  //debug('Listening on ' + bind);
 }
+
+function initDB(callback) {
+  var c = {
+    "MongoDB": {
+      "url": "mongodb://localhost:27017/blog",
+      "poolSize": 5
+    }
+  };
+  var url = c.MongoDB.url;
+  var poolSize = c.MongoDB.poolSize;
+
+  var options = {
+    server: {
+      poolSize: poolSize
+    },
+    replset: {
+      keepAlive: 1
+    }
+  };
+
+  var callbackCalled = false;
+
+  var db = mongoose.connection;
+
+  db.on('error', function (err) {
+    console.error('Error occurred while establishing new MongoDB connection. ' + err);
+  });
+
+  db.on('connected', function() {
+    console.log('Successfully connected to MongoDB on "' + url + '" with pool size: ' + poolSize);
+    if(!callbackCalled) {
+      callbackCalled = true;
+      callback();
+    }
+  });
+
+  db.on('disconnected', function() {
+    console.error('Connection lost or not established with MongoDB on "' + url + '" Reconnecting in 5s.');
+    setTimeout(connect, 5000);
+
+    if(!callbackCalled) {
+      callbackCalled = true;
+      callback();
+    }
+  });
+
+  function connect(){
+    console.log('Try to establish MongoDB connection on "' + url + '" with pool size: ' + poolSize);
+    mongoose.connect(url, options);
+  }
+
+  connect();
+};
