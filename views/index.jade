@@ -7,6 +7,8 @@ block content
       header(ng-show='user')
         a(href='/') Home
         br
+        a(href='/admin' ng-show='user.isAdmin') Admin page
+        br
         a(href='/user/{{ user.username }}') Profile
         br
         a(href='/user') Find user
@@ -15,9 +17,9 @@ block content
       header(ng-hide='user')
         a(href='/') Home
         br
-        a(href='/login' ng-hide='user') Login
+        a(href='/login') Login
         br
-        a(href='/register' ng-hide='user') Register
+        a(href='/register') Register
       hr
 
       ng-view

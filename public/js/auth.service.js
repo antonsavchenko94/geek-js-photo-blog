@@ -9,7 +9,8 @@
         return {
             register: register,
             login: login,
-            logout: logout
+            logout: logout,
+            islogged: islogged
         };
 
         function register(user) {
@@ -25,6 +26,10 @@
         function logout() {
             return $http.get('/auth/logout')
                 .then(removeUser)
+        }
+
+        function islogged() {
+            return $http.get('/auth/islogged');
         }
 
         function saveUser(data) {

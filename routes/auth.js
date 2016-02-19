@@ -5,7 +5,6 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 router.post('/register', function(req, res, next) {
-    console.log(req.body);
     User.create(req.body, function(err, user) {
         if (err) {
             console.log(err);
@@ -21,7 +20,7 @@ passport.use(new LocalStrategy(
         User.findOne({
             username: username,
             password: password
-        }, '-password', function(err, user) {
+        }, function(err, user) {
             if (err) {
                 return done(err);
             }
@@ -40,7 +39,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findOne({_id: id}, '-password', function(err, user) {
+    User.findOne({_id: id}, function(err, user) {
         if (err) {
             return done(err);
         }
@@ -72,6 +71,10 @@ router.post('/login', function(req, res, next) {
 router.get('/logout', function(req, res) {
     req.logOut();
     res.end();
+});
+
+router.get('/islogged', function(req, res) {
+    res.send(req.user ? {user: req.user} : null);
 });
 
 module.exports = router;

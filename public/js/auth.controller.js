@@ -15,17 +15,17 @@
 
         function register() {
             AuthService.register(getUserCredentials())
-                .then(redirectToHome);
+                .then(redirect('/login'));
         }
 
         function login() {
             AuthService.login(getUserCredentials())
-                .then(redirectToHome);
+                .then(redirect('/'));
         }
 
         function logout() {
             AuthService.logout()
-                .then(redirectToHome);
+                .then(redirect('/'));
         }
 
         function getUserCredentials() {
@@ -39,8 +39,8 @@
             return credentials;
         }
 
-        function redirectToHome() {
-            $location.path('/');
+        function redirect(url) {
+            $location.path(url);
         }
     }
 })();
