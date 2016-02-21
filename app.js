@@ -13,6 +13,7 @@ var album = require('./routes/album');
 var auth = require('./routes/auth');
 
 var app = express();
+var COOKIE_MAX_AGE = 1000 * 3600 * 24 * 7; //1 week
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,11 +26,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'node_modules'))); //temp
 app.use(session({
   secret: 'blog',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {maxAge: COOKIE_MAX_AGE}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -61,21 +62,21 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
+    //res.render('error', {
+    //  message: err.message,
+    //  error: err
+    //});
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  //res.status(err.status || 500);
+  //res.render('error', {
+  //  message: err.message,
+  //  error: {}
+  //});
 });
 
 

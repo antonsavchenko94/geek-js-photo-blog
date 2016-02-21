@@ -1,5 +1,7 @@
 h1 Login page.
 br
+div(ng-if="vm.message")
+  span {{ vm.message }}
 
 span Username:
 input(ng-model="vm.newUser.username")

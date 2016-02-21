@@ -3,33 +3,55 @@ var router = express.Router();
 var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
 
 router.post('/register', function(req, res, next) {
-    User.create(req.body, function(err, user) {
-        if (err) {
-            console.log(err);
-            return next(err)
-        }
+    bcrypt.hash(req.body.password, 10, function(error, hash) {
+        req.body.password = hash;
 
-        res.send({success: true});
+        User.create(req.body, function(err, user) {
+            if (err) {
+                if (err.code === 11000) {
+                    res.status(500).send({message: 'This username is already in use.'});
+                } else {
+                    res.status(500).send({message: err.message});
+                }
+
+                return next(err)
+            }
+
+            res.end();
+        });
     });
 });
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
         User.findOne({
-            username: username,
-            password: password
-        }, function(err, user) {
+            username: username
+        }, '+password', function(err, user) {
             if (err) {
                 return done(err);
             }
 
             if (!user) {
-                return done(null, null, {message: 'incorrect username or password'});
+                return done(null, null, {message: 'Incorrect username.'});
             }
 
-            return done(null, user)
+            bcrypt.compare(password, user.password, function (error, isValid) {
+                if (error) {
+                    return error;
+                }
+
+                if (!isValid) {
+                    return done(null, null, {message: 'Incorrect password.'})
+                }
+
+                var User = JSON.parse(JSON.stringify(user));
+                delete User.password;
+
+                return done(null, User)
+            })
         })
     }
 ));
@@ -55,7 +77,7 @@ router.post('/login', function(req, res, next) {
         }
 
         if (!user) {
-            return res.send({message: info.message})
+            return res.status(500).send({message: info.message});
         }
 
         req.logIn(user, function(err) {

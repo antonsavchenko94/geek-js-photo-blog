@@ -6,10 +6,6 @@
     function config($routeProvider, $locationProvider) {
         // with base(href='/') in html allows not to get /#/ in routes
         $locationProvider.html5Mode(true);
-        var role = {
-            user: isUser,
-            admin: isAdmin
-        };
 
         $routeProvider
             .when('/', {
@@ -33,30 +29,18 @@
             .when('/user', {
                 templateUrl: 'partials/users',
                 controller: 'UsersController',
-                controllerAs: 'vm',
-                resolve: {
-                    access: role.user
-                }
+                controllerAs: 'vm'
             })
             .when('/user/:username', {
                 templateUrl: 'partials/profile',
                 controller: 'ProfileController',
-                controllerAs: 'vm',
-                resolve: {
-                    access: role.user
-                }
+                controllerAs: 'vm'
             })
             .when('/settings', {
-                templateUrl: 'partials/settings',
-                resolve: {
-                    access: role.user
-                }
+                templateUrl: 'partials/settings'
             })
             .when('/albums', {
-                templateUrl: 'partials/albums',
-                resolve: {
-                    access: role.user
-                }
+                templateUrl: 'partials/albums'
             })
             // TODO user album&photo pages
             .when('/user/:username/album/:album_id', {
@@ -66,45 +50,11 @@
                 templateUrl: 'partials/photo'
             })
             .when('/admin', {
-                templateUrl: 'partials/admin',
-                resolve: {
-                    access: role.admin
-                }
+                templateUrl: 'partials/admin'
             })
             .otherwise({
                 redirectTo: '/'
             });
-
-        /**
-         * executes before template render
-         * allows render if condition is true, otherwise redirects to login page
-         * @param condition
-         * @param $q returns promise
-         * @param $location performs redirects
-         * @returns {*}
-         */
-        function checkRole(condition, $q, $location) {
-            return $q(function(resolve, reject) {
-                if (condition) {
-                    resolve()
-                } else {
-                    $location.path('/login');
-                    reject()
-                }
-            });
-        }
-
-        function isUser($q, $location, AuthService) {
-            return AuthService.islogged().then(function(data) {
-                    return checkRole(data.data.user, $q, $location)
-                })
-        }
-
-        function isAdmin($q, $location, AuthService) {
-            return AuthService.islogged().then(function(data) {
-                return checkRole(data.data.user.isAdmin, $q, $location)
-            })
-        }
 
         function logout($q, $location, AuthService) {
             return $q(function(resolve, reject) {

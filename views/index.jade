@@ -4,17 +4,17 @@ block content
   h1 Photoblog
   div(ng-app='blog')
     div(ng-controller='AppController')
-      header(ng-show='user')
+      header(ng-if='user')
         a(href='/') Home
-        br
-        a(href='/admin' ng-show='user.isAdmin') Admin page
         br
         a(href='/user/{{ user.username }}') Profile
         br
         a(href='/user') Find user
         br
         a(href='/logout') Logout
-      header(ng-hide='user')
+        br
+        a(href='/admin' ng-if='user.isAdmin') Admin page
+      header(ng-if='!user')
         a(href='/') Home
         br
         a(href='/login') Login
