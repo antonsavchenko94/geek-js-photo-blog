@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 var album = new Schema({
     title:      { type: String, required: true },
     postedBy:   { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    phothos:    [
+    photos:    [
         {
             filename: {type: String, required: true},
             uploaded: {type: Date, required: true},
