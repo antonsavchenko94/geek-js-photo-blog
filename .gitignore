@@ -30,6 +30,7 @@ build/Release
 # node_modules
 .idea
 node_modules/
+bower_components/
 
 # Optional npm cache directory
 .npm

@@ -1,0 +1,23 @@
+{
+  "name": "photo_blog",
+  "description": "",
+  "main": "",
+  "authors": [
+    "antonsavchenko94 <savchenko.inc@gmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ng-table": "^0.8.3",
+    "angular-resource": "^1.5.0",
+    "angular-smart-table": "^2.1.7"
+  }
+}

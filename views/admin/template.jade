@@ -1,0 +1,19 @@
+doctype html
+html(ng-app='blog')
+    head
+        title Thumbnail Gallery - Start Bootstrap Template
+        script(defer=true src='/angular/angular.js')
+        script(defer=true src='/angular-route/angular-route.js')
+        script(defer=true src="/libs/ng-table.min.js")
+        script(defer=true src="/libs/angular-resource.js")
+        link(rel='stylesheet' href="/stylesheets/style.css")
+        //script(defer=true src="/js/admin/app.js")
+        script(defer=true src="/js/admin.controller.js")
+    body
+        nav(class='{{active}}', ng-click='$event.preventDefault()')
+            // When a link in the menu is clicked, we set the active variable
+            a.user(href='#users', ng-click="active='user'") User
+            a.projects(href='#', ng-click="active='projects'") Complaints
+            a.services(href='#', ng-click="active='services'") Services
+            a.contact(href='#', ng-click="active='contact'") Contact
+        block content

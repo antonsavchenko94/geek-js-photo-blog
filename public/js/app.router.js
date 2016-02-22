@@ -6,6 +6,10 @@
     function config($routeProvider, $locationProvider) {
         // with base(href='/') in html allows not to get /#/ in routes
         $locationProvider.html5Mode(true);
+        var role = {
+            user: isUser,
+            admin: isAdmin
+        };
 
         $routeProvider
             .when('/', {
@@ -60,6 +64,12 @@
             })
             .when('/user/:username/album/:album_id/photo/:photo_id', {
                 templateUrl: 'partials/photo'
+            })
+            .when('/admin', {
+                templateUrl: 'admin/index',
+                resolve: {
+                    access: role.admin
+                }
             })
             .otherwise({
                 redirectTo: '/'

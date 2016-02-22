@@ -11,6 +11,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var album = require('./routes/album');
 var auth = require('./routes/auth');
+var admin = require('./routes/admin');
 
 var app = express();
 
@@ -45,6 +46,7 @@ function requireLogin(req, res, next) {
 app.use('/album', album);
 app.use('/users', requireLogin, users);
 app.use('/auth', auth);
+app.use('/admin', admin);
 app.use('/', routes); //has to be the last
 
 // catch 404 and forward to error handler
