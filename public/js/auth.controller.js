@@ -10,37 +10,21 @@
 
         vm.login = login;
         vm.register = register;
-        vm.logout = logout;
         vm.newUser = {};
+        vm.message = '';
 
         function register() {
-            AuthService.register(getUserCredentials())
-                .then(redirectToHome);
+            AuthService.register(vm.newUser)
+                .then(function(message) {
+                    message ? vm.message = message : $location.path('/login');
+                })
         }
 
         function login() {
-            AuthService.login(getUserCredentials())
-                .then(redirectToHome);
-        }
-
-        function logout() {
-            AuthService.logout()
-                .then(redirectToHome);
-        }
-
-        function getUserCredentials() {
-            var credentials = {};
-            for (var key in vm.newUser) {
-                if(vm.newUser.hasOwnProperty(key)) {
-                    credentials[key] = vm.newUser[key];
-                }
-            }
-
-            return credentials;
-        }
-
-        function redirectToHome() {
-            $location.path('/');
+            AuthService.login(vm.newUser)
+                .then(function(message) {
+                    message ? vm.message = message : $location.path('/');
+                })
         }
     }
 })();

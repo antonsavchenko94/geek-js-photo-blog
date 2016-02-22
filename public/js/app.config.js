@@ -33,30 +33,18 @@
             .when('/user', {
                 templateUrl: 'partials/users',
                 controller: 'UsersController',
-                controllerAs: 'vm',
-                resolve: {
-                    access: requireLogin
-                }
+                controllerAs: 'vm'
             })
             .when('/user/:username', {
                 templateUrl: 'partials/profile',
                 controller: 'ProfileController',
-                controllerAs: 'vm',
-                resolve: {
-                    access: requireLogin
-                }
+                controllerAs: 'vm'
             })
             .when('/settings', {
-                templateUrl: 'partials/settings',
-                resolve: {
-                    access: requireLogin
-                }
+                templateUrl: 'partials/settings'
             })
             .when('/albums', {
-                templateUrl: 'partials/albums',
-                resolve: {
-                    access: requireLogin
-                }
+                templateUrl: 'partials/albums'
             })
             // TODO user album&photo pages
             .when('/user/:username/album/:album_id', {
@@ -74,25 +62,6 @@
             .otherwise({
                 redirectTo: '/'
             });
-
-        /**
-         * executes before template render
-         * allows render if user is authenticated, otherwise redirects to login page
-         * @param $rootScope includes authenticated user
-         * @param $q
-         * @param $location performs redirects
-         * @returns {*}
-         */
-        function requireLogin($rootScope, $q, $location) {
-            return $q(function(resolve, reject) {
-                if ($rootScope.user) {
-                    resolve()
-                } else {
-                    $location.path('/login');
-                    reject()
-                }
-            });
-        }
 
         function logout($q, $location, AuthService) {
             return $q(function(resolve, reject) {

@@ -9,22 +9,46 @@
         return {
             register: register,
             login: login,
-            logout: logout
+            logout: logout,
+            islogged: islogged,
+            role: {
+                user: isUser,
+                admin: isAdmin
+            }
         };
 
         function register(user) {
             return $http.post('/auth/register', user)
                 .then(saveUser)
+                .catch(handleError)
         }
 
         function login(user) {
             return $http.post('/auth/login', user)
                 .then(saveUser)
+                .catch(handleError)
         }
 
         function logout() {
-            return $http.get('/auth/logout')
-                .then(removeUser)
+            return $http.get('/auth/logout').then(function() {
+                    $rootScope.user = null;
+                })
+        }
+
+        function islogged() {
+            return $http.get('/auth/islogged');
+        }
+
+        function isUser() {
+            return islogged().then(function(data) {
+                return data.data.user
+            })
+        }
+
+        function isAdmin() {
+            return islogged().then(function(data) {
+                return data.data.user && data.data.user.isAdmin
+            })
         }
 
         function saveUser(data) {
@@ -33,8 +57,8 @@
             }
         }
 
-        function removeUser() {
-            $rootScope.user = null;
+        function handleError(err) {
+            return err.data.message;
         }
     }
 })();

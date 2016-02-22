@@ -19,6 +19,9 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
+/public/lib
+
+
 # node-waf configuration
 .lock-wscript
 
@@ -31,6 +34,7 @@ build/Release
 .idea
 node_modules/
 bower_components/
+
 
 # Optional npm cache directory
 .npm
