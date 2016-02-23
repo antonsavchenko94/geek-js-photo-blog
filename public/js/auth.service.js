@@ -10,7 +10,8 @@
             register: register,
             login: login,
             logout: logout,
-            islogged: islogged,
+            isLogged: isLogged,
+            saveUser: saveUser,
             role: {
                 user: isUser,
                 admin: isAdmin
@@ -35,22 +36,27 @@
                 })
         }
 
-        function islogged() {
+        //returns promise with server response
+        function isLogged() {
             return $http.get('/auth/islogged');
         }
 
+        //returns promise with user if user is logged
         function isUser() {
-            return islogged().then(function(data) {
+            return isLogged().then(function(data) {
                 return data.data.user
             })
         }
 
+        //returns promise with bool(true) if user is logged and is admin
         function isAdmin() {
-            return islogged().then(function(data) {
+            return isLogged().then(function(data) {
                 return data.data.user && data.data.user.isAdmin
             })
         }
 
+        //save to $rootScope to have access to user throughout the app
+        //(mainly for template ng-show/ng-hide)
         function saveUser(data) {
             if (data.data.user) {
                 $rootScope.user = data.data.user;
@@ -58,7 +64,9 @@
         }
 
         function handleError(err) {
-            return err.data.message;
+            if (err.data.message) {
+                return err.data.message;
+            }
         }
     }
 })();
