@@ -1,4 +1,4 @@
-(function() {
+(function () {
     angular
         .module('blog')
         .config(config);
@@ -6,10 +6,6 @@
     function config($routeProvider, $locationProvider) {
         // with base(href='/') in html allows not to get /#/ in routes
         $locationProvider.html5Mode(true);
-        var role = {
-            user: isUser,
-            admin: isAdmin
-        };
 
         $routeProvider
             .when('/', {
@@ -54,17 +50,14 @@
                 templateUrl: 'partials/photo'
             })
             .when('/admin', {
-                templateUrl: 'admin/index',
-                resolve: {
-                    access: role.admin
-                }
+                templateUrl: 'partials/admin'
             })
             .otherwise({
                 redirectTo: '/'
             });
 
         function logout($q, $location, AuthService) {
-            return $q(function(resolve, reject) {
+            return $q(function (resolve, reject) {
                 AuthService.logout();
                 $location.path('/');
                 reject();

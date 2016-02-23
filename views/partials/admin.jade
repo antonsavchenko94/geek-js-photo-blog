@@ -1,1 +1,31 @@
-h1 Admin page
+div
+    nav(class='{{active}}', ng-click='$event.preventDefault()')
+        // When a link in the menu is clicked, we set the active variable
+        a.user(href='#', ng-click="active='user'") User
+        a.projects(href='#', ng-click="active='complaints'") Complaints
+
+    div(ng-if="active == 'user'")
+        div(ng-controller='AdminController')
+            label
+                | Search:
+            br
+            input(ng-model="searchUser")
+            table.usertable
+                tr
+                    th
+                        a Username
+                    th
+                        a Email
+                    th
+                        a Status
+                    th
+                        a Action
+                tr(ng-repeat='user in users | filter:searchUser')
+                    td {{user.username}}
+                    td {{user.email}}
+                    td {{user.status}}
+                    td
+                        img(src="/images/rubbish-bin.png" title="delete user" ng-click="delete(user._id)")
+                        img(src="/images/line.png")
+                        img(ng-if="user.status=='active'" src="/images/ban.png" title="ban user" ng-click="ban(user._id)")
+                        img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="ban(user._id)")
