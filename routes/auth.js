@@ -47,10 +47,7 @@ passport.use(new LocalStrategy(
                     return done(null, null, {message: 'Incorrect password.'})
                 }
 
-                var User = JSON.parse(JSON.stringify(user));
-                delete User.password;
-
-                return done(null, User)
+                return done(null, user)
             })
         })
     }
@@ -61,7 +58,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findOne({_id: id}, function(err, user) {
+    User.findOne({_id: id}, '+password', function(err, user) {
         if (err) {
             return done(err);
         }
@@ -85,7 +82,7 @@ router.post('/login', function(req, res, next) {
                 return next(err);
             }
 
-            res.send({user: user});
+            res.send({user: deletePassword(req.user)});
         })
     })(req, res, next)
 });
@@ -96,7 +93,14 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/islogged', function(req, res) {
-    res.send(req.user ? {user: req.user} : null);
+    res.send(req.user ? {user: deletePassword(req.user)} : null);
 });
+
+//delete password before sending user data to client
+function deletePassword(user) {
+    var User = JSON.parse(JSON.stringify(user));
+    delete User.password;
+    return User;
+}
 
 module.exports = router;

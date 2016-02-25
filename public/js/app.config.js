@@ -37,7 +37,9 @@
                 controllerAs: 'vm'
             })
             .when('/settings', {
-                templateUrl: 'partials/settings'
+                templateUrl: 'partials/settings',
+                controller: 'ProfileController',
+                controllerAs: 'vm'
             })
             .when('/albums', {
                 templateUrl: 'partials/albums'

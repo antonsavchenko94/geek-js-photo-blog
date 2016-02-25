@@ -1,2 +1,24 @@
 h1 Settings page.
-p change avatar, password...
+div
+  label First name:
+  input(ng-model="vm.info.first_name")
+  br
+  label Last name:
+  input(ng-model="vm.info.last_name")
+  br
+  label Email:
+  input(ng-model="vm.info.email")
+  br
+  button(ng-click='vm.update()') Change info
+  br
+  hr
+  label Current password:
+  input(ng-model="vm.info.password.current" required)
+  br
+  label New password:
+  input(ng-model="vm.info.password.new" required)
+  br
+  label Repeat new password:
+  input(ng-model="vm.info.password.repeat" required)
+  br
+  button(ng-click='vm.update()') Change password

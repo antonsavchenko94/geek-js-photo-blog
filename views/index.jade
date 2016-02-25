@@ -1,25 +1,18 @@
 extends layout
 
 block content
-  h1 Photoblog
   div(ng-app='blog')
     div(ng-controller='AppController')
-      header(ng-if='user')
-        a(href='/') Home
-        br
-        a(href='/user/{{ user.username }}') Profile
-        br
-        a(href='/user') Find user
-        br
-        a(href='/logout') Logout
-        br
-        a(href='/admin' ng-if='user.isAdmin') Admin page
-      header(ng-if='!user')
-        a(href='/') Home
-        br
-        a(href='/login') Login
-        br
-        a(href='/register') Register
-      hr
+      header
+        nav(ng-if='user')
+          a(href='/') Home
+          a(href='/user/{{ user.username }}') Profile
+          a(href='/user') Find user
+          a(href='/logout') Logout
+          a(href='/admin' ng-if='user.isAdmin') Admin page
+        nav(ng-if='!user')
+          a(href='/') Home
+          a(href='/login') Login
+          a(href='/register') Register
 
       ng-view
