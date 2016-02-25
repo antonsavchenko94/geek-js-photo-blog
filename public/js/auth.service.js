@@ -19,44 +19,56 @@
         };
 
         function register(user) {
-            return $http.post('/auth/register', user)
+            return $http.post('/api/auth/register', user)
                 .then(saveUser)
                 .catch(handleError)
         }
 
         function login(user) {
-            return $http.post('/auth/login', user)
+            return $http.post('/api/auth/login', user)
                 .then(saveUser)
                 .catch(handleError)
         }
 
         function logout() {
-            return $http.get('/auth/logout').then(function() {
+            return $http.get('/api/auth/logout').then(function() {
                     $rootScope.user = null;
                 })
         }
 
-        //returns promise with server response
+        /**
+         * check if current visitor is logged
+         * @returns Promise
+         */
         function isLogged() {
-            return $http.get('/auth/islogged');
+            return $http.get('/api/auth/islogged');
         }
 
-        //returns promise with user if user is logged
+        /**
+         * check if current visitor is authenticated user
+         * @returns Promise
+         */
         function isUser() {
             return isLogged().then(function(data) {
                 return data.data.user
             })
         }
 
-        //returns promise with bool(true) if user is logged and is admin
+        /**
+         * check if user is logged and is admin
+         * @returns Promise
+         */
         function isAdmin() {
             return isLogged().then(function(data) {
                 return data.data.user && data.data.user.isAdmin
             })
         }
 
-        //save to $rootScope to have access to user throughout the app
-        //(mainly for template ng-show/ng-hide)
+        /**
+         * save to $rootScope to have access to user throughout the app
+         * (mainly for template ng-show/ng-hide)
+         * @param data server response with user object
+         */
         function saveUser(data) {
             if (data.data.user) {
                 $rootScope.user = data.data.user;

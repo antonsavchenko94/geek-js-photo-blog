@@ -3,20 +3,31 @@
         .module('blog')
         .factory('AccessService', AccessService);
 
+    /**
+     * set access restrictions(filters) for urls
+     * @param AuthService
+     * @param $location
+     * @param $rootScope
+     * @returns {{check: check, setFilter: setFilter, role: {user: (*|isUser), admin: (*|isAdmin)}}}
+     * @constructor
+     */
     function AccessService (AuthService, $location, $rootScope) {
         var role = {
             user: AuthService.role.user,
             admin: AuthService.role.admin
         };
         var filters = [];
-        
+
         return {
             check: check,
             setFilter: setFilter,
             role: role
         };
 
-        //redirect if user is not allowed to view @param url
+        /**
+         * redirect if user is not allowed to view @param url
+         * @param url
+         */
         function check(url) {
             var filter = getFilter(url);
 
@@ -29,6 +40,12 @@
             }
         }
 
+        /**
+         * create access filter
+         * @param urlArray set of urls which need to have access restriction, urls may be instanceof RegExp
+         * @param role of user, who is allowed to view @param urlArray
+         * @param redirectTo string url
+         */
         function setFilter(urlArray, role, redirectTo) {
             filters.push({
                 url: urlArray,
@@ -37,7 +54,11 @@
             })
         }
 
-        //check if @param url has access restrictions
+        /**
+         * check if @param url has access restrictions
+         * @param url
+         * @returns filter
+         */
         function getFilter(url) {
             for (var i = 0; i < filters.length; i++) {
                 for (var j = 0; j < filters[i].url.length; j++) {

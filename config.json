@@ -2,5 +2,13 @@
   "MongoDB": {
     "url": "mongodb://localhost:27017/blog",
     "poolSize": 5
+  },
+  "session": {
+    "secret": "blog",
+    "resave": true,
+    "saveUninitialized": true,
+    "cookie": {
+      "maxAge": 604800000
+    }
   }
 }

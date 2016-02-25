@@ -6,15 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
+var config = JSON.parse(JSON.stringify(require('./config')));
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var album = require('./routes/album');
-var auth = require('./routes/auth');
-var admin = require('./routes/admin');
+var api = require('./routes/api');
 
 var app = express();
-var COOKIE_MAX_AGE = 1000 * 3600 * 24 * 7; //1 week
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,28 +24,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: 'blog',
-  resave: true,
-  saveUninitialized: true,
-  cookie: {maxAge: COOKIE_MAX_AGE}
-}));
+app.use(session(config.session));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// middleware to restrict access for unauthorised users
-function requireLogin(req, res, next) {
-  if (!req.isAuthenticated()) {
-    return res.redirect('/login');
-  }
-  next();
-}
-
-app.use('/album', album);
-app.use('/users', requireLogin, users);
-app.use('/auth', auth);
-app.use('/admin', admin);
-app.use('/', routes); //has to be the last
+app.use('/', routes);
+app.use('/api', api);
+app.use('*', function (req, res) {
+  res.render('index');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

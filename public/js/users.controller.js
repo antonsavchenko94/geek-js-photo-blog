@@ -9,7 +9,8 @@
         var vm = this;
         vm.users = [];
 
-        $http.get('/users').then(function(data) {
+
+        $http.get('/api/users').then(function(data) {
             vm.users = data.data.users;
         })
     }

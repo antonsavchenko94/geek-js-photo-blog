@@ -10,7 +10,7 @@ router.get('/admin/:name', function (req, res) {
 });
 
 // render "container page"
-router.get('*', function (req, res, next) {
+router.get('/', function (req, res, next) {
     res.render('index');
 });
 

@@ -44,13 +44,6 @@
             .when('/albums', {
                 templateUrl: 'partials/albums'
             })
-            // TODO user album&photo pages
-            .when('/user/:username/album/:album_id', {
-                templateUrl: 'partials/album'
-            })
-            .when('/user/:username/album/:album_id/photo/:photo_id', {
-                templateUrl: 'partials/photo'
-            })
             .when('/admin', {
                 templateUrl: 'partials/admin'
             })
@@ -58,6 +51,13 @@
                 redirectTo: '/'
             });
 
+        /**
+         * reject template render and redirect
+         * @param $q
+         * @param $location
+         * @param AuthService
+         * @returns Promise.reject
+         */
         function logout($q, $location, AuthService) {
             return $q(function (resolve, reject) {
                 AuthService.logout();
