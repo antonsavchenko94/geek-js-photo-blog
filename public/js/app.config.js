@@ -42,7 +42,14 @@
                 controllerAs: 'vm'
             })
             .when('/albums', {
-                templateUrl: 'partials/albums'
+                templateUrl: 'partials/albums',
+                controller: "AllAlbumsController",
+                controllerAs: 'vm'
+            })
+            .when('/albums/:id', {
+                templateUrl: 'partials/album',
+                controller: "AlbumController",
+                controllerAs: 'vm'
             })
             .when('/admin', {
                 templateUrl: 'partials/admin'

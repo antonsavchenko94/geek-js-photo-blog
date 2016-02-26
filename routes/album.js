@@ -3,12 +3,33 @@ var router = express.Router();
 var Album = require('../models/album');
 
 router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
+
+    Album.find({}, function(err, albums) {
+        if (err) {
+            console.log(err);
+            next(err);
+        }
+        res.send({albums: albums});
+    });
+});
+
+router.get('/:id', function(req, res, next) {
+    var id = req.params.id;
+
+    Album.findOne({_id: id}, function(err, album) {
+        if (err) {
+            console.log(err);
+            next(err);
+        }
+        res.send({album: album});
+    });
 });
 
 router.post('/', function(req, res, next) {
-    console.log(req.body);
-    Album.create(req.body, function (err, album) {
+    var newAlbum = req.body;
+    newAlbum.created = new Date();
+
+    Album.create(newAlbum, function (err, album) {
         if(err) {
             return next(err)
         }

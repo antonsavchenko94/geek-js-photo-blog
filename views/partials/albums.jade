@@ -2,6 +2,9 @@ h1 albums list
 
 button Add photo
 br
-button Add album
-input(type='text' size='40')
+button(ng-click="vm.createAlbum()") Add album
+input(type='text' size='40' ng-model="vm.newAlbum.title")
+
+div(ng-repeat='album in vm.albums')
+    a(href='/albums/{{ album._id }}') {{ album.title }}
 
