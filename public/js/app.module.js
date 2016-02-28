@@ -1,4 +1,4 @@
-angular.module('blog', ['ngRoute', 'ngResource'])
+angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload'])
     .factory("User", function ($resource) {
         return $resource("/api/admin/users/:id", {id: '@_id'},
             {

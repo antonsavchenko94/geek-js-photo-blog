@@ -19,9 +19,6 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
-/public/lib
-
-
 # node-waf configuration
 .lock-wscript
 
@@ -32,8 +29,12 @@ build/Release
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 # node_modules
 .idea
+/uploads/
 node_modules/
 bower_components/
+/public/lib/
+/public/libs/
+
 
 
 # Optional npm cache directory

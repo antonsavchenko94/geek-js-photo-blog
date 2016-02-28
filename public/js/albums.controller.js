@@ -9,7 +9,7 @@
 
 
 
-    function AllAlbumsController(AlbumsService, $http) {
+    function AllAlbumsController(AlbumsService, $location, $http) {
         var vm = this;
 
         vm.albums = [];
@@ -41,21 +41,30 @@
             vm.albums = data.data.albums;
         });
 
-
         function createAlbum() {
             if (vm.newAlbum.title) {
                 AlbumsService.createAlbum(vm.newAlbum);
-                vm.albums.push(vm.newAlbum);
+                $http.get('/api/album').then(function (data) {
+                    vm.albums = data.data.albums;
+                });
                 vm.newAlbum = {};
             }
         }
     }
 
-    function AlbumController(AlbumsService, $http, $routeParams) {
+    function AlbumController(AlbumsService, $location, $http, $routeParams, $rootScope) {
         var vm = this;
 
         var albumId = $routeParams.id;
         vm.album = {};
+        vm.photos = [];
+        vm.image = {
+            filename: ""
+        };
+
+        vm.openPhotos = openPhotos;
+        vm.uploadPhotos = uploadPhotos ;
+
         /*vm.getAlbumByID = getAlbumByID;
 
         function getAlbumByID (id) {
@@ -65,17 +74,29 @@
             });
         }*/
 
-        vm.msg = "pidoe";
+        vm.msg = "";
 
         $http.get('/api/album/' + albumId).then(function (data) {
             vm.album = data.data.album;
-            console.log(vm.album);
         });
 
+        function openPhotos(photos, errFiles){
+            console.log(photos);
+            if (photos && !photos.length){
+                vm.photos = [photos];
+            } else {
+                vm.photos = photos;
+            }
+            /*vm.photos.push(photos);
+            photos.filename = "";
+            console.log("opened " + vm.photos);*/
+        }
 
+        function uploadPhotos (photos){
+            var path = $location.path().split("/");
+            var albumId = path[path.length - 1];
+            AlbumsService.uploadPhotos(photos, albumId);
+        }
 
     }
 })();
-
-
-

@@ -1,2 +1,11 @@
 h1 Album page: {{ vm.album.title }}
+button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
+    | Select Images
+br
 p {{ vm.msg }}
+
+div(ng-repeat='(id, photo) in vm.photos')
+    p {{ id }} : {{ photo.name }}
+    img(ngf-src='vm.photos[id]' style="max-width: 200px; max-height: 200px" )
+button(ng-click='vm.uploadPhotos(vm.photos)')
+    | Upload images

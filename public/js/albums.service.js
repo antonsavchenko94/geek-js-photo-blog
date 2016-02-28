@@ -3,13 +3,14 @@
         .module('blog')
         .service('AlbumsService', AlbumsService);
 
-    AlbumsService.$inject = ['$http', '$rootScope'];
+    AlbumsService.$inject = ['$http', '$rootScope', '$timeout', 'Upload'];
 
-    function AlbumsService($http, $rootScope) {
+    function AlbumsService($http, $rootScope, $timeout, Upload) {
         return {
             createAlbum: createAlbum,
             getAlbums: getAlbums,
-            getAlbumById: getAlbumById
+            getAlbumById: getAlbumById,
+            uploadPhotos: uploadPhotos
         };
 
         function createAlbum(album) {
@@ -32,6 +33,40 @@
 
         function getAlbumById(id) {
 
+        }
+
+        function uploadPhotos(photos, albumId) {
+
+            console.log(photos);
+            if (photos && photos.length) {
+                for (var i = 0; i < photos.length; i++) {
+                    var file = photos[i];
+                    if (!file.$error) {
+                        Upload.upload({
+                            url: 'api/album/uploadPhotos',
+                            method: 'POST',
+                            data: {
+                                albumId: albumId,
+                                user: $rootScope.user,
+                                file: file
+                            }
+                        }).then(function (resp) {
+                            $timeout(function() {
+                                /*$scope.log = 'file: ' +
+                                    resp.config.data.file.name +
+                                    ', Response: ' + JSON.stringify(resp.data) +
+                                    '\n' + $scope.log;*/
+                            });
+                        }, null, function (evt) {
+                            /*var progressPercentage = parseInt(100.0 *
+                                evt.loaded / evt.total);
+                            $scope.log = 'progress: ' + progressPercentage +
+                                '% ' + evt.config.data.file.name + '\n' +
+                                $scope.log;*/
+                        });
+                    }
+                }
+            }
         }
     }
 })();
