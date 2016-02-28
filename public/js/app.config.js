@@ -3,9 +3,11 @@
         .module('blog')
         .config(config);
 
-    function config($routeProvider, $locationProvider) {
+    function config($routeProvider, $locationProvider, $httpProvider) {
         // with base(href='/') in html allows not to get /#/ in routes
         $locationProvider.html5Mode(true);
+        // run MessageInterceptor function on each server response
+        $httpProvider.interceptors.push('MessageInterceptor');
 
         $routeProvider
             .when('/', {

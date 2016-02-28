@@ -2,11 +2,6 @@ var express = require('express');
 var User = require('../models/user');
 var router = express.Router();
 
-
-router.get('/', function (req, res) {
-    res.render('admin/index');
-});
-
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {
         if (!err)

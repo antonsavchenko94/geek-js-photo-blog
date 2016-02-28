@@ -11,23 +11,22 @@
             login: login,
             logout: logout,
             isLogged: isLogged,
-            saveUser: saveUser,
             role: {
                 user: isUser,
                 admin: isAdmin
             }
         };
 
-        function register(user) {
+        function register(user, successCb, failureCb) {
             return $http.post('/api/auth/register', user)
-                .then(saveUser)
-                .catch(handleError)
+                .then(successCb)
+                .catch(failureCb)
         }
 
-        function login(user) {
+        function login(user, successCb, failureCb) {
             return $http.post('/api/auth/login', user)
-                .then(saveUser)
-                .catch(handleError)
+                .then(successCb)
+                .catch(failureCb)
         }
 
         function logout() {
@@ -38,7 +37,7 @@
 
         /**
          * check if current visitor is logged
-         * @returns Promise
+         * @returns HttpPromise
          */
         function isLogged() {
             return $http.get('/api/auth/islogged');
@@ -49,8 +48,8 @@
          * @returns Promise
          */
         function isUser() {
-            return isLogged().then(function(data) {
-                return data.data.user
+            return isLogged().then(function(res) {
+                return res.data.user;
             })
         }
 
@@ -59,26 +58,9 @@
          * @returns Promise
          */
         function isAdmin() {
-            return isLogged().then(function(data) {
-                return data.data.user && data.data.user.isAdmin
+            return isLogged().then(function(res) {
+                return res.data.user && res.data.user.isAdmin;
             })
-        }
-
-        /**
-         * save to $rootScope to have access to user throughout the app
-         * (mainly for template ng-show/ng-hide)
-         * @param data server response with user object
-         */
-        function saveUser(data) {
-            if (data.data.user) {
-                $rootScope.user = data.data.user;
-            }
-        }
-
-        function handleError(err) {
-            if (err.data.message) {
-                return err.data.message;
-            }
         }
     }
 })();

@@ -5,9 +5,6 @@ var router = express.Router();
 router.get('/partials/:name', function (req, res) {
     res.render('partials/' + req.params.name);
 });
-router.get('/admin/:name', function (req, res) {
-    res.render('admin/' + req.params.name);
-});
 
 // render "container page"
 router.get('/', function (req, res, next) {
