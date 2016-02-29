@@ -6,8 +6,8 @@
     function run($rootScope, $location, AccessService, AuthService) {
         //get user on 'app init' (after refresh/tab close)
         if (!$rootScope.user) {
-            AuthService.isLogged().then(function(data){
-                AuthService.saveUser(data);
+            AuthService.isLogged().then(function(res) {
+                $rootScope.user = res.data.user || null;
             });
         }
 

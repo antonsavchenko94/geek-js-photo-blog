@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['AuthService', '$location'];
+    AuthController.$inject = ['AuthService', '$location', '$rootScope'];
 
-    function AuthController(AuthService, $location) {
+    function AuthController(AuthService, $location, $rootScope) {
         var vm = this;
 
         vm.login = login;
@@ -14,17 +14,20 @@
         vm.message = '';
 
         function register() {
-            AuthService.register(vm.newUser)
-                .then(function(message) {
-                    message ? vm.message = message : $location.path('/login');
-                })
+            AuthService.register(vm.newUser, function(res) {
+                saveUserAndRedirect(res, '/login');
+            })
         }
 
         function login() {
-            AuthService.login(vm.newUser)
-                .then(function(message) {
-                    message ? vm.message = message : $location.path('/');
-                })
+            AuthService.login(vm.newUser, function(res) {
+                saveUserAndRedirect(res, '/');
+            });
+        }
+
+        function saveUserAndRedirect(res, redirectTo) {
+            $rootScope.user = res.data.user ? res.data.user : null;
+            $location.path(redirectTo);
         }
     }
 })();

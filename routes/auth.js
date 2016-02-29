@@ -12,12 +12,10 @@ router.post('/register', function(req, res, next) {
         User.create(req.body, function(err, user) {
             if (err) {
                 if (err.code === 11000) {
-                    res.status(500).send({message: 'This username is already in use.'});
+                    res.status(400).send({message: 'This username is already in use.'});
                 } else {
-                    res.status(500).send({message: err.message});
+                    res.status(400).send({message: err.message});
                 }
-
-                return next(err)
             }
 
             res.end();
@@ -74,7 +72,7 @@ router.post('/login', function(req, res, next) {
         }
 
         if (!user) {
-            return res.status(500).send({message: info.message});
+            return res.status(400).send({message: info.message});
         }
 
         req.logIn(user, function(err) {

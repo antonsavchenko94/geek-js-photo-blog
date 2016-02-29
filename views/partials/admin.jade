@@ -4,6 +4,8 @@ div
         a.user(href='#', ng-click="active='user'") User
         a.projects(href='#', ng-click="active='complaints'") Complaints
 
+    flash-message
+
     div(ng-if="active == 'user'")
         div(ng-controller='AdminController')
             label
@@ -21,7 +23,8 @@ div
                     th
                         a Action
                 tr(ng-repeat='user in users | filter:searchUser')
-                    td {{user.username}}
+                    td
+                        a(href='/user/{{user.username}}') {{user.username}}
                     td {{user.email}}
                     td {{user.status}}
                     td

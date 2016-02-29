@@ -1,7 +1,6 @@
 h1 Registration page.
 br
-div(ng-if="vm.message")
-  span {{ vm.message }}
+flash-message
 
 span First name:
 input(ng-model="vm.newUser.first_name")

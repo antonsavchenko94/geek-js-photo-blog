@@ -17,18 +17,20 @@
         // get user info to fill profile and check if it is profile of current user
         function getUserData() {
             if (!$routeParams.username) return;
-            $http.get('/api/users/' + $routeParams.username)
-                .then(function(data) {
-                    vm.user = data.data.user;
+            $http.get('/api/users/' + $routeParams.username).then(function(data) {
+                vm.user = data.data.user;
 
-                    if ($rootScope.user && vm.user.username === $rootScope.user.username) {
-                        vm.myProfile = true;
-                    }
-                });
+                if ($rootScope.user && vm.user.username === $rootScope.user.username) {
+                    vm.myProfile = true;
+                    $rootScope.user = vm.user;
+                }
+            });
         }
 
         function update() {
-            $http.put('/api/users', vm.info)
+            $http.put('/api/users', vm.info).then(function() {
+                vm.info = null;
+            })
         }
     }
 })();
