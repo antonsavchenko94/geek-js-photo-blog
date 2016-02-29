@@ -9,14 +9,17 @@ var router = express.Router();
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        console.log(req.body);
+
         cb(null, getAlbumPath({
             postedBy: req.body.user,
             _id: req.body.albumId
         }))
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
+
+        var splitedFilename = file.originalname.split('.');
+        var extension = "." +splitedFilename[splitedFilename.length - 1];
+        cb(null, req.body.user._id + '_' + Date.now() + extension);
     }
 });
 
@@ -129,9 +132,25 @@ router.post('/', function (req, res, next) {
 
 });
 
-router.post('/uploadPhotos', /*busboyMiddleware,*/ upload.single('file'), function (req, res, next) {
+router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
     var file = req.file;
     var fields = req.body;
+    var photo = {
+        filename: file.filename,
+        uploaded: new Date(),
+        status: fields.status || 'public',
+        view_count: 0,
+        pic: 'pic'
+    };
+
+    Album.findOne({_id: fields.albumId}, function(err, album) {
+        if (err) {
+            console.log(err);
+            next(err);
+        }
+        album.photos.push(photo);
+        album.save();
+    });
 
     res.json(file);
     res.end();
