@@ -18,7 +18,7 @@ var storage = multer.diskStorage({
     filename: function (req, file, cb) {
 
         var splitedFilename = file.originalname.split('.');
-        var extension = "." +splitedFilename[splitedFilename.length - 1];
+        var extension = "." + splitedFilename[splitedFilename.length - 1];
         cb(null, req.body.user._id + '_' + Date.now() + extension);
     }
 });
@@ -47,7 +47,8 @@ function getAlbumPath(album) {
     var s = path.sep;
     return path.normalize(
         '..' + s
-        + 'uploads' + s
+        + 'public' + s
+        + 'assets' + s
         + album.postedBy.username + s
         + album._id
     );
@@ -55,30 +56,6 @@ function getAlbumPath(album) {
 
 function createAlbumDirectory(album) {
     mkdirPath(getAlbumPath(album));
-}
-
-function getAlbumById(albumId){
-    var album = {};
-    Album.findOne({_id: albumId}, function(err, foundedAlbum) {
-        if (err) {
-            console.log(err);
-            next(err);
-        }
-        album = foundedAlbum;
-    });
-    return album;
-}
-
-function getAlbumByTitle(title){
-    var album = {};
-    Album.findOne({title: title}, function(err, foundedAlbum) {
-        if (err) {
-            console.log(err);
-            next(err);
-        }
-        album = foundedAlbum;
-    });
-    return album;
 }
 
 router.get('/', function (req, res, next) {
@@ -92,16 +69,16 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id', function (req, res) {
     var id = req.params.id;
 
-    Album.findOne({_id: id}, function (err, album) {
-        if (err) {
-            console.log(err);
-            next(err);
-        }
-        res.send({album: album});
-    });
+    Album.findById(id)
+        .populate('postedBy')
+        .exec(function (err, album) {
+            res.send({album: album});
+        });
+
+
 });
 
 router.post('/', function (req, res, next) {
@@ -117,7 +94,7 @@ router.post('/', function (req, res, next) {
             console.log(err);
             return next(err)
         }
-        Album.findOne({title: a.title}, function(err, receivedAlbum) {
+        Album.findOne({title: a.title}, function (err, receivedAlbum) {
             if (err) {
                 console.log(err);
                 return next(err);
@@ -143,7 +120,7 @@ router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
         pic: 'pic'
     };
 
-    Album.findOne({_id: fields.albumId}, function(err, album) {
+    Album.findOne({_id: fields.albumId}, function (err, album) {
         if (err) {
             console.log(err);
             next(err);

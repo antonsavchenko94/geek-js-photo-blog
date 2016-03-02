@@ -9,7 +9,6 @@
         return {
             createAlbum: createAlbum,
             getAlbums: getAlbums,
-            getAlbumById: getAlbumById,
             uploadPhotos: uploadPhotos
         };
 
@@ -31,13 +30,8 @@
             return albums;
         }
 
-        function getAlbumById(id) {
-
-        }
-
         function uploadPhotos(photos, albumId) {
 
-            console.log(photos);
             if (photos && photos.length) {
                 for (var i = 0; i < photos.length; i++) {
                     var file = photos[i];
