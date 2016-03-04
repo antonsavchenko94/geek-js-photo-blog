@@ -1,63 +1,54 @@
-div.well.col-md-8.col-md-offset-2
-  ul.nav.nav-tabs(ng-init="vm.tab = 'info'" ng-click="$event.preventDefault()")
-    li(ng-class="{'active': vm.tab == 'info'}")
-      a(href='#' ng-click="vm.setTab('info')") Info
-    li(ng-class="{'active': vm.tab == 'pass'}")
-      a(href='#' ng-click="vm.setTab('pass')") Password
-    li(ng-class="{'active': vm.tab == 'avatar'}")
-      a(href='#' ng-click="vm.setTab('avatar')") Avatar
-
-  div.tab-content
-    div.tab-pane(ng-class="{'active': vm.tab == 'info'}")
-      form
-        flash-message
-        div.form-group(id="tab")
-          label(for="first_name") First name:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-user
-            input.form-control(ng-model="vm.info.first_name" id="first_name" value="{{user.first_name}}")
-        div.form-group
-          label(for="last_name") Last name:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-user
-            input.form-control(type="text" ng-model="vm.info.last_name" id="last_name" value="{{user.last_name}}")
-        div.form-group
-          label(for="email") Email:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-envelope
-            input.form-control(type="email" ng-model="vm.info.email" id="email" valuer="{{user.email}}")
-        button.btn.btn-success(ng-click="vm.update()") Update
-
-    div.tab-pane(ng-class="{'active': vm.tab == 'pass'}")
-      form
-        flash-message
-        div.form-group
-          label(for="pass_current") Current password:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-lock
-            input.form-control(type="password" ng-model="vm.info.password.current" id="pass_current")
-        div.form-group
-          label(for="pass_new") New password:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-lock
-            input.form-control(type="password" ng-model="vm.info.password.new" id="pass_new")
-        div.form-group
-          label(for="pass_repeat") Repeat new password:
-          div.input-group
-            span.input-group-addon
-              i.glyphicon.glyphicon-lock
-            input.form-control(type="password" ng-model="vm.info.password.repeat" id="pass_repeat")
-        button.btn.btn-success(ng-click="vm.update()") Update
-
-    div.tab-pane(ng-class="{'active': vm.tab == 'avatar'}")
-      form
-        flash-message
+tab-container.col-md-8.col-md-offset-2(on-tab-select="vm.info = {}")
+  tab(title="Info")
+    form
+      flash-message
+      div.form-group
+        label(for="first_name") First name:
         div.input-group
           span.input-group-addon
-            i.glyphicon.glyphicon-file
-          input.form-control(type="file")
+            i.glyphicon.glyphicon-user
+          input.form-control(ng-model="vm.info.first_name" id="first_name" value="{{user.first_name}}")
+      div.form-group
+        label(for="last_name") Last name:
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-user
+          input.form-control(type="text" ng-model="vm.info.last_name" id="last_name" value="{{user.last_name}}")
+      div.form-group
+        label(for="email") Email:
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-envelope
+          input.form-control(type="email" ng-model="vm.info.email" id="email" valuer="{{user.email}}")
+      button.btn.btn-success(ng-click="vm.update()") Update
+
+  tab(title="Password")
+    form
+      flash-message
+      div.form-group
+        label(for="pass_current") Current password:
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-lock
+          input.form-control(type="password" ng-model="vm.info.password.current" id="pass_current")
+      div.form-group
+        label(for="pass_new") New password:
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-lock
+          input.form-control(type="password" ng-model="vm.info.password.new" id="pass_new")
+      div.form-group
+        label(for="pass_repeat") Repeat new password:
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-lock
+          input.form-control(type="password" ng-model="vm.info.password.repeat" id="pass_repeat")
+      button.btn.btn-success(ng-click="vm.update()") Update
+
+  tab(title="Avatar")
+    form
+      flash-message
+      div.input-group
+        span.input-group-addon
+          i.glyphicon.glyphicon-file
+        input.form-control(type="file")

@@ -1,13 +1,16 @@
-h1 profile of {{ vm.user.username }}
-h3 First name: {{ vm.user.first_name }}
-h3 Last name: {{ vm.user.last_name }}
-hr
+div.row
+  div.col-md-10.col-md-offset-1.col-sm-12
+    div.col-md-4.col-sm-4.col-xs-4
+      //avatar
+      img.img-responsive.img-thumbnail(src="http://placehold.it/250x250.jpg")
+    div
+      h1 {{ vm.user.username }}
+      h3 {{ vm.user.first_name }} {{ vm.user.last_name }}
 
-div(ng-show='vm.myProfile')
-  h3 it is your profile
-  a(href='/settings') PROFILE SETTINGS
-  br
-  a(href='/albums') MANAGE ALBUMS
-  br
-hr
-h2 albums & photos list
+      div(ng-if='vm.myProfile')
+        div.btn.col-md-4
+          a(href='/settings')
+            h2 Settings
+        div.btn.col-md-4
+          a(href='/albums')
+            h2 Albums

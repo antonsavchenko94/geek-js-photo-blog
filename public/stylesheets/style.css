@@ -1,5 +1,5 @@
 body {
-    padding: 50px;
+    padding: 20px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -36,7 +36,7 @@ section, footer, header, aside, nav {
 
 nav {
     display: inline-block;
-    margin: 60px auto 45px;
+    margin: 0 auto 45px;
     background-color: #5597b4;
     box-shadow: 0 1px 1px #ccc;
     border-radius: 2px;

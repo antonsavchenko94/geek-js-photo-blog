@@ -11,7 +11,6 @@
         vm.info = {};
 
         vm.update = update;
-        vm.setTab = setTab;
 
         getUserData();
 
@@ -32,12 +31,6 @@
             $http.put('/api/users', vm.info).then(function() {
                 vm.info = null;
             })
-        }
-
-        function setTab(tab) {
-            vm.tab = tab;
-            vm.info = {};
-            $rootScope.message = null;
         }
     }
 })();
