@@ -88,3 +88,7 @@ p b {
     text-transform: uppercase;
     font-size: 18px;
 }
+
+.tab-pane {
+    padding-top: 20px;
+}
