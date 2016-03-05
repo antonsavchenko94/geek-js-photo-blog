@@ -1,4 +1,5 @@
 var Album = require('../models/album');
+var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
 
@@ -8,15 +9,18 @@ var albumController = function (albumService) {
         next();
     };
 
-    var getAll = function (req, res) {
-
-        Album.find({}, function (err, albums) {
-            if (err) {
-                console.log(err);
-                next(err);
-            }
-            res.send({albums: albums});
+    var getAllByUsername = function (req, res) {
+        var username = req.params.username;
+        User.findOne({username: username}, function (err, user) {
+            Album.find({postedBy: user._id}, function (err, albums) {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+                res.send({albums: albums});
+            });
         });
+
     };
 
     var getById = function (req, res) {
@@ -64,11 +68,6 @@ var albumController = function (albumService) {
                 });
             }
         });
-
-
-
-
-
     };
 
     function mkdir(path) {
@@ -93,13 +92,12 @@ var albumController = function (albumService) {
         var s = path.sep;
         console.log('Is profile album: ' + album.isProfileAlbum);
         console.log(album);
-        var folderName = album.isProfileAlbum ? album.postedBy._id : album._id;
         return path.normalize(
             '..' + s
             + 'public' + s
             + 'assets' + s
             + album.postedBy.username + s
-            + folderName
+            + album._id
         );
     }
 
@@ -108,7 +106,7 @@ var albumController = function (albumService) {
     }
 
     return {
-        getAll: getAll,
+        getAllByUsername: getAllByUsername,
         getById: getById,
         createNewAlbum: createNewAlbum,
         middleware: middleware

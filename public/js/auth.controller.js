@@ -15,7 +15,7 @@
 
         function register() {
             AuthService.register(vm.newUser, function(res) {
-                AlbumsService.createAlbum({});
+                AlbumsService.createProfileAlbum(vm.newUser);
                 saveUserAndRedirect(res, '/login');
             })
         }

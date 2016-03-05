@@ -3,17 +3,18 @@ h1 albums list
 button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
     | Select Images
 
-select(ng-options='album._id as album.title for album in vm.albums track by album._id' ng-model='vm.albumId')
-    option(value="") Profile photos
+select(ng-options='album._id as album.title for album in vm.userAlbums track by album._id' ng-model='vm.albumId')
+    option(value="") Profile album
 
 div(ng-repeat='(id, photo) in vm.photos')
     p {{ id }} : {{ photo.name }}
     img(ngf-src='vm.photos[id]' style="max-width: 200px; max-height: 200px" )
-button(ng-click='vm.uploadPhotos(vm.photos)')
+button(ng-click='vm.uploadPhotos(vm.photos, vm.albumId)')
     | Upload images
 br
+br
 
-button(ng-click="vm.createAlbum(vm.title)") Add album
+button(ng-click="vm.createAlbum(vm.title, $rootScope.user)") Add album
 input(type='text' size='40' ng-model="vm.title")
 
 div(ng-repeat='photo in vm.profileAlbum')

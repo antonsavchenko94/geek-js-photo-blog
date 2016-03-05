@@ -15,21 +15,21 @@
             createProfileAlbum: createProfileAlbum
         };
 
-        function createAlbum(album) {
-            album.postedBy = $rootScope.user;
+        function createAlbum(album, user) {
+            album.postedBy = user ||$rootScope.user;
             $http.post('/api/album', album);
         }
 
-        function createProfileAlbum() {
+        function createProfileAlbum(user) {
             var album = {
                 title: 'Profile Album',
                 isProfileAlbum: true
             };
-            createAlbum(album);
+            createAlbum(album, user);
         }
 
-        function getAlbumsList() {
-            return $http.get('/api/album').then(function (data) {
+        function getAlbumsList(username) {
+            return $http.get('/api/album/getAll/' + username).then(function (data) {
                 return data.data.albums;
             });
         }

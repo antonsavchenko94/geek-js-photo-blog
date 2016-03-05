@@ -3,16 +3,18 @@
         .module('blog')
         .controller('AlbumsController', AlbumsController);
 
-    AlbumsController.$inject = ['AlbumsService', '$http'];
+    AlbumsController.$inject = ['AlbumsService', '$http', '$rootScope'];
 
-    function AlbumsController(AlbumsService, $http) {
+    function AlbumsController(AlbumsService, $http, $rootScope) {
         var vm = this;
 
-        vm.albums = [];
+        vm.userAlbums = [];
+        vm.mainAlbum = {};
+
         vm.photos = [];
         vm.profileAlbum = [];
         vm.albumId = null;
-
+        vm.title = '';
         vm.newAlbum = {};
 
 
@@ -21,35 +23,43 @@
         vm.uploadPhotos = uploadPhotos;
         vm.getProfileAlbum = getProfileAlbum;
 
-        AlbumsService.createProfileAlbum();
-        reloadAlbumsList();
+        //AlbumsService.createProfileAlbum();
+
+        reloadAlbumsList($rootScope.user.username);
 
         function createAlbum(title) {
             if (title) {
                 AlbumsService.createAlbum({title: title});
-                reloadAlbumsList();
+                reloadAlbumsList($rootScope.user.username);
                 vm.newAlbum = {};
+                vm.title = '';
             }
         }
 
         function openPhotos(photos, errFiles) {
-            vm.photos =  AlbumsService.openPhotos(photos, errFiles)
+            vm.photos = AlbumsService.openPhotos(photos, errFiles)
         }
 
-        function uploadPhotos(photos) {
-            AlbumsService.uploadPhotos(photos, vm.albumId);
+        function uploadPhotos(photos, albumId) {
+            if (!albumId)
+                albumId = vm.profieAlbum._id;
+            AlbumsService.uploadPhotos(photos, albumId);
             vm.photos = [];
+            vm.albumId = null;
         }
 
-        function reloadAlbumsList(){
-            vm.albums = AlbumsService.getAlbumsList();
+        function reloadAlbumsList(username) {
+            if (!username) return;
+            vm.albums = AlbumsService.getAlbumsList(username);
             vm.albums.then(function (a) {
                 vm.albums = a;
+                vm.userAlbums = a.slice(1, a.length);
+                vm.profieAlbum = a[0];
             });
             return vm.albums;
         }
 
-        function getProfileAlbum(){
+        function getProfileAlbum() {
             vm.profieAlbum = AlbumsService.getAlbumById();
             vm.profileAlbum.then(function (a) {
                 vm.profileAlbum = a;

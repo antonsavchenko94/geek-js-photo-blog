@@ -3,11 +3,14 @@
         .module('blog')
         .controller('PhotoController', PhotoController);
 
-    PhotoController.$inject = ['AlbumsService', '$location', '$http', '$routeParams'];
+    PhotoController.$inject = ['AlbumsService', '$location', '$http', '$routeParams', '$rootScope'];
 
-    function PhotoController(AlbumsService, $location, $http, $routeParams) {
+    function PhotoController(AlbumsService, $location, $http, $routeParams, $rootScope) {
         var vm = this;
+
         var albumId = $routeParams.id;
+
+        vm.isMyProfile = false;
         vm.msg = "";
         vm.album = {};
         vm.photos = [];
@@ -21,6 +24,12 @@
 
         reloadAlbum();
 
+        function isMyProfile() {
+            var authorizedProfile = $rootScope.user._id;
+            var requestedProfile = vm.album.postedBy._id;
+            return authorizedProfile == requestedProfile;
+        }
+
         function reloadAlbum() {
             vm.album = getAlbumById(albumId);
         }
@@ -29,6 +38,7 @@
             vm.album = AlbumsService.getAlbumById(id);
             vm.album.then(function (a) {
                 vm.album = a;
+                vm.isMyProfile = isMyProfile() || false;
             });
             return vm.album;
         }
