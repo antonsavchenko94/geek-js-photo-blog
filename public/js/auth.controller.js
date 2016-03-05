@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['AuthService', '$location', '$rootScope'];
+    AuthController.$inject = ['AuthService', 'AlbumsService', '$location', '$rootScope'];
 
-    function AuthController(AuthService, $location, $rootScope) {
+    function AuthController(AuthService, AlbumsService, $location, $rootScope) {
         var vm = this;
 
         vm.login = login;
@@ -15,6 +15,7 @@
 
         function register() {
             AuthService.register(vm.newUser, function(res) {
+                AlbumsService.createAlbum({});
                 saveUserAndRedirect(res, '/login');
             })
         }

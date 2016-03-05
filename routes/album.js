@@ -4,6 +4,8 @@ var path = require('path');
 var fs = require('fs');
 
 var Album = require('../models/album');
+var albumService = require('../services/albumService');
+var albumController = require('../controllers/albumController')(albumService);
 
 var router = express.Router();
 
@@ -58,56 +60,15 @@ function createAlbumDirectory(album) {
     mkdirPath(getAlbumPath(album));
 }
 
-router.get('/', function (req, res, next) {
-
-    Album.find({}, function (err, albums) {
-        if (err) {
-            console.log(err);
-            next(err);
-        }
-        res.send({albums: albums});
-    });
-});
-
-router.get('/:id', function (req, res) {
-    var id = req.params.id;
-
-    Album.findById(id)
-        .populate('postedBy')
-        .exec(function (err, album) {
-            res.send({album: album});
-        });
+router.route('/')
+    .get(albumController.getAll);
 
 
-});
+router.route('/:id')
+    .get(albumController.getById);
 
-router.post('/', function (req, res, next) {
-
-    var album = {
-        title: req.body.title,
-        postedBy: req.body.postedBy,
-        created: new Date()
-    };
-
-    Album.create(album, function (err, a) {
-        if (err) {
-            console.log(err);
-            return next(err)
-        }
-        Album.findOne({title: a.title}, function (err, receivedAlbum) {
-            if (err) {
-                console.log(err);
-                return next(err);
-            }
-            album._id = receivedAlbum._id;
-
-            res.send(album);
-            createAlbumDirectory(album);
-        });
-
-    });
-
-});
+router.route('/')
+    .post(albumController.createNewAlbum);
 
 router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
     var file = req.file;

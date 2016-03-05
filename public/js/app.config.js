@@ -11,7 +11,9 @@
 
         $routeProvider
             .when('/', {
-                templateUrl: 'partials/index'
+                templateUrl: 'partials/index',
+                controller: 'FeedController',
+                controllerAs: 'vm'
             })
             .when('/register', {
                 templateUrl: 'partials/register',
@@ -45,12 +47,12 @@
             })
             .when('/albums', {
                 templateUrl: 'partials/albums',
-                controller: "AllAlbumsController",
+                controller: "AlbumsController",
                 controllerAs: 'vm'
             })
             .when('/albums/:id', {
                 templateUrl: 'partials/album',
-                controller: "AlbumController",
+                controller: "PhotoController",
                 controllerAs: 'vm'
             })
             .when('/admin', {

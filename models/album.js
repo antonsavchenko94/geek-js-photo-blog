@@ -17,7 +17,11 @@ var album = new Schema({
             pic: {type: String, required: true}
         }
     ],
-    created:    { type: Date }
+    created:    { type: Date },
+    isProfileAlbum: {
+        type: Boolean,
+        default: false
+    }
 });
 
 album.set('autoIndex', true);
