@@ -17,8 +17,11 @@ router.post('/register', function(req, res, next) {
                     res.status(400).send({message: err.message});
                 }
             }
-
-            res.end();
+            res.send({
+                _id: user._id,
+                username: user.username
+            });
+            //res.end();
         });
     });
 });

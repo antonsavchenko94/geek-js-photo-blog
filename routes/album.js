@@ -67,7 +67,7 @@ router.route('/getAll/:username')
 router.route('/:id')
     .get(albumController.getById);
 
-router.route('/')
+router.route('/createNew')
     .post(albumController.createNewAlbum);
 
 router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {

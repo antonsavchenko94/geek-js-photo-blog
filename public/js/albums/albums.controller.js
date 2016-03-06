@@ -23,7 +23,7 @@
         vm.uploadPhotos = uploadPhotos;
         vm.getProfileAlbum = getProfileAlbum;
 
-        //AlbumsService.createProfileAlbum();
+        AlbumsService.createProfileAlbum($rootScope.user);
 
         reloadAlbumsList($rootScope.user.username);
 

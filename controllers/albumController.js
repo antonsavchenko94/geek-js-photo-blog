@@ -35,7 +35,7 @@ var albumController = function (albumService) {
     };
 
     var createNewAlbum = function (req, res, next) {
-
+        console.log('create new album');
         var isProfileAlbum = !!req.body.isProfileAlbum || false;
 
         var album = {
@@ -45,8 +45,10 @@ var albumController = function (albumService) {
             isProfileAlbum: isProfileAlbum
         };
 
-        Album.findOne({title: album.title}, function (err, queryAlbum) {
+        console.log(album);
 
+        Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
+            console.log(queryAlbum);
             if (queryAlbum){
                 res.send(queryAlbum.title + " album already exists");
             } else {
@@ -55,7 +57,7 @@ var albumController = function (albumService) {
                         console.log(err);
                         return next(err)
                     }
-                    Album.findOne({title: a.title}, function (err, receivedAlbum) {
+                    Album.findOne({title: a.title, postedBy: album.postedBy._id}, function (err, receivedAlbum) {
                         if (err) {
                             console.log(err);
                             return next(err);
@@ -91,7 +93,7 @@ var albumController = function (albumService) {
     function getAlbumPath(album) {
         var s = path.sep;
         console.log('Is profile album: ' + album.isProfileAlbum);
-        console.log(album);
+        //console.log(album);
         return path.normalize(
             '..' + s
             + 'public' + s
