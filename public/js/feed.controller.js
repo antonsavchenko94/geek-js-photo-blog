@@ -8,9 +8,35 @@
     function FeedController(AlbumsService, $location, $http, $routeParams) {
         var vm = this;
 
-        vm.msg = '';
+        vm.photos = [];
+        vm.albums = [];
+        vm.msg = 'qqq';
+
+        getAllProfileAlbums();
 
 
+        function getAllProfileAlbums() {
+            AlbumsService.getAllProfileAlbums()
+                .then(function (albums) {
+                    vm.albums = albums;
+                    console.log(vm.albums);
+                    getAllProfilePhotos();
+                });
+        }
+
+        function getAllProfilePhotos() {
+            vm.albums.forEach(function (album, i, albums) {
+                album.photos.forEach(function (photo, i, photos) {
+                    photo.url = "/assets/"
+                        + album.postedBy.username + "/"
+                        + album._id + "/"
+                        + photo.filename;
+                    vm.photos.push(photo);
+                });
+            });
+            console.log(vm.photos);
+            return vm.photos;
+        }
 
     }
 })();

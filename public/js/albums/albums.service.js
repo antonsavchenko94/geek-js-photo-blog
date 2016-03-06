@@ -12,11 +12,11 @@
             uploadPhotos: uploadPhotos,
             getAlbumById: getAlbumById,
             openPhotos: openPhotos,
-            createProfileAlbum: createProfileAlbum
+            createProfileAlbum: createProfileAlbum,
+            getAllProfileAlbums: getAllProfileAlbums
         };
 
         function createAlbum(album) {
-            console.log(album);
             album.postedBy = album.postedBy || $rootScope.user;
             $http.post('/api/album/createNew', album);
         }
@@ -27,7 +27,6 @@
                 isProfileAlbum: true,
                 postedBy: user
             };
-            console.log(album);
             createAlbum(album);
         }
 
@@ -86,6 +85,12 @@
             } else {
                 return photos;
             }
+        }
+
+        function getAllProfileAlbums(){
+            return $http.get('/api/album/getAllProfileAlbums').then(function (data) {
+                return data.data.albums;
+            });
         }
     }
 })();

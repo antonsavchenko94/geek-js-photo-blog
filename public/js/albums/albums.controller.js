@@ -24,6 +24,7 @@
         vm.getProfileAlbum = getProfileAlbum;
 
         AlbumsService.createProfileAlbum($rootScope.user);
+        AlbumsService.getAllProfileAlbums();
 
         reloadAlbumsList($rootScope.user.username);
 

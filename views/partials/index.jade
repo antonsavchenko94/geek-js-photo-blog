@@ -1,2 +1,6 @@
 h1 Index
-p {{ vm.msg }}
+div(ng-repeat='(id, photo) in vm.photos | orderBy:"-uploaded"')
+    hr
+    span {{photo.uploaded}}
+    a(href="{{ photo.url }}")
+        img(src='{{ photo.url }}' style="max-width: 500px; max-height: 500px")

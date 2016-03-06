@@ -59,13 +59,16 @@ function getAlbumPath(album) {
 function createAlbumDirectory(album) {
     mkdirPath(getAlbumPath(album));
 }
+router.route('/getAllProfileAlbums')
+    .get(albumController.getAllProfileAlbums);
 
 router.route('/getAll/:username')
     .get(albumController.getAllByUsername);
 
-
 router.route('/:id')
     .get(albumController.getById);
+
+
 
 router.route('/createNew')
     .post(albumController.createNewAlbum);
@@ -94,6 +97,5 @@ router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
     res.json(file);
     res.end();
 });
-
 
 module.exports = router;

@@ -72,6 +72,18 @@ var albumController = function (albumService) {
         });
     };
 
+    var getAllProfileAlbums = function(req, res, next){
+        Album.find({isProfileAlbum: true})
+            .populate('postedBy')
+            .exec(function (err, albums) {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+                res.send({albums: albums});
+            });
+    };
+
     function mkdir(path) {
 
         try {
@@ -111,6 +123,7 @@ var albumController = function (albumService) {
         getAllByUsername: getAllByUsername,
         getById: getById,
         createNewAlbum: createNewAlbum,
+        getAllProfileAlbums: getAllProfileAlbums,
         middleware: middleware
     };
 };
