@@ -1,9 +1,9 @@
 var Album = require('../models/album');
 var User = require('../models/user');
-var path = require('path');
-var fs = require('fs');
 
-var albumController = function (albumService) {
+var albumService = require('../services/albumService')();
+
+var albumController = function () {
 
     var middleware = function (req, res, next) {
         next();
@@ -35,17 +35,14 @@ var albumController = function (albumService) {
     };
 
     var createNewAlbum = function (req, res, next) {
-        console.log('create new album');
         var isProfileAlbum = !!req.body.isProfileAlbum || false;
 
         var album = {
-            title: req.body.title,
+            title: isProfileAlbum ? 'Profile album' : req.body.title,
             postedBy: req.body.postedBy,
             created: new Date(),
             isProfileAlbum: isProfileAlbum
         };
-
-        console.log(album);
 
         Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
             console.log(queryAlbum);
@@ -65,7 +62,7 @@ var albumController = function (albumService) {
                         album._id = receivedAlbum._id;
 
                         res.send(album);
-                        createAlbumDirectory(album);
+                        albumService.createAlbumDirectory(album);
                     });
                 });
             }
@@ -84,47 +81,38 @@ var albumController = function (albumService) {
             });
     };
 
-    function mkdir(path) {
+    var uploadPhotos = function (req, res, next) {
+        var file = req.file;
+        var fields = req.body;
+        var photo = {
+            filename: file.filename,
+            uploaded: new Date(),
+            status: fields.status || 'public',
+            view_count: 0,
+            pic: 'pic'
+        };
 
-        try {
-            fs.mkdirSync(path);
+        Album.findOne({_id: fields.albumId}, function (err, album) {
+            if (err) {
+                console.log(err);
+                next(err);
+            }
+            console.log('==============title: ' + album.title);
+            album.photos.push(photo);
+            album.save();
+        });
 
-        } catch (e) {
-            if (e.code != 'EEXIST') throw e;
-        }
-    }
-
-    function mkdirPath(dirPath) {
-        var pathParts = dirPath.split(path.sep);
-
-        for (var i = 1; i <= pathParts.length; i++) {
-            mkdir(path.join.apply(null, pathParts.slice(0, i)));
-        }
-    }
-
-    function getAlbumPath(album) {
-        var s = path.sep;
-        console.log('Is profile album: ' + album.isProfileAlbum);
-        //console.log(album);
-        return path.normalize(
-            '..' + s
-            + 'public' + s
-            + 'assets' + s
-            + album.postedBy.username + s
-            + album._id
-        );
-    }
-
-    function createAlbumDirectory(album) {
-        mkdirPath(getAlbumPath(album));
-    }
+        res.json(file);
+        res.end();
+    };
 
     return {
         getAllByUsername: getAllByUsername,
         getById: getById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
-        middleware: middleware
+        middleware: middleware,
+        uploadPhotos: uploadPhotos
     };
 };
 

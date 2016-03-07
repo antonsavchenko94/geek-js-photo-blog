@@ -17,8 +17,11 @@
         };
 
         function createAlbum(album) {
+            var url = album.isProfileAlbum
+                ? '/api/shared/createProfileAlbum'
+                : '/api/album/createNew';
             album.postedBy = album.postedBy || $rootScope.user;
-            $http.post('/api/album/createNew', album);
+            $http.post(url, album);
         }
 
         function createProfileAlbum(user) {
@@ -87,8 +90,8 @@
             }
         }
 
-        function getAllProfileAlbums(){
-            return $http.get('/api/album/getAllProfileAlbums').then(function (data) {
+        function getAllProfileAlbums() {
+            return $http.get('/api/shared/getAllProfileAlbums').then(function (data) {
                 return data.data.albums;
             });
         }

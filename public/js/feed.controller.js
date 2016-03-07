@@ -14,12 +14,10 @@
 
         getAllProfileAlbums();
 
-
         function getAllProfileAlbums() {
             AlbumsService.getAllProfileAlbums()
                 .then(function (albums) {
                     vm.albums = albums;
-                    console.log(vm.albums);
                     getAllProfilePhotos();
                 });
         }
@@ -34,7 +32,6 @@
                     vm.photos.push(photo);
                 });
             });
-            console.log(vm.photos);
             return vm.photos;
         }
 
