@@ -5,7 +5,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
 
-router.post('/register', function(req, res, next) {
+router.post('/register', function(req, res) {
     bcrypt.hash(req.body.password, 10, function(error, hash) {
         req.body.password = hash;
 
@@ -17,11 +17,7 @@ router.post('/register', function(req, res, next) {
                     res.status(400).send({message: err.message});
                 }
             }
-            res.send({
-                _id: user._id,
-                username: user.username
-            });
-            //res.end();
+            res.send(user ? {user: deletePassword(user)} : null);
         });
     });
 });

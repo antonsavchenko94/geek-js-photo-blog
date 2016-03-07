@@ -3,16 +3,26 @@
         .module('blog')
         .controller('FeedController', FeedController);
 
-    FeedController.$inject = ['AlbumsService', '$location', '$http', '$routeParams'];
+    FeedController.$inject = ['AlbumsService', 'AuthService', '$rootScope'];
 
-    function FeedController(AlbumsService, $location, $http, $routeParams) {
+    function FeedController(AlbumsService, AuthService, $rootScope) {
         var vm = this;
 
+        vm.feedPhotos = [];
         vm.photos = [];
         vm.albums = [];
+        vm.feedAlbums = [];
+        vm.userAlbums = [];
+        vm.profileAlbum = [];
+        vm.isLogged = false;
         vm.msg = 'qqq';
 
+        getUserAlbumsList();
         getAllProfileAlbums();
+        checkLoginStatus();
+
+        vm.openPhotos = openPhotos;
+        vm.uploadPhotos = uploadPhotos;
 
         function getAllProfileAlbums() {
             AlbumsService.getAllProfileAlbums()
@@ -23,16 +33,46 @@
         }
 
         function getAllProfilePhotos() {
-            vm.albums.forEach(function (album, i, albums) {
-                album.photos.forEach(function (photo, i, photos) {
+            vm.albums.forEach(function (album) {
+                album.photos.forEach(function (photo) {
                     photo.url = "/assets/"
                         + album.postedBy.username + "/"
                         + album._id + "/"
                         + photo.filename;
-                    vm.photos.push(photo);
+                    vm.feedPhotos.push(photo);
                 });
             });
-            return vm.photos;
+            return vm.feedPhotos;
+        }
+
+        function checkLoginStatus(){
+            AuthService.isLogged().then(function (data) {
+                vm.isLogged = !!data.data.user || false;
+                console.log(data.data);
+            });
+        }
+
+        function openPhotos(photos, errFiles) {
+            vm.photos = AlbumsService.openPhotos(photos, errFiles);
+            console.log(vm.photos);
+        }
+
+        function uploadPhotos(photos, albumId) {
+            if (!albumId)
+                albumId = vm.profieAlbum._id;
+            AlbumsService.uploadPhotos(photos, albumId);
+            vm.photos = [];
+            vm.albumId = null;
+        }
+
+        function getUserAlbumsList() {
+            if (!$rootScope.user) return;
+            vm.userAlbums = AlbumsService.getAlbumsList($rootScope.user.username);
+            vm.userAlbums.then(function (a) {
+                vm.userAlbums = a.slice(1, a.length);
+                vm.profieAlbum = a[0];
+            });
+            return vm.userAlbums;
         }
 
     }

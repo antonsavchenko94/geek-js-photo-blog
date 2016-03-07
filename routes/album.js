@@ -4,12 +4,14 @@ var fs = require('fs');
 
 var Album = require('../models/album');
 var albumController = require('../controllers/albumController')();
+var albumService = require('../services/albumService')();
 
 var router = express.Router();
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
 
-        cb(null, getAlbumPath({
+        cb(null, albumService.getAlbumPath({
             postedBy: req.body.user,
             _id: req.body.albumId
         }))
@@ -59,8 +61,5 @@ router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
     res.json(file);
     res.end();
 });
-
-router.route('/uploadPhotos')
-    .post(albumController.uploadPhotos);
 
 module.exports = router;

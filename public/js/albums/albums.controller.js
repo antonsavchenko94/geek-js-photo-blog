@@ -5,7 +5,7 @@
 
     AlbumsController.$inject = ['AlbumsService', '$http', '$rootScope'];
 
-    function AlbumsController(AlbumsService, $http, $rootScope) {
+    function AlbumsController(AlbumsService, $rootScope) {
         var vm = this;
 
         vm.userAlbums = [];
@@ -22,9 +22,6 @@
         vm.openPhotos = openPhotos;
         vm.uploadPhotos = uploadPhotos;
         vm.getProfileAlbum = getProfileAlbum;
-
-        AlbumsService.createProfileAlbum($rootScope.user);
-        AlbumsService.getAllProfileAlbums();
 
         reloadAlbumsList($rootScope.user.username);
 
