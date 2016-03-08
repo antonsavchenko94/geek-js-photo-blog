@@ -5,8 +5,10 @@ var auth = require('./auth');
 var users = require('./users');
 var album = require('./album');
 var admin = require('./admin');
+var shared = require('./shared');
 
 router.use('/auth', auth);
+router.use('/shared', shared);
 
 //require user
 router.use(function(req, res, next) {

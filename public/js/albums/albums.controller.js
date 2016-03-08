@@ -1,57 +1,34 @@
-(function() {
+(function () {
     angular
         .module('blog')
-        .controller('ProfileController', ProfileController);
+        .controller('AlbumsController', AlbumsController);
 
-    ProfileController.$inject = ['$http', '$routeParams', '$rootScope', 'AlbumsService'];
+    AlbumsController.$inject = ['AlbumsService', '$http', '$rootScope'];
 
-    function ProfileController($http, $routeParams, $rootScope, AlbumsService) {
+    function AlbumsController(AlbumsService, $rootScope) {
         var vm = this;
-        vm.myProfile = false;
-        vm.info = {};
 
         vm.userAlbums = [];
         vm.mainAlbum = {};
+
         vm.photos = [];
         vm.profileAlbum = [];
         vm.albumId = null;
+        vm.title = '';
         vm.newAlbum = {};
 
-        vm.update = update;
 
-        //albums methods
         vm.createAlbum = createAlbum;
         vm.openPhotos = openPhotos;
         vm.uploadPhotos = uploadPhotos;
+        vm.getProfileAlbum = getProfileAlbum;
 
-        getUserData();
-
-        // reload list of albums and photos
-        reloadAlbumsList($routeParams.username);
-
-        // get user info to fill profile and check if it is profile of current user
-        function getUserData() {
-            if (!$routeParams.username) return;
-            $http.get('/api/users/' + $routeParams.username).then(function(data) {
-                vm.user = data.data.user;
-
-                if ($rootScope.user && vm.user.username === $rootScope.user.username) {
-                    vm.myProfile = true;
-                    $rootScope.user = vm.user;
-                }
-            });
-        }
-
-        function update() {
-            $http.put('/api/users', vm.info).then(function() {
-                vm.info = null;
-            })
-        }
+        reloadAlbumsList($rootScope.user.username);
 
         function createAlbum(title) {
             if (title) {
                 AlbumsService.createAlbum({title: title});
-                reloadAlbumsList($routeParams.username);
+                reloadAlbumsList($rootScope.user.username);
                 vm.newAlbum = {};
                 vm.title = '';
             }
@@ -79,5 +56,14 @@
             });
             return vm.albums;
         }
+
+        function getProfileAlbum() {
+            vm.profieAlbum = AlbumsService.getAlbumById();
+            vm.profileAlbum.then(function (a) {
+                vm.profileAlbum = a;
+            });
+            return vm.album;
+        }
     }
+
 })();
