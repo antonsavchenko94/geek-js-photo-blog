@@ -63,7 +63,7 @@
 
         function uploadPhotos(photos, albumId) {
             if (!albumId)
-                albumId = vm.profieAlbum._id;
+                albumId = vm.profileAlbum._id;
             AlbumsService.uploadPhotos(photos, albumId);
             vm.photos = [];
             vm.albumId = null;
@@ -74,7 +74,7 @@
             vm.userAlbums = AlbumsService.getAlbumsList($rootScope.user.username);
             vm.userAlbums.then(function (a) {
                 vm.userAlbums = a.slice(1, a.length);
-                vm.profieAlbum = a[0];
+                vm.profileAlbum = a[0];
             });
             return vm.userAlbums;
         }

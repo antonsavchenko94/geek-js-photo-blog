@@ -15,9 +15,9 @@
 
         function register() {
             AuthService.register(vm.newUser, function(res) {
-                AlbumsService.createProfileAlbum(res.data);
+                AlbumsService.createProfileAlbum(res.data.user);
                 console.log(res.data);
-                saveUserAndRedirect(res, '/login');
+                saveUserAndRedirect(null, '/login');
             })
         }
 
@@ -28,7 +28,7 @@
         }
 
         function saveUserAndRedirect(res, redirectTo) {
-            $rootScope.user = res.data.user ? res.data.user : null;
+            $rootScope.user = res && res.data.user ? res.data.user : null;
             $location.path(redirectTo);
         }
     }

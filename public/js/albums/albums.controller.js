@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AlbumsController', AlbumsController);
 
-    AlbumsController.$inject = ['AlbumsService', '$http', '$rootScope'];
+    AlbumsController.$inject = ['AlbumsService', '$rootScope', '$routeParams'];
 
-    function AlbumsController(AlbumsService, $rootScope) {
+    function AlbumsController(AlbumsService, $rootScope, $routeParams) {
         var vm = this;
 
         vm.userAlbums = [];
@@ -16,19 +16,20 @@
         vm.albumId = null;
         vm.title = '';
         vm.newAlbum = {};
-
+        vm.user = {username: $routeParams.username || $rootScope.user};
+        vm.myProfile = vm.user.username === $rootScope.user.username;
 
         vm.createAlbum = createAlbum;
         vm.openPhotos = openPhotos;
         vm.uploadPhotos = uploadPhotos;
         vm.getProfileAlbum = getProfileAlbum;
 
-        reloadAlbumsList($rootScope.user.username);
+        reloadAlbumsList(vm.user.username);
 
         function createAlbum(title) {
             if (title) {
                 AlbumsService.createAlbum({title: title});
-                reloadAlbumsList($rootScope.user.username);
+                reloadAlbumsList(vm.user.username);
                 vm.newAlbum = {};
                 vm.title = '';
             }
@@ -40,7 +41,7 @@
 
         function uploadPhotos(photos, albumId) {
             if (!albumId)
-                albumId = vm.profieAlbum._id;
+                albumId = vm.profileAlbum._id;
             AlbumsService.uploadPhotos(photos, albumId);
             vm.photos = [];
             vm.albumId = null;
@@ -52,13 +53,13 @@
             vm.albums.then(function (a) {
                 vm.albums = a;
                 vm.userAlbums = a.slice(1, a.length);
-                vm.profieAlbum = a[0];
+                vm.profileAlbum = a[0];
             });
             return vm.albums;
         }
 
         function getProfileAlbum() {
-            vm.profieAlbum = AlbumsService.getAlbumById();
+            vm.profileAlbum = AlbumsService.getAlbumById();
             vm.profileAlbum.then(function (a) {
                 vm.profileAlbum = a;
             });

@@ -7,36 +7,15 @@ div.row
       h1 {{ vm.user.username }}
       h3 {{ vm.user.first_name }} {{ vm.user.last_name }}
 
-      div(ng-if='vm.myProfile')
-        div.btn.col-md-4
-          a(href='/settings')
-            h2 Settings
-        div.btn.col-md-4
-          a(href='/albums')
-            h2 Albums
+      div.btn.col-md-4
+        a(href='/user/{{ vm.user.username }}/albums')
+          h2 Albums
+      div.btn.col-md-4(ng-if='vm.myProfile')
+        a(href='/settings')
+          h2 Settings
 
 hr
-h2 albums & photos list
-div(ng-show='vm.myProfile')
-  button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
-    | Select Images
-
-  select(ng-options='album._id as album.title for album in vm.userAlbums track by album._id' ng-model='vm.albumId')
-    option(value="") Profile album
-
-  div(ng-repeat='(id, photo) in vm.photos')
-    p {{ id }} : {{ photo.name }}
-    img(ngf-src='vm.photos[id]' style="max-width: 200px; max-height: 200px" )
-  button(ng-click='vm.uploadPhotos(vm.photos)')
-    | Upload images
-  br
-  br
-  button(ng-click="vm.createAlbum(vm.title, $rootScope.user)") Add album
-  input(type='text' size='40' ng-model="vm.title")
-  hr
+h2 Recent photos or Profile Album photos (?)
 
 div(ng-repeat='photo in vm.profileAlbum')
   img(ng-src="{{ vm.getPhotoUrl(photo.filename) }}" style="max-width: 600px; max-height: 600px")
-
-div(ng-repeat='album in vm.albums')
-  a(href='/user/{{ vm.user.username}}/{{ album._id }}') {{ album.title }}

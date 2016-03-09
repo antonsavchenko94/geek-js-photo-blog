@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('blog')
-        .controller('PhotoController', AlbumController);
+        .controller('AlbumController', AlbumController);
 
     AlbumController.$inject = ['AlbumsService', '$location', '$http', '$routeParams', '$rootScope'];
 

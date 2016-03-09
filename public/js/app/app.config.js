@@ -45,7 +45,7 @@
                 controller: 'ProfileController',
                 controllerAs: 'vm'
             })
-            .when('/albums', {
+            .when('/user/:username/albums', {
                 templateUrl: 'partials/albums',
                 controller: "AlbumsController",
                 controllerAs: 'vm'
@@ -75,11 +75,10 @@
          * @returns Promise.reject
          */
         function logout($q, $location, AuthService) {
-            return $q(function (resolve, reject) {
-                AuthService.logout();
+            return AuthService.logout().then(function() {
                 $location.path('/');
-                reject();
-            })
+                return $q.reject('logout');
+            });
         }
     }
 })();

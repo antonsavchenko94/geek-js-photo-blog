@@ -63,7 +63,7 @@
 
         function uploadPhotos(photos, albumId) {
             if (!albumId)
-                albumId = vm.profieAlbum._id;
+                albumId = vm.profileAlbum._id;
             AlbumsService.uploadPhotos(photos, albumId);
             vm.photos = [];
             vm.albumId = null;
@@ -74,8 +74,8 @@
             vm.albums = AlbumsService.getAlbumsList(username);
             vm.albums.then(function (a) {
                 vm.albums = a;
-                vm.userAlbums = a.slice(1, a.length);
-                vm.profieAlbum = a[0];
+                vm.userAlbums = a.slice(0, a.length - 1);
+                vm.profileAlbum = a[0];
             });
             return vm.albums;
         }

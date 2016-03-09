@@ -12,13 +12,17 @@ var albumController = function () {
     var getAllByUsername = function (req, res) {
         var username = req.params.username;
         User.findOne({username: username}, function (err, user) {
-            Album.find({postedBy: user._id}, function (err, albums) {
-                if (err) {
-                    console.log(err);
-                    next(err);
+            Album.find({postedBy: user._id})
+                .sort('created')
+                .exec(function (err, albums) {
+                    if (err) {
+                        console.log(err);
+                        next(err);
+                    }
+
+                    res.send({albums: albums});
                 }
-                res.send({albums: albums});
-            });
+            );
         });
 
     };
@@ -44,6 +48,7 @@ var albumController = function () {
             isProfileAlbum: isProfileAlbum
         };
 
+        console.log(album);
         Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
             console.log(queryAlbum);
             if (queryAlbum){
