@@ -1,6 +1,4 @@
-h1 Index
-
-div(ng-show='vm.isLogged')
+div(ng-show='user')
     button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
         | Select Images
 
@@ -15,8 +13,4 @@ div(ng-show='vm.isLogged')
     br
     hr
 
-div(ng-repeat='(id, photo) in vm.feedPhotos | orderBy:"-uploaded"')
-    hr
-    span {{photo.uploaded}}
-    a(href="{{ photo.url }}")
-        img(src='{{ photo.url }}' style="max-width: 500px; max-height: 500px")
+photo-grid(photos="vm.feedPhotos")

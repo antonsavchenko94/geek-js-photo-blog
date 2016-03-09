@@ -39,6 +39,10 @@
                         + album.postedBy.username + "/"
                         + album._id + "/"
                         + photo.filename;
+                    photo.pageUrl = "/user/"
+                        + album.postedBy.username + "/"
+                        + album._id + "/"
+                        + photo._id;
                     vm.feedPhotos.push(photo);
                 });
             });

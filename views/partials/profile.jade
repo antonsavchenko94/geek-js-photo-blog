@@ -39,4 +39,4 @@ div(ng-repeat='photo in vm.profileAlbum')
   img(ng-src="{{ vm.getPhotoUrl(photo.filename) }}" style="max-width: 600px; max-height: 600px")
 
 div(ng-repeat='album in vm.albums')
-  a(href='/albums/{{ album._id }}') {{ album.title }}
+  a(href='/user/{{ vm.user.username}}/{{ album._id }}') {{ album.title }}

@@ -50,8 +50,13 @@
                 controller: "AlbumsController",
                 controllerAs: 'vm'
             })
-            .when('/albums/:id', {
+            .when('/user/:username/:album_id', {
                 templateUrl: 'partials/album',
+                controller: "AlbumController",
+                controllerAs: 'vm'
+            })
+            .when('/user/:username/:album_id/:photo_id', {
+                templateUrl: 'partials/photo',
                 controller: "PhotoController",
                 controllerAs: 'vm'
             })
