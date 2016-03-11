@@ -2,19 +2,25 @@ h1 Registration page.
 br
 flash-message
 
-span First name:
-input(ng-model="vm.newUser.first_name")
-br
-span Last name:
-input(ng-model="vm.newUser.last_name")
-br
-span Email:
-input(type="email" ng-model="vm.newUser.email")
-br
-span Username:
-input(ng-model="vm.newUser.username")
-br
-span Password:
-input(type="password" ng-model="vm.newUser.password")
-br
-button(ng-click="vm.register()") Register
+div(ng-if="!vm.token")
+    span Email:
+    input(type="email" ng-model="vm.newUser.email")
+    button(ng-click="vm.sendToken()") Confirm
+
+div(ng-if="vm.token")
+    span First name:
+    input(ng-model="vm.newUser.first_name")
+    br
+    span Last name:
+    input(ng-model="vm.newUser.last_name")
+    br
+    span Email:
+    input(type="email" ng-model="vm.newUser.email" value="{{vm.newUser.email}}")
+    br
+    span Username:
+    input(ng-model="vm.newUser.username")
+    br
+    span Password:
+    input(type="password" ng-model="vm.newUser.password")
+    br
+    button(ng-click="vm.register()") Register

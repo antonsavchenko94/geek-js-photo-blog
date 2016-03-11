@@ -3,14 +3,16 @@
         .module('blog')
         .service('AuthService', AuthService);
 
-    AuthService.$inject = ['$http', '$rootScope'];
+    AuthService.$inject = ['$http', '$rootScope', '$routeParams'];
 
-    function AuthService($http, $rootScope) {
+    function AuthService($http, $rootScope, $routeParams) {
         return {
             register: register,
             login: login,
             logout: logout,
             isLogged: isLogged,
+            sendToken:sendToken,
+            checkToken:checkToken,
             role: {
                 user: isUser,
                 admin: isAdmin
@@ -61,6 +63,16 @@
             return isLogged().then(function(res) {
                 return res.data.user && res.data.user.isAdmin;
             })
+        }
+
+        function sendToken(email) {
+            return $http.post('/api/token/'+email);
+        }
+        function checkToken(successCb,failureCb){
+            if (!$routeParams.token) return;
+            return $http.post('/api/token/check'+$routeParams.token)
+                .then(successCb)
+                .catch(failureCb);
         }
     }
 })();

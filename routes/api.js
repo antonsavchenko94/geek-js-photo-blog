@@ -5,7 +5,9 @@ var auth = require('./auth');
 var users = require('./users');
 var album = require('./album');
 var admin = require('./admin');
+var token = require('./token');
 
+router.use('/token', token);
 router.use('/auth', auth);
 
 //require user
