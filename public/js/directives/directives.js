@@ -22,7 +22,7 @@
             template:
                 '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-repeat="photo in photos">' +
                 '   <a class="thumbnail" href="{{photo.pageUrl}}">' +
-                '       <img class="img-responsive" src="{{photo.url}}"/>' +
+                '       <img class="img-responsive" src="{{photo.imageUrl}}"/>' +
                 '   </a>' +
                 '</div>'
         };

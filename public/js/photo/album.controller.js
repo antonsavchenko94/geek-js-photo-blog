@@ -37,7 +37,7 @@
         function getAlbumById(id) {
             vm.album = AlbumsService.getAlbumById(id);
             vm.album.then(function (a) {
-                vm.album = a;
+                vm.album = AlbumsService.generatePhotoUrls(a);
                 vm.isMyProfile = isMyProfile() || false;
             });
             return vm.album;

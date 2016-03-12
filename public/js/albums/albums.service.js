@@ -12,6 +12,7 @@
             uploadPhotos: uploadPhotos,
             getAlbumById: getAlbumById,
             openPhotos: openPhotos,
+            generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
             getAllProfileAlbums: getAllProfileAlbums
         };
@@ -94,6 +95,26 @@
             return $http.get('/api/shared/getAllProfileAlbums').then(function (data) {
                 return data.data.albums;
             });
+        }
+
+        function generatePhotoUrls(albums, username){
+            var a = [];
+            a = a.concat(albums);
+            a.map(function(album) {
+                var user = album.postedBy.username ? album.postedBy.username : username;
+                album.photos.map(function(photo) {
+                    photo.imageUrl = "/assets/"
+                        + user + "/"
+                        + album._id + "/"
+                        + photo.filename;
+                    photo.pageUrl = "/user/"
+                        + user + "/"
+                        + album._id + "/"
+                        + photo._id;
+                });
+            });
+
+            return a.length == 1 ? a[0] : a;
         }
     }
 })();

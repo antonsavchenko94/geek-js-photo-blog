@@ -112,3 +112,16 @@ p b {
     transform: translate(-50%, -50%);
     object-fit: cover;
 }
+
+.profile-info {
+    margin-bottom: 40px;
+}
+
+.profile-info a {
+    margin: 10px 10px 0 0;
+}
+
+.profile-info a > h3 {
+    padding: 0;
+    margin: 0;
+}

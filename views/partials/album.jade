@@ -1,5 +1,6 @@
-h1 Album page: {{ vm.album.title }}
-div(ng-hide='!vm.isMyProfile')
+div.text-center
+    h1 {{ vm.album.title }}
+div(ng-hide='!vm.isMyProfile').text-center
     button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
         | Select Images
     br
@@ -12,5 +13,4 @@ div(ng-hide='!vm.isMyProfile')
         | Upload images
     br
 hr
-div(ng-repeat='photo in vm.album.photos')
-    img(ng-src="{{ vm.getPhotoUrl(photo.filename) }}" style="max-width: 600px; max-height: 600px")
+photo-grid(photos="vm.album.photos")
