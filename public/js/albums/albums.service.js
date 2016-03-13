@@ -54,7 +54,7 @@
                 for (var i = 0; i < photos.length; i++) {
                     var file = photos[i];
                     if (!file.$error) {
-                        Upload.upload({
+                        return Upload.upload({
                             url: 'api/album/uploadPhotos',
                             method: 'POST',
                             data: {

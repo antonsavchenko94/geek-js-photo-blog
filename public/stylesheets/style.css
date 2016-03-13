@@ -125,3 +125,12 @@ p b {
     padding: 0;
     margin: 0;
 }
+
+photo-upload .upload-form {
+    margin: 30px 0;
+}
+
+photo-upload img {
+    max-width: 200px;
+    max-height: 200px;
+}
