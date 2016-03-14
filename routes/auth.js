@@ -12,9 +12,9 @@ router.post('/register', function(req, res) {
         User.create(req.body, function(err, user) {
             if (err) {
                 if (err.code === 11000) {
-                    res.status(400).send({message: 'This username is already in use.'});
+                    return res.status(400).send({message: 'This username is already in use.'});
                 } else {
-                    res.status(400).send({message: err.message});
+                    return res.status(400).send({message: err.message});
                 }
             }
             res.send(user ? {user: deletePassword(user)} : null);

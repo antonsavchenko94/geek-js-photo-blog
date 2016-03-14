@@ -7,27 +7,17 @@
 
     function ProfileController($http, $routeParams, $rootScope, AlbumsService) {
         var vm = this;
+        vm.user = {};
         vm.myProfile = false;
         vm.info = {};
-
-        vm.userAlbums = [];
-        vm.mainAlbum = {};
-        vm.photos = [];
         vm.profileAlbum = [];
-        vm.albumId = null;
-        vm.newAlbum = {};
 
         vm.update = update;
-
-        //albums methods
-        vm.createAlbum = createAlbum;
-        vm.openPhotos = openPhotos;
-        vm.uploadPhotos = uploadPhotos;
 
         getUserData();
 
         // reload list of albums and photos
-        reloadAlbumsList($routeParams.username);
+        getProfileAlbum($routeParams.username);
 
         // get user info to fill profile and check if it is profile of current user
         function getUserData() {
@@ -48,36 +38,12 @@
             })
         }
 
-        function createAlbum(title) {
-            if (title) {
-                AlbumsService.createAlbum({title: title});
-                reloadAlbumsList($routeParams.username);
-                vm.newAlbum = {};
-                vm.title = '';
-            }
-        }
-
-        function openPhotos(photos, errFiles) {
-            vm.photos = AlbumsService.openPhotos(photos, errFiles)
-        }
-
-        function uploadPhotos(photos, albumId) {
-            if (!albumId)
-                albumId = vm.profieAlbum._id;
-            AlbumsService.uploadPhotos(photos, albumId);
-            vm.photos = [];
-            vm.albumId = null;
-        }
-
-        function reloadAlbumsList(username) {
+        function getProfileAlbum(username) {
             if (!username) return;
             vm.albums = AlbumsService.getAlbumsList(username);
             vm.albums.then(function (a) {
-                vm.albums = a;
-                vm.userAlbums = a.slice(1, a.length);
-                vm.profieAlbum = a[0];
+                vm.profileAlbum = AlbumsService.generatePhotoUrls(a[0], username);
             });
-            return vm.albums;
         }
     }
 })();

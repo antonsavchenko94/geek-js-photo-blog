@@ -1,22 +1,4 @@
-h1 Index
+div.text-center(ng-if='user')
+    photo-upload(albums="vm.userAlbums" after-upload="vm.getAllProfileAlbums" ng-if="vm.userAlbums")
 
-div(ng-show='vm.isLogged')
-    button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
-        | Select Images
-
-    select(ng-options='album._id as album.title for album in vm.userAlbums track by album._id' ng-model='vm.albumId')
-        option(value="") Profile album
-
-    div(ng-repeat='(id, photo) in vm.photos')
-        p {{ id }} : {{ photo.name }}
-        img(ngf-src='vm.photos[id]' style="max-width: 200px; max-height: 200px" )
-    button(ng-click='vm.uploadPhotos(vm.photos)')
-        | Upload images
-    br
-    hr
-
-div(ng-repeat='(id, photo) in vm.feedPhotos | orderBy:"-uploaded"')
-    hr
-    span {{photo.uploaded}}
-    a(href="{{ photo.url }}")
-        img(src='{{ photo.url }}' style="max-width: 500px; max-height: 500px")
+photo-grid(photos="vm.feedPhotos")

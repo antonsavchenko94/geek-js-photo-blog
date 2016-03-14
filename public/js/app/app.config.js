@@ -45,13 +45,18 @@
                 controller: 'ProfileController',
                 controllerAs: 'vm'
             })
-            .when('/albums', {
+            .when('/user/:username/albums', {
                 templateUrl: 'partials/albums',
                 controller: "AlbumsController",
                 controllerAs: 'vm'
             })
-            .when('/albums/:id', {
+            .when('/user/:username/:album_id', {
                 templateUrl: 'partials/album',
+                controller: "AlbumController",
+                controllerAs: 'vm'
+            })
+            .when('/user/:username/:album_id/:photo_id', {
+                templateUrl: 'partials/photo',
                 controller: "PhotoController",
                 controllerAs: 'vm'
             })
@@ -70,11 +75,10 @@
          * @returns Promise.reject
          */
         function logout($q, $location, AuthService) {
-            return $q(function (resolve, reject) {
-                AuthService.logout();
+            return AuthService.logout().then(function() {
                 $location.path('/');
-                reject();
-            })
+                return $q.reject('logout');
+            });
         }
     }
 })();

@@ -34,6 +34,9 @@ router.route('/getAll/:username')
 router.route('/:id')
     .get(albumController.getById);
 
+router.route('/:album_id/:photo_id')
+    .get(albumController.getPhotoById);
+
 router.route('/createNew')
     .post(albumController.createNewAlbum);
 

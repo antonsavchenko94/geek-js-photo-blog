@@ -1,36 +1,16 @@
-h1 profile of {{ vm.user.username }}
-h3 First name: {{ vm.user.first_name }}
-h3 Last name: {{ vm.user.last_name }}
-hr
+div.container-fluid.profile-info
+  div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.col-xs-12
+    div.col-md-6.col-sm-5.col-xs-6
+      //avatar
+      img.img-responsive.img-thumbnail(src="/images/no-avatar.png")
+    div.col-md-6.col-sm-7.col-xs-6
+      h1 {{ vm.user.username }}
+      h3 {{ vm.user.first_name }} {{ vm.user.last_name }}
+      h3 Email: {{ vm.user.email }}
 
-div(ng-show='vm.myProfile')
-  h3 it is your profile
-  a(href='/settings') PROFILE SETTINGS
-  br
-  a(href='/albums') MANAGE ALBUMS
-  br
-hr
-h2 albums & photos list
-div(ng-show='vm.myProfile')
-  button(ngf-select='vm.openPhotos($files, $invalidFiles)', ngf-multiple='true', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB')
-    | Select Images
+      a.btn.btn-primary(href="/user/{{ vm.user.username }}/albums")
+        h3 Albums
+      a.btn.btn-primary(href="/settings" ng-if="vm.myProfile")
+        h3 Settings
 
-  select(ng-options='album._id as album.title for album in vm.userAlbums track by album._id' ng-model='vm.albumId')
-    option(value="") Profile album
-
-  div(ng-repeat='(id, photo) in vm.photos')
-    p {{ id }} : {{ photo.name }}
-    img(ngf-src='vm.photos[id]' style="max-width: 200px; max-height: 200px" )
-  button(ng-click='vm.uploadPhotos(vm.photos)')
-    | Upload images
-  br
-  br
-  button(ng-click="vm.createAlbum(vm.title, $rootScope.user)") Add album
-  input(type='text' size='40' ng-model="vm.title")
-  hr
-
-div(ng-repeat='photo in vm.profileAlbum')
-  img(ng-src="{{ vm.getPhotoUrl(photo.filename) }}" style="max-width: 600px; max-height: 600px")
-
-div(ng-repeat='album in vm.albums')
-  a(href='/albums/{{ album._id }}') {{ album.title }}
+photo-grid(photos="vm.profileAlbum.photos")

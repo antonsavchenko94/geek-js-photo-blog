@@ -1,8 +1,7 @@
 (function(){
     angular
         .module('blog')
-        .factory('MessageInterceptor', MessageInterceptor)
-        .directive('flashMessage', flashMessage);
+        .factory('MessageInterceptor', MessageInterceptor);
 
     MessageInterceptor.$inject = ['$q', '$rootScope'];
 
@@ -16,12 +15,6 @@
                 $rootScope.message = error.data.message ? {type: 'danger', text: error.data.message} : null;
                 return $q.reject(error);
             }
-        }
-    }
-
-    function flashMessage() {
-        return {
-            template: '<div ng-if="message" class="alert alert-{{message.type}}"> {{message.text}} </div>'
         }
     }
 })();

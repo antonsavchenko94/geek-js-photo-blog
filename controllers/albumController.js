@@ -12,13 +12,17 @@ var albumController = function () {
     var getAllByUsername = function (req, res) {
         var username = req.params.username;
         User.findOne({username: username}, function (err, user) {
-            Album.find({postedBy: user._id}, function (err, albums) {
-                if (err) {
-                    console.log(err);
-                    next(err);
+            Album.find({postedBy: user._id})
+                .sort('created')
+                .exec(function (err, albums) {
+                    if (err) {
+                        console.log(err);
+                        next(err);
+                    }
+
+                    res.send({albums: albums});
                 }
-                res.send({albums: albums});
-            });
+            );
         });
 
     };
@@ -32,6 +36,15 @@ var albumController = function () {
             .exec(function (err, album) {
                 res.send({album: album});
             });
+    };
+
+    var getPhotoById = function(req, res) {
+        Album.findOne({_id: req.params.album_id},
+            {'photos': {$elemMatch : {_id: req.params.photo_id}}},
+            function(err, data) {
+                res.send({photo: data.photos[0]});
+            }
+        )
     };
 
     var createNewAlbum = function (req, res, next) {
@@ -109,6 +122,7 @@ var albumController = function () {
     return {
         getAllByUsername: getAllByUsername,
         getById: getById,
+        getPhotoById: getPhotoById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         middleware: middleware,

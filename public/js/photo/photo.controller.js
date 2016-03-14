@@ -3,74 +3,19 @@
         .module('blog')
         .controller('PhotoController', PhotoController);
 
-    PhotoController.$inject = ['AlbumsService', '$location', '$http', '$routeParams', '$rootScope'];
+    PhotoController.$inject = ['AlbumsService', '$routeParams', '$rootScope', '$http'];
 
-    function PhotoController(AlbumsService, $location, $http, $routeParams, $rootScope) {
+    function PhotoController(AlbumsService, $routeParams, $rootScope, $http) {
         var vm = this;
+        vm.photo = {};
 
-        var albumId = $routeParams.id;
+        getPhotoById();
 
-        vm.isMyProfile = false;
-        vm.msg = "";
-        vm.album = {};
-        vm.photos = [];
-        vm.image = {
-            filename: ""
-        };
-        vm.openPhotos = openPhotos;
-        vm.uploadPhotos = uploadPhotos;
-        vm.getPhoto = getPhoto;
-        vm.getPhotoUrl = getPhotoUrl;
-
-        reloadAlbum();
-
-        function isMyProfile() {
-            var authorizedProfile = $rootScope.user._id;
-            var requestedProfile = vm.album.postedBy._id;
-            return authorizedProfile == requestedProfile;
+        function getPhotoById() {
+            $http.get('/api/album/' + $routeParams.album_id + '/' + $routeParams.photo_id).then(function(res) {
+                vm.photo = res.data.photo;
+                vm.photo.url = '/assets/' + $routeParams.username + '/' + $routeParams.album_id + '/' + vm.photo.filename;
+            })
         }
-
-        function reloadAlbum() {
-            vm.album = getAlbumById(albumId);
-        }
-
-        function getAlbumById(id) {
-            vm.album = AlbumsService.getAlbumById(id);
-            vm.album.then(function (a) {
-                vm.album = a;
-                vm.isMyProfile = isMyProfile() || false;
-            });
-            return vm.album;
-        }
-
-        function openPhotos(photos, errFiles) {
-            vm.photos =  AlbumsService.openPhotos(photos, errFiles)
-        }
-
-        function uploadPhotos(photos) {
-            AlbumsService.uploadPhotos(photos, getAlbumId());
-            vm.photos = [];
-        }
-
-        function getPhoto() {
-            $http.get('/api/album/getPhoto/' + albumId)
-                .then(function (data) {
-                })
-        }
-
-        function getPhotoUrl(filename) {
-            if (vm.album) {
-                return "/assets/"
-                    + vm.album.postedBy.username + "/"
-                    + vm.album._id + "/"
-                    + filename;
-            }
-        }
-
-        function getAlbumId() {
-            var path = $location.path().split("/");
-            return path[path.length - 1];
-        }
-
     }
 })();

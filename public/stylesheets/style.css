@@ -1,5 +1,5 @@
 body {
-    padding: 50px;
+    padding: 20px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -36,7 +36,7 @@ section, footer, header, aside, nav {
 
 nav {
     display: inline-block;
-    margin: 60px auto 45px;
+    margin: 0 auto 45px;
     background-color: #5597b4;
     box-shadow: 0 1px 1px #ccc;
     border-radius: 2px;
@@ -87,4 +87,91 @@ p b {
     border-radius: 2px;
     text-transform: uppercase;
     font-size: 18px;
+}
+
+.tab-pane {
+    padding-top: 20px;
+}
+
+.photogrid-item {
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+.photogrid-item.hasTitle {
+    height: 360px;
+}
+
+.photogrid-item h2 {
+    margin: 10px 0;
+}
+
+.photogrid-item a:hover {
+    text-decoration: none;
+}
+
+.photogrid-item .img-container {
+    height: 280px;
+    overflow: hidden;
+}
+
+.photogrid-item img {
+    min-height: 100%;
+    min-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.profile-info {
+    margin-bottom: 40px;
+}
+
+.profile-info a {
+    margin: 10px 10px 0 0;
+}
+
+.profile-info a > h3 {
+    padding: 0;
+    margin: 0;
+}
+
+photo-upload .upload-form {
+    margin: 30px 0;
+}
+
+photo-upload img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.users-table {
+    border: none;
+    vertical-align: middle;
+}
+
+.users-table img {
+    max-width: 50px;
+    max-height: 50px;
+    width: auto;
+    height: auto;
+}
+
+.table.users-table>tbody>tr>td,
+.table.users-table>tbody>tr>th,
+.table.users-table>thead>tr>td,
+.table.users-table>thead>tr>th {
+    vertical-align: middle;
+    text-align: center;
+    border: none;
+}
+
+.users-search {
+    margin-bottom: 30px;
 }
