@@ -63,9 +63,7 @@
             '   </button>' +
             '   <button class="btn btn-success" ng-click="vm.uploadPhotos(vm.photos, vm.albumId)"> Upload images</button>' +
             '   <div class="well" ng-if="vm.photos.length > 0">' +
-            '       <div ng-repeat="(id, photo) in vm.photos">' +
-            '           <img ngf-src="vm.photos[id]" />' +
-            '       </div>' +
+            '       <img ngf-src="vm.photos[id]" ng-repeat="(id, photo) in vm.photos"/>' +
             '   </div>' +
             '</div>'
         }

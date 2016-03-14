@@ -3,9 +3,9 @@
         .module('blog')
         .service('AlbumsService', AlbumsService);
 
-    AlbumsService.$inject = ['$http', '$rootScope', '$timeout', 'Upload'];
+    AlbumsService.$inject = ['$http', '$rootScope', '$timeout', 'Upload', '$q'];
 
-    function AlbumsService($http, $rootScope, $timeout, Upload) {
+    function AlbumsService($http, $rootScope, $timeout, Upload, $q) {
         return {
             createAlbum: createAlbum,
             getAlbumsList: getAlbumsList,
@@ -51,10 +51,10 @@
                 albumId = $rootScope.user._id;
             }
             if (photos && photos.length && albumId) {
-                for (var i = 0; i < photos.length; i++) {
-                    var file = photos[i];
+                var resolvedPromises = $q.all(photos.map(function(photo) {
+                    var file = photo;
                     if (!file.$error) {
-                        return Upload.upload({
+                       return Upload.upload({
                             url: 'api/album/uploadPhotos',
                             method: 'POST',
                             data: {
@@ -62,7 +62,7 @@
                                 user: $rootScope.user,
                                 file: file
                             }
-                        }).then(function (resp) {
+                       }).then(function (resp) {
                             $timeout(function () {
                                 /*$scope.log = 'file: ' +
                                  resp.config.data.file.name +
@@ -78,8 +78,10 @@
                              $scope.log;*/
                         });
                     }
-                }
+                }))
             }
+
+            return resolvedPromises;
         }
 
         function openPhotos(photos, errFiles) {

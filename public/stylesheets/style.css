@@ -147,8 +147,14 @@ photo-upload .upload-form {
 }
 
 photo-upload img {
-    max-width: 200px;
+    margin: 10px;
     max-height: 200px;
+    width: auto;
+    height: auto;
+}
+
+photo-upload .well {
+    margin-top: 20px;
 }
 
 .users-table {
