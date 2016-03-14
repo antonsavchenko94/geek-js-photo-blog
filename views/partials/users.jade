@@ -1,4 +1,21 @@
-h2 Choose user to view his/her profile
-input(ng-model="searchUser" placeholder="Search")
-div(ng-repeat='user in vm.users | filter:searchUser')
-   a(href='/user/{{ user.username }}') {{ user.username }}
+div.users-search.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.col-xs-12
+   input.form-control(ng-model="searchUser" placeholder="Search")
+
+div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.col-xs-12
+   table.users-table.table.table-striped.table-condensed.table-responsive
+      thead
+         tr
+            th
+            th Username
+            th First Name
+            th Last Name
+            th Email
+      tbody
+         tr(ng-repeat="user in vm.users | filter:searchUser")
+            td
+               img.pull-right(src="/images/no-avatar.png")
+            td
+               a(href="/user/{{ user.username }}") {{ user.username }}
+            td {{ user.last_name }}
+            td {{ user.first_name }}
+            td {{ user.email }}

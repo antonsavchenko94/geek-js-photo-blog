@@ -150,3 +150,28 @@ photo-upload img {
     max-width: 200px;
     max-height: 200px;
 }
+
+.users-table {
+    border: none;
+    vertical-align: middle;
+}
+
+.users-table img {
+    max-width: 50px;
+    max-height: 50px;
+    width: auto;
+    height: auto;
+}
+
+.table.users-table>tbody>tr>td,
+.table.users-table>tbody>tr>th,
+.table.users-table>thead>tr>td,
+.table.users-table>thead>tr>th {
+    vertical-align: middle;
+    text-align: center;
+    border: none;
+}
+
+.users-search {
+    margin-bottom: 30px;
+}

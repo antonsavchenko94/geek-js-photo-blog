@@ -38,6 +38,15 @@ var albumController = function () {
             });
     };
 
+    var getPhotoById = function(req, res) {
+        Album.findOne({_id: req.params.album_id},
+            {'photos': {$elemMatch : {_id: req.params.photo_id}}},
+            function(err, data) {
+                res.send({photo: data.photos[0]});
+            }
+        )
+    };
+
     var createNewAlbum = function (req, res, next) {
         var isProfileAlbum = !!req.body.isProfileAlbum || false;
 
@@ -48,7 +57,6 @@ var albumController = function () {
             isProfileAlbum: isProfileAlbum
         };
 
-        console.log(album);
         Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
             console.log(queryAlbum);
             if (queryAlbum){
@@ -114,6 +122,7 @@ var albumController = function () {
     return {
         getAllByUsername: getAllByUsername,
         getById: getById,
+        getPhotoById: getPhotoById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         middleware: middleware,

@@ -36,6 +36,7 @@
         }
 
         function getAlbumCovers(albums) {
+            vm.albumCovers = [];
             albums.forEach(function(album) {
                 album.cover = {
                     pageUrl: '/user/' + vm.user.username + '/' + album._id,

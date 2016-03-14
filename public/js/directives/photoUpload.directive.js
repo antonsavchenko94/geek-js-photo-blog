@@ -16,14 +16,24 @@
                 afterUpload: '='
             },
             controllerAs: "vm",
+            link: function($scope, $elem, $attrs, ctrl) {
+                $scope.$watch('vm.albums', function(newValue) {
+                    ctrl.setAlbums(newValue);
+                });
+            },
             controller: function(AlbumsService, $routeParams) {
                 var vm = this;
                 vm.photos = [];
                 vm.albumId = null;
                 if (vm.albums) {
                     vm.profileAlbumId = vm.albums[0]._id;
-                    vm._albums = vm.albums.slice(1, vm.albums.length);
                 }
+
+                vm.setAlbums = function(albums) {
+                    if(albums) {
+                        vm._albums = albums.slice(1, vm.albums.length);
+                    }
+                };
 
                 vm.openPhotos = function(photos, errFiles) {
                     vm.photos = AlbumsService.openPhotos(photos, errFiles);
