@@ -20,9 +20,12 @@
                 orderBy: '='
             },
             template:
-                '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-repeat="photo in photos">' +
+                '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-class="{hasTitle: photo.title}" ng-repeat="photo in photos">' +
                 '   <a class="thumbnail" href="{{photo.pageUrl}}">' +
-                '       <img class="img-responsive" src="{{photo.imageUrl}}"/>' +
+                '       <h2 ng-if="photo.title" class="text-center">{{photo.title}}</h2>' +
+                '       <div class="img-container">' +
+                '           <img class="img-responsive" src="{{photo.imageUrl}}"/>' +
+                '       </div>' +
                 '   </a>' +
                 '</div>'
         };

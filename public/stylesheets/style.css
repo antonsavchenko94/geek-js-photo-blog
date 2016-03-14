@@ -93,13 +93,29 @@ p b {
     padding-top: 20px;
 }
 
-.photogrid-item a {
-    padding: 10px;
+.photogrid-item {
     height: 300px;
+    margin-bottom: 20px;
+}
+
+.photogrid-item.hasTitle {
+    height: 360px;
+}
+
+.photogrid-item h2 {
+    margin: 10px 0;
+}
+
+.photogrid-item a:hover {
+    text-decoration: none;
+}
+
+.photogrid-item .img-container {
+    height: 280px;
     overflow: hidden;
 }
 
-.photogrid-item a>img {
+.photogrid-item img {
     min-height: 100%;
     min-width: 100%;
     width: auto;

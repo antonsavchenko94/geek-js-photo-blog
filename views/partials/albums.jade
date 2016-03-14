@@ -6,5 +6,4 @@ div.text-center(ng-if="vm.myProfile")
     div.form-group
         photo-upload(albums="vm.albums" ng-if="vm.albums")
 
-div(ng-repeat='album in vm.albums')
-    a(href='/user/{{ vm.user.username }}/{{ album._id }}') {{ album.title }}
+photo-grid(photos="vm.albumCovers")
