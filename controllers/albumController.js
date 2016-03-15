@@ -15,14 +15,13 @@ var albumController = function () {
             Album.find({postedBy: user._id})
                 .sort('created')
                 .exec(function (err, albums) {
-                    if (err) {
-                        console.log(err);
-                        next(err);
+                        if (err) {
+                            console.log(err);
+                            next(err);
+                        }
+                        res.send({albums: albums});
                     }
-
-                    res.send({albums: albums});
-                }
-            );
+                );
         });
 
     };
@@ -38,13 +37,25 @@ var albumController = function () {
             });
     };
 
-    var getPhotoById = function(req, res) {
-        Album.findOne({_id: req.params.album_id},
-            {'photos': {$elemMatch : {_id: req.params.photo_id}}},
-            function(err, data) {
-                res.send({photo: data.photos[0]});
-            }
-        )
+    var getPhotoById = function (req, res) {
+        var albumId = req.params.album_id;
+        var photoId = req.params.photo_id;
+        Album.update(
+            {
+                '_id': ""+albumId,
+                'photos._id': ""+photoId
+            },
+            {$inc: {'photos.$.view_count': 1}},
+            function () {
+                Album.findOne(
+                    {_id: albumId},
+                    {'photos': {$elemMatch: {_id: photoId}}},
+                    function (err, data) {
+                        res.send({photo: data.photos[0]});
+                    }
+                )
+            });
+
     };
 
     var createNewAlbum = function (req, res, next) {
@@ -59,7 +70,7 @@ var albumController = function () {
 
         Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
             console.log(queryAlbum);
-            if (queryAlbum){
+            if (queryAlbum) {
                 res.send(queryAlbum.title + " album already exists");
             } else {
                 Album.create(album, function (err, a) {
@@ -82,7 +93,7 @@ var albumController = function () {
         });
     };
 
-    var getAllProfileAlbums = function(req, res, next){
+    var getAllProfileAlbums = function (req, res, next) {
         Album.find({isProfileAlbum: true})
             .populate('postedBy')
             .exec(function (err, albums) {
@@ -118,6 +129,7 @@ var albumController = function () {
         res.json(file);
         res.end();
     };
+
 
     return {
         getAllByUsername: getAllByUsername,

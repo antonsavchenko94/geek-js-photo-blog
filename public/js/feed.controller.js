@@ -19,17 +19,23 @@
             AlbumsService.getAllProfileAlbums()
                 .then(function (albums) {
                     vm.albums = AlbumsService.generatePhotoUrls(albums);
+                    console.log(vm.albums);
                     getAllProfilePhotos();
                 });
         }
 
         function getAllProfilePhotos() {
             vm.feedPhotos = []; // temp?
-            vm.albums.forEach(function (album) {
-                album.photos.forEach(function (photo) {
-                    vm.feedPhotos.push(photo);
+
+            if (vm.albums.length) {
+                vm.albums.forEach(function (album) {
+                    album.photos.forEach(function (photo) {
+                        vm.feedPhotos.push(photo);
+                    });
                 });
-            });
+            } else {
+                vm.feedPhotos = vm.albums.photos
+            }
         }
 
         function getUserAlbumsList() {

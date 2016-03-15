@@ -24,7 +24,7 @@ var albumService = function () {
     var getAlbumPath = function (album) {
         var s = path.sep;
         return path.normalize(
-            '.' + s
+            '..' + s
             + 'public' + s
             + 'assets' + s
             + album.postedBy.username + s
