@@ -13,6 +13,7 @@
             isLogged: isLogged,
             sendToken:sendToken,
             checkToken:checkToken,
+            newPassword:newPassword,
             role: {
                 user: isUser,
                 admin: isAdmin
@@ -71,6 +72,12 @@
         function checkToken(successCb,failureCb){
             if (!$routeParams.token) return;
             return $http.post('/api/token/check'+$routeParams.token)
+                .then(successCb)
+                .catch(failureCb);
+        }
+
+        function newPassword(email, successCb, failureCb){
+            return $http.post('/api/auth/recovery',{'email': email})
                 .then(successCb)
                 .catch(failureCb);
         }

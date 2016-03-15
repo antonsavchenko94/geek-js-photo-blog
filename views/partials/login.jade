@@ -1,11 +1,17 @@
 h1 Login page.
 br
 flash-message
-
-span Username:
-input(ng-model="vm.newUser.username")
-br
-span Password:
-input(type="password" ng-model="vm.newUser.password")
-br
-button(ng-click="vm.login()") Login
+div(ng-if="!vm.passRecover")
+    span Username:
+    input(ng-model="vm.newUser.username")
+    br
+    span Password:
+    input(type="password" ng-model="vm.newUser.password")
+    span
+        a(ng-click="vm.passRecover = true") Forgot password ?
+    br
+    button(ng-click="vm.login()") Login
+div(ng-if="vm.passRecover")
+    span Your email:
+        input(ng-model="vm.temp.email")
+        button(ng-click="vm.newPassword()") Get new password;

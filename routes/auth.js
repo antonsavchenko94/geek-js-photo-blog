@@ -4,6 +4,8 @@ var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
+var sendEmail = require('../controllers/email.controller.js');
+var token = require('../controllers/token.controller.js');
 
 router.post('/register', function(req, res, next) {
     bcrypt.hash(req.body.password, 10, function(error, hash) {
@@ -94,11 +96,66 @@ router.get('/islogged', function(req, res) {
     res.send(req.user ? {user: deletePassword(req.user)} : null);
 });
 
+router.post('/recovery', function(req, res, next) {
+    User.findOne({email: req.body.email}, function(err, user){
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.status(400).send({message: "user isn't found"});
+        }
+        user.password = passwordGenerator();
+        user.status = 'notActive';
+        user.save(function(err){
+            if(err){
+                return res.status(400).send({message: "Can't save user"});
+            }else {
+                var tn = token.create(user.email);
+                sendEmail.sendRecoveryPassword(user, tn, function(err){
+                    if(err){
+                        return next(err);
+                    } else {
+                        res.status(200).send();
+                    }
+                });
+            }
+        })
+    })
+});
+
+router.get('/active/:token', function(req, res){
+    token.check(req.params.token, function(result, err){
+        if(err){
+            res.status(400).send({message: err});
+        }else {
+            User.findOne({'email': result.email}, function(err, user){
+                user.status = 'active';
+                user.save(function(err){
+                    if(err) {
+                        res.status(400).send({message: "Can't save user"});
+                    } else {
+                        res.status(200).redirect('/login');
+                    }
+                })
+            })
+        }
+    })
+});
+
 //delete password before sending user data to client
 function deletePassword(user) {
     var User = JSON.parse(JSON.stringify(user));
     delete User.password;
     return User;
+}
+
+function passwordGenerator() {
+    var password = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 8; i++ ){
+        password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return password;
 }
 
 module.exports = router;
