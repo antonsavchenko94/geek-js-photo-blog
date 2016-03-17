@@ -36,11 +36,38 @@ var albumService = function () {
         mkdirPath(getAlbumPath(album));
     };
 
+    var uploadParams = function() {
+        return {
+            photos: {
+                destination: function (req, file, cb) {
+                    cb(null, getAlbumPath({
+                        postedBy: req.body.user,
+                        _id: req.body.albumId
+                    }))
+                },
+                filename: function (req, file, cb) {
+                    var extension = "." + file.originalname.split('.').pop();
+                    cb(null, req.body.user._id + '_' + Date.now() + extension);
+                }
+            },
+            avatar: {
+                destination: function (req, file, cb) {
+                    cb(null, './public/assets/' + req.body.user.username);
+                },
+                filename: function (req, file, cb) {
+                    var extension = "." + file.originalname.split('.').pop();
+                    cb(null, "avatar" + extension);
+                }
+            }
+        };
+    };
+
     return {
         mkdir: mkdir,
         mkdirPath: mkdirPath,
         getAlbumPath: getAlbumPath,
-        createAlbumDirectory: createAlbumDirectory
+        createAlbumDirectory: createAlbumDirectory,
+        uploadParams: uploadParams
     };
 };
 

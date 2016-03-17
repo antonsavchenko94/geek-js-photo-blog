@@ -6,6 +6,7 @@
     /**
      * requires ng-if to run directive only when *some_value* is available
      * <photo-upload albums="some_value" ng-if="some_value" after-upload="function"></photo-upload>
+     * <photo-upload avatar></photo-upload>
      */
     function photoUpload() {
         return {
@@ -17,6 +18,10 @@
             },
             controllerAs: "vm",
             link: function($scope, $elem, $attrs, ctrl) {
+                if ($attrs.avatar) {
+                    ctrl.isAvatar = true;
+                }
+
                 $scope.$watch('vm.albums', function(newValue) {
                     ctrl.setAlbums(newValue);
                 });
@@ -25,23 +30,28 @@
                 var vm = this;
                 vm.photos = [];
                 vm.albumId = null;
-                if (vm.albums) {
-                    vm.profileAlbumId = vm.albums[0]._id;
-                }
 
                 vm.setAlbums = function(albums) {
-                    if(albums) {
-                        vm._albums = albums.slice(1, vm.albums.length);
+                    if (albums) {
+                        vm._albums = albums.slice(1, albums.length);
+                        if (!vm.profileAlbumId) {
+                            vm.profileAlbumId = vm.albums[0]._id;
+                        }
                     }
                 };
 
                 vm.openPhotos = function(photos, errFiles) {
                     vm.photos = AlbumsService.openPhotos(photos, errFiles);
+
+                    if (vm.isAvatar) {
+                        vm.photos = [].concat(vm.photos[0]);
+                        vm.photos[0].isAvatar = true;
+                    }
                 };
 
                 vm.uploadPhotos = function(photos, albumId) {
                     if (!albumId) {
-                        albumId = vm.profileAlbumId || $routeParams.album_id;
+                        albumId = vm.profileAlbumId || $routeParams.album_id || null;
                     }
 
                     AlbumsService.uploadPhotos(photos, albumId).then(function(){

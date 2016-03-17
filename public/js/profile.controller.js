@@ -24,6 +24,7 @@
             if (!$routeParams.username) return;
             $http.get('/api/users/' + $routeParams.username).then(function(data) {
                 vm.user = data.data.user;
+                vm.user.avatar = vm.user.avatar || "/images/no-avatar.png";
 
                 if ($rootScope.user && vm.user.username === $rootScope.user.username) {
                     vm.myProfile = true;
@@ -40,8 +41,7 @@
 
         function getProfileAlbum(username) {
             if (!username) return;
-            vm.albums = AlbumsService.getAlbumsList(username);
-            vm.albums.then(function (a) {
+            AlbumsService.getAlbumsList(username).then(function (a) {
                 vm.profileAlbum = AlbumsService.generatePhotoUrls(a[0], username);
             });
         }
