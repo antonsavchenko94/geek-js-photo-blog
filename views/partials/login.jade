@@ -22,7 +22,6 @@ div(ng-if="!vm.passRecover")
                 input.form-control(type="password" ng-model="vm.newUser.password" id="password" placeholder="Password")
 
             button.btn.btn-success(ng-click="vm.login()") Login
-
 div(ng-if="vm.passRecover")
     span Your email:
         input(ng-model="vm.temp.email")

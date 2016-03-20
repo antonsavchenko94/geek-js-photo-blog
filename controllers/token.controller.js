@@ -5,7 +5,7 @@ var secrete = 'photoblog';
 
 var token = {
     create: function (value) {
-        var token = jwt.sign(value, secrete, {expiresIn: "10h"});
+        var token = jwt.sign(value, secrete, {expiresIn: '10m'});
         Token.create({'value': token}, function (err, token) {
             if (err) {
                 throw err;

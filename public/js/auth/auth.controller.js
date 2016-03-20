@@ -64,7 +64,7 @@
                 if (res.status === 200) {
                     showFlashMessage('info', 'New password sent to ' + vm.temp.email + '. Check Your email box !!!');
                 }
-                $location.path('/');
+                $location.path('/login');
             });
         }
 
