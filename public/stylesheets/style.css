@@ -181,3 +181,23 @@ photo-upload .well {
 .users-search {
     margin-bottom: 30px;
 }
+
+.comment-block {
+    display: block;
+}
+.comment {
+    display: inline-flex;
+}
+
+
+.text{
+    border: solid 1px black;
+    border-radius: 5px;
+    width: 400px;
+    height: 30px;
+}
+
+.media-left img{
+    width: 64px;
+    height: 64px;
+}
