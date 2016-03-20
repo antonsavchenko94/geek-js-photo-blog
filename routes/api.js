@@ -6,7 +6,9 @@ var users = require('./users');
 var album = require('./album');
 var admin = require('./admin');
 var shared = require('./shared');
+var token = require('./token');
 
+router.use('/token', token);
 router.use('/auth', auth);
 router.use('/shared', shared);
 

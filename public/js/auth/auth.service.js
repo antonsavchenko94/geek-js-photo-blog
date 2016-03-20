@@ -1,16 +1,19 @@
-(function(){
+(function () {
     angular
         .module('blog')
         .service('AuthService', AuthService);
 
-    AuthService.$inject = ['$http', '$rootScope'];
+    AuthService.$inject = ['$http', '$rootScope', '$routeParams'];
 
-    function AuthService($http, $rootScope) {
+    function AuthService($http, $rootScope, $routeParams) {
         return {
             register: register,
             login: login,
             logout: logout,
             isLogged: isLogged,
+            sendToken: sendToken,
+            checkToken: checkToken,
+            newPassword: newPassword,
             role: {
                 user: isUser,
                 admin: isAdmin
@@ -30,9 +33,9 @@
         }
 
         function logout() {
-            return $http.get('/api/auth/logout').then(function() {
-                    $rootScope.user = null;
-                })
+            return $http.get('/api/auth/logout').then(function () {
+                $rootScope.user = null;
+            })
         }
 
         /**
@@ -48,7 +51,7 @@
          * @returns Promise
          */
         function isUser() {
-            return isLogged().then(function(res) {
+            return isLogged().then(function (res) {
                 return res.data.user;
             })
         }
@@ -58,9 +61,28 @@
          * @returns Promise
          */
         function isAdmin() {
-            return isLogged().then(function(res) {
+            return isLogged().then(function (res) {
                 return res.data.user && res.data.user.isAdmin;
             })
+        }
+
+        function sendToken(email, successCb, failureCb) {
+            return $http.post('/api/token/new', {"email": email})
+                .then(successCb)
+                .catch(failureCb);
+        }
+
+        function checkToken(successCb, failureCb) {
+            if (!$routeParams.token) return;
+            return $http.post('/api/token/check/' + $routeParams.token)
+                .then(successCb)
+                .catch(failureCb);
+        }
+
+        function newPassword(email, successCb, failureCb) {
+            return $http.post('/api/auth/recovery', {'email': email})
+                .then(successCb)
+                .catch(failureCb);
         }
     }
 })();
