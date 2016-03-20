@@ -1,2 +1,5 @@
 img.center-block.img-responsive(src="{{vm.photo.url}}")
-h2 comments
+
+flash-message
+
+show-comments( comments-to='vm.photo' ng-if="vm.photo")
