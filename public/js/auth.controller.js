@@ -1,4 +1,4 @@
-(function() {
+(function () {
     angular
         .module('blog')
         .controller('AuthController', AuthController);
@@ -23,13 +23,13 @@
         }
 
         function register() {
-            AuthService.register(vm.newUser, function(res) {
+            AuthService.register(vm.newUser, function (res) {
                 saveUserAndRedirect(res, '/login');
             })
         }
 
         function login() {
-            AuthService.login(vm.newUser, function(res) {
+            AuthService.login(vm.newUser, function (res) {
                 saveUserAndRedirect(res, '/');
             });
         }
@@ -43,21 +43,21 @@
             AuthService.sendToken(vm.newUser.email)
         }
 
-        function checkToken(){
-            AuthService.checkToken(function(res){
+        function checkToken() {
+            AuthService.checkToken(function (res) {
                 vm.newUser.email = res.data.email;
                 console.log(res);
                 vm.token = true;
             })
         }
 
-        function newPassword(){
-            AuthService.newPassword(vm.temp.email, function(res){
+        function newPassword() {
+            AuthService.newPassword(vm.temp.email, function (res) {
                 console.log(res);
-                if(res.status === 200){
-                    showFlashMessage('info', 'New password sent to '+ vm.temp.email + '. Check Your email box !!!');
+                if (res.status === 200) {
+                    showFlashMessage('info', 'New password sent to ' + vm.temp.email + '. Check Your email box !!!');
                 }
-                $location.path('/');
+                $location.path('/login');
             });
         }
 
