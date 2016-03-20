@@ -7,7 +7,7 @@
 
     function PhotoController(AlbumsService, $routeParams, $rootScope, $http) {
         var vm = this;
-        vm.photo = {};
+        vm.photo = null;
 
         getPhotoById();
 

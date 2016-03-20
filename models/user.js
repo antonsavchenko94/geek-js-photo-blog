@@ -9,7 +9,7 @@ var user = new Schema({
     email:      { type: String, required: true },
     avatar:     { type: String, required: false },
     isAdmin:    { type: Boolean, required: false },
-    status:     { type: String, default: 'active', enum:['baned', 'active']}
+    status:     { type: String, default: 'active', enum:['baned', 'active', 'notActive']}
 });
 
 user.set('autoIndex', true);

@@ -20,6 +20,11 @@
                 controller: 'AuthController',
                 controllerAs: 'vm'
             })
+            .when('/register/:token', {
+                templateUrl: 'partials/register',
+                controller: 'AuthController',
+                controllerAs: 'vm'
+            })
             .when('/login', {
                 templateUrl: 'partials/login',
                 controller: 'AuthController',

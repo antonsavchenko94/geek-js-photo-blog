@@ -1,4 +1,6 @@
 img.center-block.img-responsive(src="{{vm.photo.url}}")
 span(class="badge") Views: {{ vm.photo.view_count }}
 
-h2 comments
+flash-message
+
+show-comments( comments-to='vm.photo' ng-if="vm.photo")
