@@ -40,6 +40,9 @@ router.route('/:album_id/:photo_id')
 router.route('/createNew')
     .post(albumController.createNewAlbum);
 
+router.route('/remove')
+    .post(albumController.removeAlbum);
+
 router.post('/uploadPhotos', upload.single('file'), function (req, res, next) {
     var file = req.file;
     var fields = req.body;

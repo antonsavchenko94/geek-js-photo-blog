@@ -7,6 +7,7 @@
 
     function AlbumsService($http, $rootScope, $timeout, Upload, $q) {
         return {
+            removeAlbum: removeAlbum,
             createAlbum: createAlbum,
             getAlbumsList: getAlbumsList,
             uploadPhotos: uploadPhotos,
@@ -16,6 +17,10 @@
             createProfileAlbum: createProfileAlbum,
             getAllProfileAlbums: getAllProfileAlbums
         };
+
+        function removeAlbum(id){
+            $http.post('/api/album/remove', {id: id});
+        }
 
         function createAlbum(album) {
             var url = album.isProfileAlbum

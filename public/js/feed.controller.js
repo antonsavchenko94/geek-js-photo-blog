@@ -19,7 +19,6 @@
             AlbumsService.getAllProfileAlbums()
                 .then(function (albums) {
                     vm.albums = AlbumsService.generatePhotoUrls(albums);
-                    console.log(vm.albums);
                     getAllProfilePhotos();
                 });
         }

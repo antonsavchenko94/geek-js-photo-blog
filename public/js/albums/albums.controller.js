@@ -37,18 +37,23 @@
 
         function getAlbumCovers(albums) {
             vm.albumCovers = [];
-            albums.forEach(function(album) {
+            albums.forEach(function (album) {
                 album.cover = {
+                    albumId: album._id,
                     pageUrl: '/user/' + vm.user.username + '/' + album._id,
                     title: album.title
                 };
 
                 album.cover.imageUrl = (album.photos.length > 0)
-                    ? '/assets/' + vm.user.username + "/" +album._id + "/" + album.photos.pop().filename
+                    ? '/assets/' + vm.user.username + "/" + album._id + "/" + album.photos.pop().filename
                     : '/images/no-image.jpg';
-
+                album.cover.editable = !album.isProfileAlbum && isMyProfile();
                 vm.albumCovers.push(album.cover);
             });
+        }
+
+        function isMyProfile(){
+            return vm.user.username === $rootScope.user.username;
         }
     }
 })();

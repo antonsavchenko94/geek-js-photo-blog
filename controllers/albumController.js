@@ -69,7 +69,7 @@ var albumController = function () {
         };
 
         Album.findOne({postedBy: album.postedBy._id, title: album.title}, function (err, queryAlbum) {
-            console.log(queryAlbum);
+
             if (queryAlbum) {
                 res.send(queryAlbum.title + " album already exists");
             } else {
@@ -130,6 +130,19 @@ var albumController = function () {
         res.end();
     };
 
+    var removeAlbum = function (req, res, next){
+        var id = req.body.id;
+
+        Album.remove({_id: id}, function (err) {
+            if (err) {
+                console.log(err);
+                next(err);
+            }
+            res.status = 200;
+            res.end();
+        });
+
+    };
 
     return {
         getAllByUsername: getAllByUsername,
@@ -138,7 +151,8 @@ var albumController = function () {
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         middleware: middleware,
-        uploadPhotos: uploadPhotos
+        uploadPhotos: uploadPhotos,
+        removeAlbum: removeAlbum
     };
 };
 
