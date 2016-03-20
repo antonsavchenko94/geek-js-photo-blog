@@ -13,7 +13,7 @@ div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.
       tbody
          tr(ng-repeat="user in vm.users | filter:searchUser")
             td
-               img.pull-right(src="/images/no-avatar.png")
+               img.pull-right(src="{{ user.avatar }}")
             td
                a(href="/user/{{ user.username }}") {{ user.username }}
             td {{ user.last_name }}
