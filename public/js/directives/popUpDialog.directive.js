@@ -3,6 +3,18 @@
         .module('blog')
         .directive('popUpDialog', popUpDialog);
 
+    /**
+     * Modal dialog directive
+     *
+     * "dialog-body" can contain html tags
+     *
+     * <pop-up-dialog dialog-show="@Boolean"
+     *                dialog-title="@String"
+     *                dialog-body="@String"
+     *                dialog-ok="@Function">
+     * </pop-up-dialog>
+     */
+
     function popUpDialog() {
         return {
             restrict: 'E',
@@ -19,9 +31,9 @@
             controllerAs: "vm",
             link: function postLink(scope, element, attrs, ctrl) {
 
-                scope.$watch('dialogOk', function (value) {
+                scope.$watch('dialogOk', function (onConfirmFunc) {
                     ctrl.onConfirm = function () {
-                        value();
+                        onConfirmFunc($('.modal-body'));
                         ctrl.toggle(element);
                     }
                 });
@@ -61,17 +73,6 @@
                 vm.onConfirm = $scope.dialogOk;
 
                 vm.toggle = toggle;
-                vm.hasHtml = hasHtml;
-
-                function hasHtml(str) {
-                    var res = str.match( /[<\/][a-zA-Z]{1,7}[>]+/ );
-                    console.log(res);
-                    return null;
-                }
-
-                function hide() {
-                    vm.dialogShow = false;
-                }
 
                 function toggle(element, value) {
                     if (!!value) {

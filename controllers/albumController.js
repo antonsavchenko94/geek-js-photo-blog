@@ -138,10 +138,27 @@ var albumController = function () {
                 console.log(err);
                 next(err);
             }
-            res.status = 200;
-            res.end();
+            res.status(200).end();
         });
+    };
 
+    var editAlbum = function (req, res, next) {
+        var reqAlbum = req.body.album;
+
+        Album.findById(reqAlbum.id, function (err, album) {
+            if (err) {
+                console.log(err);
+                next(err);
+            }
+            album.title = reqAlbum.title;
+            album.save(function (err) {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+            });
+            res.send(album);
+        });
     };
 
     var uploadAvatar = function(req, res, next) {
@@ -163,7 +180,8 @@ var albumController = function () {
         middleware: middleware,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
-        removeAlbum: removeAlbum
+        removeAlbum: removeAlbum,
+        editAlbum: editAlbum
     };
 };
 

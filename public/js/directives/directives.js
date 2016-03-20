@@ -14,6 +14,9 @@
     function photoGrid() {
         return {
             restrict: 'E',
+            bindToController:{
+                refresh: '='
+            },
             scope: {
                 photos: '=',
                 select: '=',
@@ -36,40 +39,65 @@
                 vm.editTitle = editTitle;
 
                 function removeAlbum(album){
+
                     vm.dialog = {
                         title: 'Removing album',
                         body: '<h1>Album \''+ album.title +'\' will be removed</h1>',
                         onConfirm: function () {
-                            AlbumsService.removeAlbum(album.albumId);
+                            AlbumsService.removeAlbum(album.albumId).then(function () {
+                                vm.refresh();
+                            });
                         }
                     };
                     vm.dialogVisible = true;
                 }
 
                 function editTitle(data){
-                    data.newTitle = 'new';
+
                     vm.dialog = {
-                        title: 'Edit title',
+                        title: 'Edit album\'s title',
                         body: '' +
-                        '<p>Old title: </p>' + data.title +
-                        '<span ng-bind="data.title()"></span>' +
-                        '<br>' +
-                        '<input type="text" name="newTitle" placeholder="Enter new title..." ' +
-                                'ng-model="data.title" ng-model-options="{getterSetter: true}">',
+                        '<p>Old title: ' + data.title + ' </p> ' +
+                        '<p>New title: ' + data.newTitle + ' </p> ',
                         onConfirm: function () {
-                            console.log('editing album' + data.title + '\nnew title: ' + data.newTitle)
+                            AlbumsService.editTitle({id: data.albumId, title: data.newTitle}).then(function () {
+                                vm.refresh();
+                            });
                         }
                     };
                     vm.dialogVisible = true;
+                    /*vm.dialog = {
+                        title: 'Edit album\'s title',
+                        body: '' +
+                        '<p>Old title: '+ data.title +' </p> ' +
+                        '<span ng-init="newTitle=0">{{ newTitle }}</span>' +
+                        '<br>' +
+                        '<input id="new-title" value="000" type="text" placeholder="Enter new title..." ' +
+                                'ng-model="newTitle">',
+                        onConfirm: function (body) {
+                            console.log(body);
+                            //console.log('editing album: ' + data.title + '\nnew title: ' + newTitle)
+                        }
+                    };
+                    vm.dialogVisible = true;*/
                 }
-
             },
             template:
                 '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-class="{hasTitle: photo.title}" ng-repeat="photo in photos">' +
-                '       <div ng-if="photo.editable">' +
-                '           <button ng-click="vm.editTitle(photo)">Edit title</button>' +
-                '           <button ng-click="vm.removeAlbum(photo)">Remove</button>' +
+                '   <div ng-if="photo.editable">' +
+                '       <div class="input-group"> ' +
+                '           <input type="text" class="form-control" placeholder="Enter {{photo.title}}\'s new title..." ng-model="photo.newTitle"> ' +
+                '           <div class="input-group-btn"> ' +
+                '               <button type="button" class="btn btn-default" ng-click="vm.editTitle(photo)">' +
+                '                   <span class="glyphicon glyphicon-pencil"></span> Apply title' +
+                '               </button> ' +
+                '               <button type="button" class="btn btn-primary" ng-click="vm.removeAlbum(photo)">' +
+                '                   <span class="glyphicon glyphicon-remove"></span> Remove album' +
+                '               </button> ' +
+                '           </div> ' +
                 '       </div>' +
+                '   </div>' +
+
                 '   <a class="thumbnail" href="{{photo.pageUrl}}">' +
                 '       <h2 ng-if="photo.title" class="text-center">{{photo.title}}</h2>' +
 

@@ -8,6 +8,7 @@
     function AlbumsService($http, $rootScope, $timeout, Upload, $q) {
         return {
             removeAlbum: removeAlbum,
+            editTitle: editTitle,
             createAlbum: createAlbum,
             getAlbumsList: getAlbumsList,
             uploadPhotos: uploadPhotos,
@@ -18,8 +19,16 @@
             getAllProfileAlbums: getAllProfileAlbums
         };
 
+        function editTitle(album){
+            return $http.post('/api/album/edit', {album: album}).then(function(data){
+                return data.data.album;
+            });
+        }
+
         function removeAlbum(id){
-            $http.post('/api/album/remove', {id: id});
+            return $http.post('/api/album/remove', {id: id}).then(function () {
+                return true;
+            });
         }
 
         function createAlbum(album) {

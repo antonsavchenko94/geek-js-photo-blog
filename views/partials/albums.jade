@@ -6,6 +6,6 @@ div.text-center(ng-if="vm.myProfile")
     div.form-group
         photo-upload(albums="vm.albums" after-upload="vm.reloadAlbumsList")
 
-photo-grid(photos="vm.albumCovers")
+photo-grid(photos="vm.albumCovers" refresh="vm.reloadAlbumsList")
 
 

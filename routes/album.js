@@ -2,7 +2,6 @@ var express = require('express');
 var multer = require('multer');
 var fs = require('fs');
 
-var Album = require('../models/album');
 var albumController = require('../controllers/albumController')();
 var albumService = require('../services/albumService')();
 var uploadParams = albumService.uploadParams();
@@ -29,6 +28,9 @@ router.route('/createNew')
 
 router.route('/remove')
     .post(albumController.removeAlbum);
+
+router.route('/edit')
+    .post(albumController.editAlbum);
 
 router.route('/uploadPhotos')
     .post(uploadPhotos.single('file'), albumController.uploadPhotos);
