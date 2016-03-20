@@ -15,20 +15,21 @@
         vm.albumCovers = [];
 
         vm.createAlbum = createAlbum;
+        vm.reloadAlbumsList = reloadAlbumsList;
 
-        reloadAlbumsList(vm.user.username);
+        reloadAlbumsList();
 
         function createAlbum(title) {
             if (title) {
                 AlbumsService.createAlbum({title: title});
-                reloadAlbumsList(vm.user.username);
+                reloadAlbumsList();
                 vm.newAlbum = {};
                 vm.title = '';
             }
         }
 
-        function reloadAlbumsList(username) {
-            if (!username) return;
+        function reloadAlbumsList() {
+            var username = $routeParams.username;
             AlbumsService.getAlbumsList(username).then(function (a) {
                 vm.albums = a;
                 getAlbumCovers(vm.albums);

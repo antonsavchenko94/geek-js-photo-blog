@@ -4,6 +4,6 @@ div.text-center(ng-if="vm.myProfile")
         span.input-group-btn
             button.btn.btn-success(ng-click="vm.createAlbum(vm.title, $rootScope.user)") Add album
     div.form-group
-        photo-upload(albums="vm.albums" ng-if="vm.albums")
+        photo-upload(albums="vm.albums" after-upload="vm.reloadAlbumsList")
 
 photo-grid(photos="vm.albumCovers")

@@ -119,6 +119,16 @@ var albumController = function () {
         res.end();
     };
 
+    var uploadAvatar = function(req, res, next) {
+        User.findOne({_id: req.user._id}, function(err, user) {
+            var url = req.file.path;
+            user.avatar = '/' + url.substring(url.indexOf('/') + 1);
+            user.save();
+        });
+
+        res.end();
+    };
+
     return {
         getAllByUsername: getAllByUsername,
         getById: getById,
@@ -126,7 +136,8 @@ var albumController = function () {
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         middleware: middleware,
-        uploadPhotos: uploadPhotos
+        uploadPhotos: uploadPhotos,
+        uploadAvatar: uploadAvatar
     };
 };
 

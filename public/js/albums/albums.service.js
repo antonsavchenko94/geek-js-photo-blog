@@ -51,18 +51,20 @@
                 albumId = $rootScope.user._id;
             }
             if (photos && photos.length && albumId) {
-                var resolvedPromises = $q.all(photos.map(function(photo) {
-                    var file = photo;
+                var resolvedPromises = $q.all(photos.map(function(file) {
                     if (!file.$error) {
-                       return Upload.upload({
-                            url: 'api/album/uploadPhotos',
+                        var url = file.isAvatar
+                            ? '/api/album/uploadAvatar'
+                            : '/api/album/uploadPhotos';
+                        return Upload.upload({
+                            url: url,
                             method: 'POST',
                             data: {
                                 albumId: albumId,
                                 user: $rootScope.user,
                                 file: file
                             }
-                       }).then(function (resp) {
+                        }).then(function (resp) {
                             $timeout(function () {
                                 /*$scope.log = 'file: ' +
                                  resp.config.data.file.name +
@@ -100,8 +102,7 @@
         }
 
         function generatePhotoUrls(albums, username){
-            var a = [];
-            a = a.concat(albums);
+            var a = [].concat(albums);
             a.map(function(album) {
                 var user = album.postedBy.username ? album.postedBy.username : username;
                 album.photos.map(function(photo) {
