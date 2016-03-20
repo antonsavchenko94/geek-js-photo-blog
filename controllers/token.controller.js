@@ -6,24 +6,22 @@ var Token = require('../models/token.js');
 var secrete = 'photoblog';
 
 var token = {
-    create: function (email){
-        var token = jwt.sign({'email':email}, secrete, {
-            expiresIn: "10h"  // expires in 10 hours
-        });
-        Token.create({'value':token}, function(err, token) {
-            if (err){
+    create: function (value) {
+        var token = jwt.sign(value, secrete, {expiresIn: "10h"});
+        Token.create({'value': token}, function (err, token) {
+            if (err) {
                 throw err;
             }
         });
         return token;
     },
     check: function (token, done) {
-        Token.findOne({'value':token}, function(err, tn){
-            if(err){
+        Token.findOne({'value': token}, function (err, tn) {
+            if (err) {
                 done(null, err);
             }
-            if(tn){
-                jwt.verify(tn.value, secrete, function(err, decoded) {
+            if (tn) {
+                jwt.verify(tn.value, secrete, function (err, decoded) {
                     if (err) {
                         done(null, err);
                     } else {
@@ -33,7 +31,7 @@ var token = {
                         done(decoded);
                     }
                 });
-            }else {
+            } else {
                 done(null, 'token not found');
             }
         })

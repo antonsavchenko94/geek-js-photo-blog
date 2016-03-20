@@ -1,23 +1,32 @@
 var express = require('express');
 var router = express.Router();
 var token = require('../controllers/token.controller.js');
+var mail = require('../controllers/email.controller.js');
 
 
-router.post('/:email', function(req, res, next){
-    var email =  req.params.email;
-    token.create(email, function(err){
-        if(err){
-            res.sendStatus(500)
-        }else {
-            res.sendStatus(200);
-        }
-    });
+router.post('/new', function (req, res, next) {
+    var tn = token.create(req.body);
+    if (!tn) {
+        res.status(500).send('token doest create');
+    } else {
+        mail.sendRegistration(req.body.email, tn, function (result, err) {
+            if (result)
+                res.status(200).send("Registration mail send to your email address");
+            else
+                res.status(500).send("email with token doesn't send");
+        })
+
+    }
 });
 
-router.post('/check/:token', function (req, res, next){
-    var tn =  req.params.token;
-    token.check(tn, function(email){
-        res.send(JSON.stringify({'email': email}));
+router.post('/check/:token', function (req, res, next) {
+    var tn = req.params.token;
+    token.check(tn, function (email, err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else
+            res.status(200).send(email);
     })
 });
 
