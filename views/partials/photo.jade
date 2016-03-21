@@ -1,5 +1,8 @@
-img.center-block.img-responsive(src="{{vm.photo.url}}")
-span(class="badge") Views: {{ vm.photo.view_count }}
+div.panel.panel-default.center-block
+    div.panel-body
+        img.center-block.img-responsive(src="{{vm.photo.url}}")
+    div.panel-footer
+        span.badge Views: {{ vm.photo.view_count }}
 
 flash-message
 

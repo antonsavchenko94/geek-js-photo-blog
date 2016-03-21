@@ -6,6 +6,7 @@ div.container-fluid.profile-info
       h1 {{ vm.user.username }}
       h3 {{ vm.user.first_name }} {{ vm.user.last_name }}
       h3 Email: {{ vm.user.email }}
+      h3 Total photo views: {{vm.user.globalViews}}
 
       a.btn.btn-primary(href="/user/{{ vm.user.username }}/albums")
         h3 Albums

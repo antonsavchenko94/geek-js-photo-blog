@@ -43,6 +43,7 @@
             if (!username) return;
             AlbumsService.getAlbumsList(username).then(function (a) {
                 vm.profileAlbum = AlbumsService.generatePhotoUrls(a[0], username);
+                vm.user.globalViews = AlbumsService.getGlobalViews(a);
             });
         }
     }

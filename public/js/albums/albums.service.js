@@ -16,7 +16,8 @@
             openPhotos: openPhotos,
             generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
-            getAllProfileAlbums: getAllProfileAlbums
+            getAllProfileAlbums: getAllProfileAlbums,
+            getGlobalViews: getGlobalViews
         };
 
         function editTitle(album){
@@ -30,6 +31,8 @@
                 return true;
             });
         }
+
+
 
         function createAlbum(album) {
             var url = album.isProfileAlbum
@@ -132,6 +135,14 @@
             });
 
             return a.length == 1 ? a[0] : a;
+        }
+
+        function getGlobalViews(albums){
+            return albums.reduce(function (sum, album) {
+                return sum + album.photos.reduce(function (sum, photo) {
+                    return sum + photo.view_count;
+                },0)
+            },0);
         }
     }
 })();
