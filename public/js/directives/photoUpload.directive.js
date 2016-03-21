@@ -68,7 +68,7 @@
             '   <select ng-if="vm._albums" class="form-control" ng-options="album._id as album.title for album in vm._albums track by album._id" ng-model="vm.albumId">' +
             '       <option value=""> Profile Album </option>' +
             '   </select>' +
-            '   <button class="btn btn-success" ngf-select="vm.openPhotos($files, $invalidFiles)" ngf-multiple="true" accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">' +
+            '   <button class="btn btn-success" ngf-select="vm.openPhotos($files, $invalidFiles)" ngf-multiple="true" accept="image/*" ngf-max-height="6000" ngf-max-size="10MB">' +
             '       Select images ' +
             '   </button>' +
             '   <button class="btn btn-success" ng-click="vm.uploadPhotos(vm.photos, vm.albumId)"> Upload images</button>' +
