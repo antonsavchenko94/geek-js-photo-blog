@@ -1,28 +1,36 @@
-div(ng-if="!vm.passRecover")
-    div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
-      div.panel.panel-info
-        div.panel-heading
-          h1.panel-title Login
-        div.panel-body
-          flash-message
 
-          form(role="form")
-            div.form-group
-              label(for="username") Username:
-              div.input-group
-                span.input-group-addon
-                  i.glyphicon.glyphicon-user
-                input.form-control(type="text" ng-model="vm.newUser.username" id="username" placeholder="Enter username")
+div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+  div.panel.panel-info
+    div.panel-heading
+      h1.panel-title Login
+    div.panel-body
+      flash-message
 
-            div.form-group
-              label(for="password") Password:
-              div.input-group
-                span.input-group-addon
-                  i.glyphicon.glyphicon-lock
-                input.form-control(type="password" ng-model="vm.newUser.password" id="password" placeholder="Password")
+      form(role="form")
+        div(ng-if="!vm.passRecover")
+          div.form-group
+            label(for="username") Username:
+            div.input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-user
+              input.form-control(type="text" ng-model="vm.newUser.username" id="username" placeholder="Enter username")
 
-            button.btn.btn-success(ng-click="vm.login()") Login
-div(ng-if="vm.passRecover")
-    span Your email:
-        input(ng-model="vm.temp.email")
-        button(ng-click="vm.newPassword()") Get new password;
+          div.form-group
+            label(for="password") Password:
+            div.input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-lock
+              input.form-control(type="password" ng-model="vm.newUser.password" id="password" placeholder="Password")
+
+        div(ng-if="vm.passRecover")
+          div.form-group
+            label(for="email") Email:
+            div.input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-lock
+              input.form-control(type="email" ng-model="vm.temp.email" id="email" placeholder="Email")
+        a(ng-click="vm.passRecover = true" ng-if="!vm.passRecover") Forgot password ?
+        br
+        br
+        button.btn.btn-success(ng-click="vm.login()" ng-if="!vm.passRecover") Login
+        button.btn.btn-success(ng-click="vm.newPassword()" ng-if="vm.passRecover") Send
