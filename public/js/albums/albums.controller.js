@@ -11,7 +11,7 @@
         vm.title = '';
         vm.newAlbum = {};
         vm.user = {username: $routeParams.username || $rootScope.user};
-        vm.myProfile = vm.user.username === $rootScope.user.username;
+        vm.myProfile = isMyProfile();
         vm.albumCovers = [];
 
         vm.createAlbum = createAlbum;

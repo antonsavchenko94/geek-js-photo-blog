@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['AuthService', '$location', '$rootScope', '$routeParams'];
+    AuthController.$inject = ['AuthService', '$location', '$rootScope', '$routeParams', 'AlbumsService'];
 
-    function AuthController(AuthService, $location, $rootScope, $routeParams) {
+    function AuthController(AuthService, $location, $rootScope, $routeParams, AlbumsService) {
         var vm = this;
 
         vm.login = login;
@@ -43,7 +43,11 @@
         function sendToken() {
             AuthService.sendToken(vm.newUser.email, function (res) {
                 showFlashMessage('info', res.data);
-            })
+            },
+                function (res) {
+                    vm.newUser.email = '';
+                    showFlashMessage('warning', res.data);
+                })
         }
 
         function checkToken() {
