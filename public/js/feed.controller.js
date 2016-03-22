@@ -11,30 +11,25 @@
         vm.feedPhotos = [];
         vm.albums = [];
         vm.getAllProfileAlbums = getAllProfileAlbums;
+        vm.loadMore = loadMore;
+        vm.allPhotosLoaded = false;
 
         getUserAlbumsList();
         getAllProfileAlbums();
 
-        function getAllProfileAlbums() {
-            AlbumsService.getAllProfileAlbums()
-                .then(function (albums) {
-                    vm.albums = AlbumsService.generatePhotoUrls(albums);
-                    getAllProfilePhotos();
-                });
+        function loadMore() {
+            if (!vm.allPhotosLoaded){
+                console.log('LOADING...');
+                getAllProfileAlbums();
+            }
         }
 
-        function getAllProfilePhotos() {
-            vm.feedPhotos = []; // temp?
-
-            if (vm.albums.length) {
-                vm.albums.forEach(function (album) {
-                    album.photos.forEach(function (photo) {
-                        vm.feedPhotos.push(photo);
-                    });
-                });
-            } else {
-                vm.feedPhotos = vm.albums.photos
-            }
+        function getAllProfileAlbums() {
+            AlbumsService.getAllProfileAlbums()
+                .then(function (album) {
+                    var photos = AlbumsService.generatePhotoUrls(album);
+                    vm.feedPhotos = [].concat(vm.feedPhotos, photos);
+                })
         }
 
         function getUserAlbumsList() {

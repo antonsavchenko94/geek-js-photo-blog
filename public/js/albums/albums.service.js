@@ -118,23 +118,21 @@
             });
         }
 
-        function generatePhotoUrls(albums, username){
-            var a = [].concat(albums);
-            a.map(function(album) {
-                var user = album.postedBy.username ? album.postedBy.username : username;
-                album.photos.map(function(photo) {
-                    photo.imageUrl = "/assets/"
-                        + user + "/"
-                        + album._id + "/"
-                        + photo.filename;
-                    photo.pageUrl = "/user/"
-                        + user + "/"
-                        + album._id + "/"
-                        + photo._id;
-                });
+        function generatePhotoUrls(album, username){
+            album.map(function(photo) {
+                var user = photo.postedBy.username ? photo.postedBy.username : username;
+                photo.imageUrl = "/assets/"
+                    + user + "/"
+                    + photo.album_id + "/"
+                    + photo.filename;
+                photo.pageUrl = "/user/"
+                    + user + "/"
+                    + photo.album_id + "/"
+                    + photo._id;
+                return photo;
             });
 
-            return a.length == 1 ? a[0] : a;
+            return album;
         }
 
         function getGlobalViews(albums){

@@ -15,14 +15,18 @@
         return {
             restrict: 'E',
             bindToController:{
-                refresh: '='
+                refresh: '=',
+                photos: '='
             },
-            scope: {
-                photos: '=',
-                select: '=',
-                orderBy: '='
-            },
+            scope: {},
             controllerAs: "vm",
+            link: function($scope, $elem, $attr, ctrl) {
+                $scope.$watch('vm.photos', function(photos) {
+                    if (photos) {
+                        ctrl.photos = photos;
+                    }
+                })
+            },
             controller: function (AlbumsService) {
                 var vm = this;
 
@@ -83,7 +87,7 @@
                 }
             },
             template:
-                '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-class="{hasTitle: photo.title}" ng-repeat="photo in photos">' +
+                '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-class="{hasTitle: photo.title}" ng-repeat="photo in vm.photos">' +
                 '   <div ng-if="photo.editable">' +
                 '       <div class="input-group"> ' +
                 '           <input type="text" class="form-control" placeholder="Enter {{photo.title}}\'s new title..." ng-model="photo.newTitle"> ' +

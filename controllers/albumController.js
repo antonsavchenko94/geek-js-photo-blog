@@ -4,6 +4,7 @@ var User = require('../models/user');
 var albumService = require('../services/albumService')();
 
 var albumController = function () {
+    var lastFeedPhotoIndex = 0;
 
     var middleware = function (req, res, next) {
         next();
@@ -101,7 +102,29 @@ var albumController = function () {
                     console.log(err);
                     next(err);
                 }
-                res.send({albums: albums});
+
+                var feedAlbum = [];
+                albums.forEach(function(album) {
+                    var user = {
+                        username: album.postedBy.username,
+                        _id: album.postedBy._id
+                    };
+                    album.photos.forEach(function(photo) {
+                        var _photo = photo.toObject();
+                        _photo.postedBy = user;
+                        _photo.album_id = album._id;
+                        feedAlbum.push(_photo);
+                    });
+                });
+
+                feedAlbum.sort(function(prev, next) {
+                    return new Date(next.uploaded) - new Date(prev.uploaded);
+                });
+
+                var _feedAlbum = feedAlbum.splice(lastFeedPhotoIndex, 12);
+                lastFeedPhotoIndex += 12;
+
+                res.send({albums: _feedAlbum});
             });
     };
 
@@ -126,6 +149,7 @@ var albumController = function () {
             album.save();
         });
 
+        lastFeedPhotoIndex = 0;
         res.json(file);
         res.end();
     };

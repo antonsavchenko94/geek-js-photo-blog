@@ -93,6 +93,11 @@ p b {
     padding-top: 20px;
 }
 
+photo-grid {
+    display: block;
+    overflow: auto;
+}
+
 .photogrid-item {
     height: 300px;
     margin-bottom: 20px;
