@@ -1,5 +1,6 @@
 var Album = require('../models/album');
 var User = require('../models/user');
+var path = require('path');
 
 var albumService = require('../services/albumService')();
 
@@ -132,14 +133,18 @@ var albumController = function () {
 
     var removeAlbum = function (req, res, next){
         var id = req.body.id;
-
-        Album.remove({_id: id}, function (err) {
-            if (err) {
-                console.log(err);
-                next(err);
-            }
-            res.status(200).end();
-        });
+        Album.findOne({_id:id})
+            .populate('postedBy')
+            .exec(function(error, album){
+                albumService.removeAlbum(album);
+                album.remove(function(err){
+                    if (err) {
+                        console.log(err);
+                        next(err);
+                    }
+                    res.status(200).end();
+                })
+            });
     };
 
     var editAlbum = function (req, res, next) {
@@ -164,7 +169,7 @@ var albumController = function () {
     var uploadAvatar = function(req, res, next) {
         User.findOne({_id: req.user._id}, function(err, user) {
             var url = req.file.path;
-            user.avatar = '/' + url.substring(url.indexOf('/') + 1);
+            user.avatar = path.sep + url.substring(url.indexOf(path.sep) + 1);
             user.save();
         });
 
