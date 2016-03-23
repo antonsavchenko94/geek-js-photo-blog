@@ -42,7 +42,9 @@
         function getProfileAlbum(username) {
             if (!username) return;
             AlbumsService.getAlbumsList(username).then(function (a) {
-                vm.profileAlbum = AlbumsService.generatePhotoUrls(a[0], username);
+                vm.profileAlbum = a;
+                vm.profileAlbum.photos = AlbumsService.generatePhotoUrls(vm.profileAlbum, username);
+                console.log(vm.profileAlbum);
                 vm.user.globalViews = AlbumsService.getGlobalViews(a);
             });
         }

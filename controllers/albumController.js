@@ -4,7 +4,7 @@ var User = require('../models/user');
 var albumService = require('../services/albumService')();
 
 var albumController = function () {
-    var lastFeedPhotoIndex = 0;
+    var seenIds = [];
 
     var middleware = function (req, res, next) {
         next();
@@ -20,6 +20,7 @@ var albumController = function () {
                             console.log(err);
                             next(err);
                         }
+
                         res.send({albums: albums});
                     }
                 );
@@ -95,37 +96,34 @@ var albumController = function () {
     };
 
     var getAllProfileAlbums = function (req, res, next) {
-        Album.find({isProfileAlbum: true})
-            .populate('postedBy')
-            .exec(function (err, albums) {
-                if (err) {
-                    console.log(err);
-                    next(err);
-                }
+        console.log(req.params);
+        if (req.params.param != 'loadMore') {
+            seenIds = [];
+        }
 
-                var feedAlbum = [];
-                albums.forEach(function(album) {
-                    var user = {
-                        username: album.postedBy.username,
-                        _id: album.postedBy._id
-                    };
-                    album.photos.forEach(function(photo) {
-                        var _photo = photo.toObject();
-                        _photo.postedBy = user;
-                        _photo.album_id = album._id;
-                        feedAlbum.push(_photo);
-                    });
+        Album.aggregate([
+            {$match: {isProfileAlbum: true, "photos._id": {"$nin": seenIds }}},
+            {$unwind: '$photos'},
+            {$project: {
+                album_id: '$_id',
+                _id: '$photos._id',
+                filename: '$photos.filename',
+                uploaded: '$photos.uploaded',
+                view_count: '$photos.view_count',
+                status: '$photos.status',
+                postedBy: '$postedBy'
+            }},
+            { $sort : {uploaded : -1}},
+            { $limit : 12 }
+        ], function(err, result) {
+            Album.populate(result, 'postedBy', function(err, feedPhotos) {
+                feedPhotos.forEach(function(photo) {
+                    seenIds.push(photo._id);
                 });
 
-                feedAlbum.sort(function(prev, next) {
-                    return new Date(next.uploaded) - new Date(prev.uploaded);
-                });
-
-                var _feedAlbum = feedAlbum.splice(lastFeedPhotoIndex, 12);
-                lastFeedPhotoIndex += 12;
-
-                res.send({albums: _feedAlbum});
-            });
+                res.send({album: feedPhotos});
+            })
+        })
     };
 
     var uploadPhotos = function (req, res, next) {

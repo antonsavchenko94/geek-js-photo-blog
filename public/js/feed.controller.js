@@ -19,16 +19,20 @@
 
         function loadMore() {
             if (!vm.allPhotosLoaded){
-                console.log('LOADING...');
-                getAllProfileAlbums();
+                console.log('LOADING...' + new Date());
+                return getAllProfileAlbums('loadMore');
             }
         }
 
-        function getAllProfileAlbums() {
-            AlbumsService.getAllProfileAlbums()
+        function getAllProfileAlbums(option) {
+            console.log('============');
+            console.dir(vm.feedPhotos);
+            return AlbumsService.getAllProfileAlbums(option)
                 .then(function (album) {
                     var photos = AlbumsService.generatePhotoUrls(album);
-                    vm.feedPhotos = [].concat(vm.feedPhotos, photos);
+                    console.dir(photos);
+                    vm.feedPhotos = vm.feedPhotos.concat(photos);
+                    console.dir(vm.feedPhotos);
                 })
         }
 

@@ -112,15 +112,15 @@
             }
         }
 
-        function getAllProfileAlbums() {
-            return $http.get('/api/shared/getAllProfileAlbums').then(function (data) {
-                return data.data.albums;
+        function getAllProfileAlbums(param) {
+            return $http.get('/api/shared/getAllProfileAlbums/' + param).then(function (data) {
+                return data.data.album;
             });
         }
 
         function generatePhotoUrls(album, username){
             album.map(function(photo) {
-                var user = photo.postedBy.username ? photo.postedBy.username : username;
+                var user = album.postedBy && album.postedBy.username ? album.postedBy.username : photo.postedBy.username;
                 photo.imageUrl = "/assets/"
                     + user + "/"
                     + photo.album_id + "/"
@@ -129,6 +129,7 @@
                     + user + "/"
                     + photo.album_id + "/"
                     + photo._id;
+
                 return photo;
             });
 
