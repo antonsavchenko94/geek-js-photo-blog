@@ -206,3 +206,19 @@ photo-upload .well {
     width: 64px;
     height: 64px;
 }
+
+.panel-comment {
+    width: 400px;
+    height: 100px;
+}
+
+.comment-input {
+    margin-bottom: 10px;
+    width: 400px;
+}
+
+.comment-block {
+    float: right;
+    position: relative;
+    left: -35%;
+}

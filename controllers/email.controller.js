@@ -5,8 +5,8 @@ var transporter = nodemailer.createTransport(smtpTransport({
     host: "mailtrap.io",
     port: 2525,
     auth: {
-        user: "b87ab2cb2c8180",
-        pass: "663cfe075bbc5f"
+        user: "95e1c78631e49c",
+        pass: "b3f7dd7b24cde1"
     }
 }));
 
@@ -17,7 +17,7 @@ var Option = {
             from: "Sender Name <de45458725-cacd67@inbox.mailtrap.io>",
             to: "Receiver Name <" + email + ">",
             subject: "Confirm email",
-            text: "To continue registering on the blog you will need to click the link http://localhost:3000/register?token=" + token
+            html: "To continue registering on the blog you will need to click the link <a href='http://localhost:3000/register?token="+ token +"'>http://localhost:3000/register?token=" + token + "</a>"
         };
         return options;
     },
@@ -28,7 +28,7 @@ var Option = {
             to: user.first_name + " " + user.last_name + "<" + user.email + ">",
             subject: "New password",
             html: "It`s your new password: " + user.password +
-            "</br> To comfirm password click link <a>http:/localhost:3000/api/auth/active/" + token + "</a>"
+            "</br> To comfirm password click link <a href='http:/localhost:3000/api/auth/active/"+token+"'>http:/localhost:3000/api/auth/active/" + token + "</a>"
         };
         return options;
     }
