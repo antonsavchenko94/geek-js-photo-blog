@@ -6,7 +6,6 @@ var User = require('../models/user');
 
 
 router.post('/new', function (req, res, next) {
-    console.log(req.body)
     User.findOne({'email': req.body.email}, function(err, user){
         if(user) {
             res.status(409).send('User with this email is exist');
