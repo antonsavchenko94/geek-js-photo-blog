@@ -23,6 +23,9 @@ router.route('/:id')
 router.route('/:album_id/:photo_id')
     .get(albumController.getPhotoById);
 
+router.route('/updatePhoto')
+    .post(albumController.updatePhoto);
+
 router.route('/createNew')
     .post(albumController.createNewAlbum);
 

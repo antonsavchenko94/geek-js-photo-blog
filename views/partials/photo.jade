@@ -6,4 +6,4 @@ div.panel.panel-default.center-block
 
 flash-message
 
-show-comments( comments-to='vm.photo' ng-if="vm.photo")
+show-comments( comments-to='vm.photo' ng-if="vm.photo && vm.photo.status != 'no-comment'")

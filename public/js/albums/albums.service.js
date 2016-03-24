@@ -131,6 +131,7 @@
                         + user + "/"
                         + album._id + "/"
                         + photo._id;
+                    photo.albumId = album._id;
                 });
             });
 

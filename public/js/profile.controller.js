@@ -1,4 +1,4 @@
-(function() {
+(function () {
     angular
         .module('blog')
         .controller('ProfileController', ProfileController);
@@ -13,8 +13,11 @@
         vm.profileAlbum = [];
 
         vm.update = update;
+        vm.toggleFollow = toggleFollow;
 
         getUserData();
+
+        angular.element(document.querySelector('#follow-button'));
 
         // reload list of albums and photos
         getProfileAlbum($routeParams.username);
@@ -22,19 +25,22 @@
         // get user info to fill profile and check if it is profile of current user
         function getUserData() {
             if (!$routeParams.username) return;
-            $http.get('/api/users/' + $routeParams.username).then(function(data) {
-                vm.user = data.data.user;
-                vm.user.avatar = vm.user.avatar || "/images/no-avatar.png";
+            $http.get('/api/users/' + $routeParams.username, {params: {visitorId: $rootScope.user._id}})
+                .then(function (data) {
+                    vm.user = data.data.user;
+                    vm.user.avatar = vm.user.avatar || "/images/no-avatar.png";
 
-                if ($rootScope.user && vm.user.username === $rootScope.user.username) {
-                    vm.myProfile = true;
-                    $rootScope.user = vm.user;
-                }
-            });
+                    toggleFollowButton(data.data.followedByVisitor);
+
+                    if ($rootScope.user && vm.user.username === $rootScope.user.username) {
+                        vm.myProfile = true;
+                        $rootScope.user = vm.user;
+                    }
+                });
         }
 
         function update() {
-            $http.put('/api/users', vm.info).then(function() {
+            $http.put('/api/users', vm.info).then(function () {
                 vm.info = null;
             })
         }
@@ -45,6 +51,19 @@
                 vm.profileAlbum = AlbumsService.generatePhotoUrls(a[0], username);
                 vm.user.globalViews = AlbumsService.getGlobalViews(a);
             });
+        }
+
+        function toggleFollow() {
+            $http.put('/api/users/toggleFollow/' + $routeParams.username, {
+                follower: $rootScope.user
+            }).then(function () {
+                getUserData();
+            });
+        }
+
+        function toggleFollowButton(isFollowedByMe){
+            var button = angular.element(document.querySelector("#follow-button"))[0];
+            button.innerHTML = isFollowedByMe ? 'Following' : 'Follow';
         }
     }
 })();

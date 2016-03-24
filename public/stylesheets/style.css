@@ -217,3 +217,7 @@ photo-upload .well {
     position: relative;
     left: -35%;
 }
+
+.dropdown {
+    cursor: pointer;
+}

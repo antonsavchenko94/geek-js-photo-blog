@@ -9,7 +9,9 @@ var user = new Schema({
     email:      { type: String, required: true },
     avatar:     { type: String, required: false },
     isAdmin:    { type: Boolean, required: false },
-    status:     { type: String, default: 'active', enum:['baned', 'active', 'notActive']}
+    status:     { type: String, default: 'active', enum:['baned', 'active', 'notActive']},
+    following:  [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}],
+    followers:  [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}]
 });
 
 user.set('autoIndex', true);

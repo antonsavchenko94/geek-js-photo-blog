@@ -41,21 +41,26 @@ var albumController = function () {
     var getPhotoById = function (req, res) {
         var albumId = req.params.album_id;
         var photoId = req.params.photo_id;
-        Album.update(
-            {
-                '_id': ""+albumId,
-                'photos._id': ""+photoId
-            },
-            {$inc: {'photos.$.view_count': 1}},
-            function () {
-                Album.findOne(
-                    {_id: albumId},
-                    {'photos': {$elemMatch: {_id: photoId}}},
-                    function (err, data) {
-                        res.send({photo: data.photos[0]});
-                    }
-                )
-            });
+        var user = req.user;
+
+        Album
+            .findOneAndUpdate(
+                {
+                    '_id': "" + albumId,
+                    'postedBy': {$ne: user._id + ''},
+                    'photos._id': "" + photoId
+                },
+                {$inc: {'photos.$.view_count': 1}},
+                {new: true},
+                function (err, data) {
+                    Album.findOne(
+                        {_id: albumId},
+                        {'photos': {$elemMatch: {_id: photoId}}},
+                        function (err, data) {
+                            res.send({photo: data.photos[0]});
+                        }
+                    )
+                });
 
     };
 
@@ -131,13 +136,13 @@ var albumController = function () {
         res.end();
     };
 
-    var removeAlbum = function (req, res, next){
+    var removeAlbum = function (req, res, next) {
         var id = req.body.id;
-        Album.findOne({_id:id})
+        Album.findOne({_id: id})
             .populate('postedBy')
-            .exec(function(error, album){
+            .exec(function (error, album) {
                 albumService.removeAlbum(album);
-                album.remove(function(err){
+                album.remove(function (err) {
                     if (err) {
                         console.log(err);
                         next(err);
@@ -166,14 +171,35 @@ var albumController = function () {
         });
     };
 
-    var uploadAvatar = function(req, res, next) {
-        User.findOne({_id: req.user._id}, function(err, user) {
+    var uploadAvatar = function (req, res, next) {
+        User.findOne({_id: req.user._id}, function (err, user) {
             var url = req.file.path;
             user.avatar = path.sep + url.substring(url.indexOf(path.sep) + 1);
             user.save();
         });
 
         res.end();
+    };
+
+    var updatePhoto = function (req, res, next) {
+        var photo = req.body.photo;
+
+        Album.update(
+            {
+                '_id': "" + photo.albumId,
+                'photos._id': "" + photo._id
+            },
+            {$set: {'photos.$.status': photo.status}},
+            function () {
+                Album.findOne(
+                    {_id: photo.albumId},
+                    {'photos': {$elemMatch: {_id: photo._id}}},
+                    function (err, data) {
+                        res.send({photo: data.photos[0]});
+                    }
+                )
+            });
+
     };
 
     return {
@@ -186,7 +212,8 @@ var albumController = function () {
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         removeAlbum: removeAlbum,
-        editAlbum: editAlbum
+        editAlbum: editAlbum,
+        updatePhoto: updatePhoto
     };
 };
 
