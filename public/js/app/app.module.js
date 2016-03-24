@@ -1,4 +1,4 @@
-angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload'])
+angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload', 'infinite-scroll'])
     .factory("User", function ($resource) {
         return $resource("/api/admin/users/:id", {id: '@_id'},
             {

@@ -14,6 +14,9 @@ var uploadAvatar = multer({storage: multer.diskStorage(uploadParams.avatar)});
 router.route('/getAllProfileAlbums')
     .get(albumController.getAllProfileAlbums);
 
+router.route('/getProfileAlbum/:username')
+    .get(albumController.getProfileAlbum);
+
 router.route('/getAll/:username')
     .get(albumController.getAllByUsername);
 

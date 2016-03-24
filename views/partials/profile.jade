@@ -13,4 +13,4 @@ div.container-fluid.profile-info
       a.btn.btn-primary(href="/settings" ng-if="vm.myProfile")
         h3 Settings
 
-photo-grid(photos="vm.profileAlbum.photos")
+photo-grid(photos="vm.profileAlbum" lazy-load="vm.loadMore()")

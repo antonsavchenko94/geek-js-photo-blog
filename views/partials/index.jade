@@ -1,4 +1,4 @@
 div.text-center(ng-if='user')
-    photo-upload(albums="vm.userAlbums" after-upload="vm.getAllProfileAlbums")
+    photo-upload(albums="vm.userAlbums" after-upload="vm.refresh")
 
-photo-grid(photos="vm.feedPhotos")
+photo-grid(photos="vm.feedPhotos" lazy-load="vm.loadMore()")

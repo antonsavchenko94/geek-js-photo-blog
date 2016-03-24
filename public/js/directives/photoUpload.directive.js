@@ -4,8 +4,7 @@
         .directive('photoUpload', photoUpload);
 
     /**
-     * requires ng-if to run directive only when *some_value* is available
-     * <photo-upload albums="some_value" ng-if="some_value" after-upload="function"></photo-upload>
+     * <photo-upload albums="[]" after-upload="function"></photo-upload>
      * <photo-upload avatar></photo-upload>
      */
     function photoUpload() {
@@ -14,7 +13,8 @@
             scope: {},
             bindToController: {
                 albums: '=',
-                afterUpload: '='
+                afterUpload: '=',
+                btnText: '@'
             },
             controllerAs: "vm",
             link: function($scope, $elem, $attrs, ctrl) {
@@ -30,6 +30,7 @@
                 var vm = this;
                 vm.photos = [];
                 vm.albumId = null;
+                vm.btnText = vm.btnText || 'images';
 
                 vm.setAlbums = function(albums) {
                     if (albums) {
@@ -69,9 +70,9 @@
             '       <option value=""> Profile Album </option>' +
             '   </select>' +
             '   <button class="btn btn-success" ngf-select="vm.openPhotos($files, $invalidFiles)" ngf-multiple="true" accept="image/*" ngf-max-height="6000" ngf-max-size="10MB">' +
-            '       Select images ' +
+            '       Select {{ vm.btnText }}' +
             '   </button>' +
-            '   <button class="btn btn-success" ng-click="vm.uploadPhotos(vm.photos, vm.albumId)"> Upload images</button>' +
+            '   <button class="btn btn-success" ng-click="vm.uploadPhotos(vm.photos, vm.albumId)"> Upload {{ vm.btnText }}</button>' +
             '   <div class="well" ng-if="vm.photos.length > 0">' +
             '       <img ngf-src="vm.photos[id]" ng-repeat="(id, photo) in vm.photos"/>' +
             '   </div>' +
