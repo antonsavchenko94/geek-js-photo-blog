@@ -7,6 +7,7 @@
 
     function FeedController(AlbumsService, $rootScope) {
         var vm = this;
+        var noMoreData = false;
 
         vm.feedPhotos = [];
         vm.albums = [];
@@ -18,19 +19,23 @@
         getAllProfileAlbums();
 
         function loadMore() {
-            getAllProfileAlbums('more');
+            if (!noMoreData) {
+                getAllProfileAlbums('more');
+            }
         }
 
         function getAllProfileAlbums(param) {
             AlbumsService.getAllProfileAlbums(param)
-                .then(function (album) {
-                    var photos = AlbumsService.generatePhotoUrls(album);
+                .then(function (res) {
+                    var photos = AlbumsService.generatePhotoUrls(res.album);
                     vm.feedPhotos = vm.feedPhotos.concat(photos);
+                    noMoreData = res.noMoreData;
                 })
         }
 
         function refresh() {
             vm.feedPhotos = [];
+            noMoreData = false;
             getAllProfileAlbums();
         }
 

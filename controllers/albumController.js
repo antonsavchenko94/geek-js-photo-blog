@@ -4,6 +4,7 @@ var path = require('path');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var albumService = require('../services/albumService')();
+var amountOfPhotosPerRequest = 12;
 
 var albumController = function () {
     var seenPhotosCount = 0;
@@ -31,7 +32,7 @@ var albumController = function () {
             }},
             {$sort: {uploaded : -1}},
             {$skip: seenPhotosCount},
-            {$limit: 12 }
+            {$limit: amountOfPhotosPerRequest}
         ], function(err, result) {
             if (err) {
                 return cb(err);
@@ -69,7 +70,7 @@ var albumController = function () {
 
     var getById = function (req, res) {
         getPhotoArrayByParam(req, {_id: ObjectId(req.params.id)}, function(err, photos){
-            res.send({album: photos})
+            res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)})
         })
     };
 
@@ -131,7 +132,7 @@ var albumController = function () {
 
     var getAllProfileAlbums = function (req, res, next) {
         getPhotoArrayByParam(req, {isProfileAlbum: true}, function(err, photos) {
-            res.send({album: photos});
+            res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
         })
     };
 
@@ -139,7 +140,7 @@ var albumController = function () {
         User.findOne({username: req.params.username}, function(err, user) {
             getPhotoArrayByParam(req, {postedBy: user._id, isProfileAlbum: true},
                 function(err, photos) {
-                    res.send({album: photos});
+                    res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
                 }
             )
         })

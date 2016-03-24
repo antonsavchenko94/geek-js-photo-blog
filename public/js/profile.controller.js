@@ -7,6 +7,8 @@
 
     function ProfileController($http, $routeParams, $rootScope, AlbumsService) {
         var vm = this;
+        var noMoreData = false;
+
         vm.user = {};
         vm.myProfile = false;
         vm.info = {};
@@ -42,15 +44,18 @@
 
         function getProfileAlbum(param) {
             if (!$routeParams.username) return;
-            AlbumsService.getProfileAlbum($routeParams.username, param).then(function (a) {
-                var photos = AlbumsService.generatePhotoUrls(a);
+            AlbumsService.getProfileAlbum($routeParams.username, param).then(function (res) {
+                var photos = AlbumsService.generatePhotoUrls(res.album);
                 vm.profileAlbum = vm.profileAlbum.concat(photos);
+                noMoreData = res.noMoreData;
                 //vm.user.globalViews = AlbumsService.getGlobalViews(a);
             });
         }
 
         function loadMore() {
-            getProfileAlbum('more');
+            if (!noMoreData) {
+                getProfileAlbum('more');
+            }
         }
     }
 })();

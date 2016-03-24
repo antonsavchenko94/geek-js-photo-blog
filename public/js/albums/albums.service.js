@@ -58,7 +58,7 @@
 
         function getAlbumById(id, param) {
             return $http.get('/api/album/' + id, {params: {loadMore: param}}).then(function (data) {
-                return data.data.album;
+                return data.data;
             });
         }
 
@@ -114,14 +114,14 @@
         function getAllProfileAlbums(param) {
             return $http.get('/api/shared/getAllProfileAlbums', {params: {loadMore: param}})
                 .then(function (data) {
-                    return data.data.album;
+                    return data.data;
             });
         }
 
         function getProfileAlbum(username, param) {
             return $http.get('/api/album/getProfileAlbum/' + username, {params: {loadMore: param}})
                 .then(function (data) {
-                    return data.data.album;
+                    return data.data;
             });
         }
 

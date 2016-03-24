@@ -9,6 +9,7 @@
         var vm = this;
 
         var albumId = $routeParams.album_id;
+        var noMoreData = false;
 
         vm.isMyProfile = false;
         vm.album = [];
@@ -25,19 +26,22 @@
 
         function reloadAlbum() {
             vm.album = [];
+            noMoreData = false;
             getAlbumById();
         }
 
         function getAlbumById(param) {
-            AlbumsService.getAlbumById(albumId, param).then(function (a) {
-                vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(a));
-                console.dir(vm.album);
+            AlbumsService.getAlbumById(albumId, param).then(function (res) {
+                vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(res.album));
+                noMoreData = res.noMoreData;
                 vm.isMyProfile = isMyProfile() || false;
             });
         }
 
         function loadMore() {
-            getAlbumById('true');
+            if (!noMoreData) {
+                getAlbumById('more');
+            }
         }
     }
 })();
