@@ -11,28 +11,33 @@
         var albumId = $routeParams.album_id;
 
         vm.isMyProfile = false;
-        vm.album = {};
+        vm.album = [];
         vm.reloadAlbum = reloadAlbum;
+        vm.loadMore = loadMore;
 
         reloadAlbum();
 
         function isMyProfile() {
-            var authorizedProfile = $rootScope.user._id;
-            var requestedProfile = vm.album.postedBy._id;
+            var authorizedProfile = $rootScope.user.username;
+            var requestedProfile = $routeParams.username;
             return authorizedProfile == requestedProfile;
         }
 
         function reloadAlbum() {
-            vm.album = getAlbumById(albumId);
+            vm.album = [];
+            getAlbumById();
         }
 
-        function getAlbumById(id) {
-            vm.album = AlbumsService.getAlbumById(id);
-            vm.album.then(function (a) {
-                vm.album = AlbumsService.generatePhotoUrls(a);
+        function getAlbumById(param) {
+            AlbumsService.getAlbumById(albumId, param).then(function (a) {
+                vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(a));
+                console.dir(vm.album);
                 vm.isMyProfile = isMyProfile() || false;
             });
-            return vm.album;
+        }
+
+        function loadMore() {
+            getAlbumById('true');
         }
     }
 })();

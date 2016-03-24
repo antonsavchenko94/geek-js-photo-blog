@@ -1,14 +1,52 @@
 var Album = require('../models/album');
 var User = require('../models/user');
 var path = require('path');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var albumService = require('../services/albumService')();
 
 var albumController = function () {
-    var seenIds = [];
+    var seenPhotosCount = 0;
 
     var middleware = function (req, res, next) {
         next();
+    };
+
+    var getPhotoArrayByParam = function(req, param, cb) {
+        if (!req.query.loadMore) {
+            seenPhotosCount = 0;
+        }
+
+        Album.aggregate([
+            {$match: param},
+            {$unwind: '$photos'},
+            {$project: {
+                album_id: '$_id',
+                _id: '$photos._id',
+                filename: '$photos.filename',
+                uploaded: '$photos.uploaded',
+                view_count: '$photos.view_count',
+                status: '$photos.status',
+                postedBy: '$postedBy'
+            }},
+            {$sort: {uploaded : -1}},
+            {$skip: seenPhotosCount},
+            {$limit: 12 }
+        ], function(err, result) {
+            if (err) {
+                return cb(err);
+            }
+
+            Album.populate(result, 'postedBy', function(err, photos) {
+                if (err) {
+                    return cb(err);
+                }
+
+                seenPhotosCount += photos.length;
+
+                return cb(null, photos);
+            })
+        })
     };
 
     var getAllByUsername = function (req, res) {
@@ -30,14 +68,9 @@ var albumController = function () {
     };
 
     var getById = function (req, res) {
-
-        var id = req.params.id;
-
-        Album.findById(id)
-            .populate('postedBy')
-            .exec(function (err, album) {
-                res.send({album: album});
-            });
+        getPhotoArrayByParam(req, {_id: ObjectId(req.params.id)}, function(err, photos){
+            res.send({album: photos})
+        })
     };
 
     var getPhotoById = function (req, res) {
@@ -97,33 +130,18 @@ var albumController = function () {
     };
 
     var getAllProfileAlbums = function (req, res, next) {
-        console.log(req.params);
-        if (req.params.param != 'loadMore') {
-            seenIds = [];
-        }
+        getPhotoArrayByParam(req, {isProfileAlbum: true}, function(err, photos) {
+            res.send({album: photos});
+        })
+    };
 
-        Album.aggregate([
-            {$match: {isProfileAlbum: true, "photos._id": {"$nin": seenIds }}},
-            {$unwind: '$photos'},
-            {$project: {
-                album_id: '$_id',
-                _id: '$photos._id',
-                filename: '$photos.filename',
-                uploaded: '$photos.uploaded',
-                view_count: '$photos.view_count',
-                status: '$photos.status',
-                postedBy: '$postedBy'
-            }},
-            { $sort : {uploaded : -1}},
-            { $limit : 12 }
-        ], function(err, result) {
-            Album.populate(result, 'postedBy', function(err, feedPhotos) {
-                feedPhotos.forEach(function(photo) {
-                    seenIds.push(photo._id);
-                });
-
-                res.send({album: feedPhotos});
-            })
+    var getProfileAlbum = function(req, res, next) {
+        User.findOne({username: req.params.username}, function(err, user) {
+            getPhotoArrayByParam(req, {postedBy: user._id, isProfileAlbum: true},
+                function(err, photos) {
+                    res.send({album: photos});
+                }
+            )
         })
     };
 
@@ -148,7 +166,6 @@ var albumController = function () {
             album.save();
         });
 
-        lastFeedPhotoIndex = 0;
         res.json(file);
         res.end();
     };
@@ -204,6 +221,7 @@ var albumController = function () {
         getPhotoById: getPhotoById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
+        getProfileAlbum: getProfileAlbum,
         middleware: middleware,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,

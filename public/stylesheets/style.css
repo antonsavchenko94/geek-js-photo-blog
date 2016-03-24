@@ -95,7 +95,7 @@ p b {
 
 photo-grid {
     display: block;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .photogrid-item {

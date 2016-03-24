@@ -17,17 +17,18 @@
                     if (timer) {
                         $timeout.cancel(timer);
                     }
-                    timer = $timeout(checkBounds, 1000);
+                    timer = $timeout(checkBounds, 500);
                 }
 
                 function checkBounds() {
+                    timer = null;
                     var rectObject = $elem[0].getBoundingClientRect();
                     if (rectObject.bottom && rectObject.bottom - window.innerHeight <= padding) {
                         $scope.$apply(loadHandler($scope));
                     }
                 }
 
-                $scope.$on('destroy', function() {
+                $scope.$on('$destroy', function() {
                     $timeout.cancel(timer);
                 });
 

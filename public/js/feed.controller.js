@@ -3,37 +3,35 @@
         .module('blog')
         .controller('FeedController', FeedController);
 
-    FeedController.$inject = ['AlbumsService', 'AuthService', '$rootScope'];
+    FeedController.$inject = ['AlbumsService', '$rootScope'];
 
-    function FeedController(AlbumsService, AuthService, $rootScope) {
+    function FeedController(AlbumsService, $rootScope) {
         var vm = this;
 
         vm.feedPhotos = [];
         vm.albums = [];
         vm.getAllProfileAlbums = getAllProfileAlbums;
         vm.loadMore = loadMore;
-        vm.allPhotosLoaded = false;
+        vm.refresh = refresh;
 
         getUserAlbumsList();
         getAllProfileAlbums();
 
         function loadMore() {
-            if (!vm.allPhotosLoaded){
-                console.log('LOADING...' + new Date());
-                return getAllProfileAlbums('loadMore');
-            }
+            getAllProfileAlbums('more');
         }
 
-        function getAllProfileAlbums(option) {
-            console.log('============');
-            console.dir(vm.feedPhotos);
-            return AlbumsService.getAllProfileAlbums(option)
+        function getAllProfileAlbums(param) {
+            AlbumsService.getAllProfileAlbums(param)
                 .then(function (album) {
                     var photos = AlbumsService.generatePhotoUrls(album);
-                    console.dir(photos);
                     vm.feedPhotos = vm.feedPhotos.concat(photos);
-                    console.dir(vm.feedPhotos);
                 })
+        }
+
+        function refresh() {
+            vm.feedPhotos = [];
+            getAllProfileAlbums();
         }
 
         function getUserAlbumsList() {

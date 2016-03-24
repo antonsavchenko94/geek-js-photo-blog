@@ -11,8 +11,11 @@ var router = express.Router();
 var uploadPhotos = multer({storage: multer.diskStorage(uploadParams.photos)});
 var uploadAvatar = multer({storage: multer.diskStorage(uploadParams.avatar)});
 
-router.route('/getAllProfileAlbums/:param')
+router.route('/getAllProfileAlbums')
     .get(albumController.getAllProfileAlbums);
+
+router.route('/getProfileAlbum/:username')
+    .get(albumController.getProfileAlbum);
 
 router.route('/getAll/:username')
     .get(albumController.getAllByUsername);
