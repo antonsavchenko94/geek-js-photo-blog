@@ -22,13 +22,13 @@ div
                         a Status
                     th
                         a Action
-                tr(ng-repeat='user in users | filter:searchUser')
+                tr(ng-repeat='user in vm.users | filter:searchUser')
                     td
                         a(href='/user/{{user.username}}') {{user.username}}
                     td {{user.email}}
                     td {{user.status}}
                     td
-                        img(src="/images/rubbish-bin.png" title="delete user" ng-click="delete(user._id)")
+                        img(src="/images/rubbish-bin.png" title="delete user" ng-click="vm.delete(user._id)")
                         img(src="/images/line.png")
-                        img(ng-if="user.status=='active'" src="/images/ban.png" title="ban user" ng-click="ban(user._id)")
-                        img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="ban(user._id)")
+                        img(ng-if="user.status=='active'" src="/images/ban.png" title="ban user" ng-click="vm.ban(user._id)")
+                        img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(user._id)")
