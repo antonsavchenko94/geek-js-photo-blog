@@ -17,6 +17,7 @@
             generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
             getAllProfileAlbums: getAllProfileAlbums,
+            getProfileAlbum: getProfileAlbum,
             getGlobalViews: getGlobalViews
         };
 
@@ -31,8 +32,6 @@
                 return true;
             });
         }
-
-
 
         function createAlbum(album) {
             var url = album.isProfileAlbum
@@ -57,9 +56,9 @@
             });
         }
 
-        function getAlbumById(id) {
-            return $http.get('/api/album/' + id).then(function (data) {
-                return data.data.album;
+        function getAlbumById(id, param) {
+            return $http.get('/api/album/' + id, {params: {loadMore: param}}).then(function (data) {
+                return data.data;
             });
         }
 
@@ -112,30 +111,38 @@
             }
         }
 
-        function getAllProfileAlbums() {
-            return $http.get('/api/shared/getAllProfileAlbums').then(function (data) {
-                return data.data.albums;
+        function getAllProfileAlbums(param) {
+            return $http.get('/api/shared/getAllProfileAlbums', {params: {loadMore: param}})
+                .then(function (data) {
+                    return data.data;
             });
         }
 
-        function generatePhotoUrls(albums, username){
-            var a = [].concat(albums);
-            a.map(function(album) {
-                var user = album.postedBy.username ? album.postedBy.username : username;
-                album.photos.map(function(photo) {
-                    photo.imageUrl = "/assets/"
-                        + user + "/"
-                        + album._id + "/"
-                        + photo.filename;
-                    photo.pageUrl = "/user/"
-                        + user + "/"
-                        + album._id + "/"
-                        + photo._id;
-                    photo.albumId = album._id;
-                });
+        function getProfileAlbum(username, param) {
+            return $http.get('/api/album/getProfileAlbum/' + username, {params: {loadMore: param}})
+                .then(function (data) {
+                    return data.data;
+            });
+        }
+
+        function generatePhotoUrls(album) {
+            album.map(function(photo) {
+                var user = album.postedBy && album.postedBy.username
+                    ? album.postedBy.username
+                    : photo.postedBy.username;
+                photo.imageUrl = "/assets/"
+                    + user + "/"
+                    + photo.album_id + "/"
+                    + photo.filename;
+                photo.pageUrl = "/user/"
+                    + user + "/"
+                    + photo.album_id + "/"
+                    + photo._id;
+
+                return photo;
             });
 
-            return a.length == 1 ? a[0] : a;
+            return album;
         }
 
         function getGlobalViews(albums){

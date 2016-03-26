@@ -3,38 +3,40 @@
         .module('blog')
         .controller('FeedController', FeedController);
 
-    FeedController.$inject = ['AlbumsService', 'AuthService', '$rootScope'];
+    FeedController.$inject = ['AlbumsService', '$rootScope'];
 
-    function FeedController(AlbumsService, AuthService, $rootScope) {
+    function FeedController(AlbumsService, $rootScope) {
         var vm = this;
+        var noMoreData = false;
 
         vm.feedPhotos = [];
         vm.albums = [];
         vm.getAllProfileAlbums = getAllProfileAlbums;
+        vm.loadMore = loadMore;
+        vm.refresh = refresh;
 
         getUserAlbumsList();
         getAllProfileAlbums();
 
-        function getAllProfileAlbums() {
-            AlbumsService.getAllProfileAlbums()
-                .then(function (albums) {
-                    vm.albums = AlbumsService.generatePhotoUrls(albums);
-                    getAllProfilePhotos();
-                });
+        function loadMore() {
+            if (!noMoreData) {
+                getAllProfileAlbums('more');
+            }
         }
 
-        function getAllProfilePhotos() {
-            vm.feedPhotos = []; // temp?
+        function getAllProfileAlbums(param) {
+            AlbumsService.getAllProfileAlbums(param)
+                .then(function (res) {
+                    var photos = AlbumsService.generatePhotoUrls(res.album);
+                    vm.feedPhotos = vm.feedPhotos.concat(photos);
+                    noMoreData = res.noMoreData;
+                })
+        }
 
-            if (vm.albums.length) {
-                vm.albums.forEach(function (album) {
-                    album.photos.forEach(function (photo) {
-                        vm.feedPhotos.push(photo);
-                    });
-                });
-            } else {
-                vm.feedPhotos = vm.albums.photos
-            }
+        function refresh() {
+            vm.feedPhotos = [];
+            noMoreData = false;
+            getAllProfileAlbums();
         }
 
         function getUserAlbumsList() {
