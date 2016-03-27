@@ -13,6 +13,7 @@
             getAlbumsList: getAlbumsList,
             uploadPhotos: uploadPhotos,
             getAlbumById: getAlbumById,
+            getOwnAlbumById: getOwnAlbumById,
             openPhotos: openPhotos,
             generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
@@ -58,6 +59,12 @@
 
         function getAlbumById(id, param) {
             return $http.get('/api/album/' + id, {params: {loadMore: param}}).then(function (data) {
+                return data.data;
+            });
+        }
+
+        function getOwnAlbumById(id, param) {
+            return $http.get('/api/album/getOwnById/' + id, {params: {loadMore: param}}).then(function (data) {
                 return data.data;
             });
         }

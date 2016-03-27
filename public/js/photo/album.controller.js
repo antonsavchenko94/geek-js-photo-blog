@@ -31,17 +31,27 @@
         }
 
         function getAlbumById(param) {
-            AlbumsService.getAlbumById(albumId, param).then(function (res) {
-                vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(res.album));
-                noMoreData = res.noMoreData;
-                vm.isMyProfile = isMyProfile() || false;
-            });
+            vm.isMyProfile = isMyProfile() || false;
+            if (vm.isMyProfile) {
+                AlbumsService.getOwnAlbumById(albumId, param).then(function (res) {
+                    generateUrls(res);
+                });
+            } else {
+                AlbumsService.getAlbumById(albumId, param).then(function (res) {
+                    generateUrls(res);
+                });
+            }
         }
 
         function loadMore() {
             if (!noMoreData) {
                 getAlbumById('more');
             }
+        }
+
+        function generateUrls(res) {
+            vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(res.album));
+            noMoreData = res.noMoreData;
         }
     }
 })();

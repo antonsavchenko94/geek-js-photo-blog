@@ -19,8 +19,8 @@ var albumController = function () {
         }
 
         Album.aggregate([
-            {$match: param},
             {$unwind: '$photos'},
+            {$match: param},
             {$project: {
                 album_id: '$_id',
                 _id: '$photos._id',
@@ -69,6 +69,15 @@ var albumController = function () {
     };
 
     var getById = function (req, res) {
+        getPhotoArrayByParam(req, {
+            _id: ObjectId(req.params.id),
+            'photos.status': {$ne: 'private'}
+        }, function(err, photos){
+            res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)})
+        })
+    };
+
+    var getOwnById = function (req, res) {
         getPhotoArrayByParam(req, {_id: ObjectId(req.params.id)}, function(err, photos){
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)})
         })
@@ -136,14 +145,21 @@ var albumController = function () {
     };
 
     var getAllProfileAlbums = function (req, res, next) {
-        getPhotoArrayByParam(req, {isProfileAlbum: true}, function(err, photos) {
+        getPhotoArrayByParam(req, {
+            $and: [
+                {isProfileAlbum: {$eq: true}},
+                {'photos.status': {$ne: 'private'}}]}, function(err, photos) {
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
         })
     };
 
     var getProfileAlbum = function(req, res, next) {
         User.findOne({username: req.params.username}, function(err, user) {
-            getPhotoArrayByParam(req, {postedBy: user._id, isProfileAlbum: true},
+            getPhotoArrayByParam(req, {
+                postedBy: user._id,
+                isProfileAlbum: true,
+                'photos.status': {$ne: 'private'}
+            },
                 function(err, photos) {
                     res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
                 }
@@ -167,7 +183,6 @@ var albumController = function () {
                 console.log(err);
                 next(err);
             }
-            console.log('==============title: ' + album.title);
             album.photos.push(photo);
             album.save();
         });
@@ -245,6 +260,7 @@ var albumController = function () {
     return {
         getAllByUsername: getAllByUsername,
         getById: getById,
+        getOwnById: getOwnById,
         getPhotoById: getPhotoById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
