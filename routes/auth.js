@@ -128,16 +128,20 @@ router.get('/active/:token', function (req, res) {
             res.status(400).send({message: err});
         } else {
             User.findOne({'email': result.email}, function (err, user) {
-                bcrypt.hash(result.password, 10, function (error, hash) {
-                    user.password = hash;
-                    user.save(function (err) {
-                        if (err) {
-                            res.status(400).send({message: "Can't save user"});
-                        } else {
-                            res.status(200).redirect('/login');
-                        }
-                    })
-                });
+                if(!user){
+                    res.status(400).send('user not found!!');
+                }else {
+                    bcrypt.hash(result.password, 10, function (error, hash) {
+                        user.password = hash;
+                        user.save(function (err) {
+                            if (err) {
+                                res.status(400).send({message: "Can't save user"});
+                            } else {
+                                res.status(200).redirect('/login');
+                            }
+                        })
+                    });
+                }
             })
         }
     })

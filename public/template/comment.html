@@ -13,7 +13,8 @@
                 <div class="media comment">
                     <div class="media-left">
                         <a href="/user/{{comment.postedBy.username}}">
-                            <img class="media-object" src="/images/no-avatar.png" alt="...">
+                            <img class="media-object" src="{{ comment.postedBy.avatar }}" alt="..." ng-if="comment.postedBy.avatar">
+                            <img class="media-object" src="/images/no-avatar.png" alt="..." ng-if="!comment.postedBy.avatar">
                         </a>
                     </div>
                     <div class="media-body">
