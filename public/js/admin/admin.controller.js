@@ -3,9 +3,10 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
-    function AdminController(User, $rootScope) {
+    function AdminController(User, $rootScope, $http) {
         var vm = this;
         getUsers();
+        getComplainPhotos();
         /**
          * Delete User by id
          * @param id
@@ -39,6 +40,19 @@
         function getUsers() {
             return User.query({}, function (data) {
                 vm.users = data;
+            })
+        }
+
+        vm.deletePhoto = function(photo){
+            $http.delete('/api/admin/delete/'+photo.postedBy.username +'/'+ photo.album_id+'/'+photo.filename).then(function(res){
+                getComplainPhotos();
+                showFlashMessage('success', 'PHOTO DELETED' );
+            })
+        };
+
+        function getComplainPhotos(){
+            return $http.get('/api/admin/complain/photos').then(function(res) {
+               vm.albums = res.data.complain;
             })
         }
 

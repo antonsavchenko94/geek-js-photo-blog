@@ -8,6 +8,7 @@ div
 
     div(ng-if="active == 'user'")
         div(ng-controller='AdminController')
+        div
             label
                 | Search:
             br
@@ -32,3 +33,32 @@ div
                         img(src="/images/line.png")
                         img(ng-if="user.status=='active'" src="/images/ban.png" title="ban user" ng-click="vm.ban(user._id)")
                         img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(user._id)")
+
+    div(ng-if="active == 'complaints'")
+        div(ng-controller='AdminController')
+        .panel.panel-default
+            .panel-heading Complain photo
+            table.table
+                tr
+                    th
+                        a Username
+                    th
+                        a FileName
+                    th
+                        a Status
+                    th
+                        a Complain
+                    th
+                        a Action
+                tr(ng-repeat="album in vm.albums | orderBy:'-complain'"  ng-if="vm.albums" )
+                        td
+                            a(href='/user/{{album.postedBy.username}}') {{album.postedBy.username}}
+                        td
+                            a(href='/user/{{album.postedBy.username}}/{{album.album_id}}/{{album._id}}') {{album.filename}}
+                        td {{album.status}}
+                        td {{album.complain}}
+                        td
+                            img(src="/images/rubbish-bin.png" title="delete photo" ng-click="vm.deletePhoto(album)")
+                            img(src="/images/line.png")
+                            img(ng-if="album.postedBy.status=='active'" src="/images/ban.png" title="ban user" ng-click="vm.ban(album.postedBy._id)")
+                            img(ng-if="album.postedBy.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(album.postedBy._id)")

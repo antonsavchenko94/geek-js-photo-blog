@@ -38,4 +38,7 @@ router.route('/uploadPhotos')
 router.route('/uploadAvatar')
     .post(uploadAvatar.single('file'), albumController.uploadAvatar);
 
+router.route('/complain/:album_id/:photo_id')
+    .get(albumController.complainPhoto);
+
 module.exports = router;

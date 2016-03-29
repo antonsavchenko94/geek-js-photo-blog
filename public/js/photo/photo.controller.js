@@ -8,6 +8,7 @@
     function PhotoController(AlbumsService, $routeParams, $rootScope, $http) {
         var vm = this;
         vm.photo = null;
+        vm.complainText = 'Complain';
 
         getPhotoById();
 
@@ -15,6 +16,12 @@
             $http.get('/api/album/' + $routeParams.album_id + '/' + $routeParams.photo_id).then(function(res) {
                 vm.photo = res.data.photo;
                 vm.photo.url = '/assets/' + $routeParams.username + '/' + $routeParams.album_id + '/' + vm.photo.filename;
+            })
+        }
+
+        vm.complain = function () {
+            $http.get('/api/album/complain/' + $routeParams.album_id + '/' + $routeParams.photo_id).then(function(res) {
+                vm.complainText = res.data;
             })
         }
     }

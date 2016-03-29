@@ -176,7 +176,22 @@ var albumController = function () {
         res.end();
     };
 
+    var complainPhoto = function(req, res, next) {
+        var albumId = req.params.album_id;
+        var photoId = req.params.photo_id;
+        Album.update(
+            {
+                '_id': ""+albumId,
+                'photos._id': ""+photoId
+            },
+            {$inc: {'photos.$.complain': 1}},
+            function () {
+                res.status(200).send('Your complaint is accepted');
+            });
+    };
+
     return {
+        complainPhoto:complainPhoto,
         getAllByUsername: getAllByUsername,
         getById: getById,
         getPhotoById: getPhotoById,

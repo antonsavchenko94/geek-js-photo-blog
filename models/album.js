@@ -14,7 +14,8 @@ var album = new Schema({
                 enum:['private', 'public', 'no-comment']
             },
             view_count: {type: Number},
-            pic: {type: String, required: true}
+            pic: {type: String, required: true},
+            complain: {type: Number, default:0}
         }
     ],
     created:    { type: Date },
