@@ -3,6 +3,7 @@ div.panel.panel-default.center-block
         img.center-block.img-responsive(src="{{vm.photo.url}}")
     div.panel-footer
         span.badge Views: {{ vm.photo.view_count }}
+        likes(photo='vm.photo')
 
 flash-message
 

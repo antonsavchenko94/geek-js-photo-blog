@@ -31,7 +31,7 @@
                 function setPrivacy (status){
                     vm.photo.status = status;
                     console.log(vm.photo);
-                    $http.post('/api/album/updatePhoto', {photo: vm.photo}).then(function (data) {
+                    $http.post('/api/album/updatePhotoPrivacy', {photo: vm.photo}).then(function (data) {
                         vm.currentStatus = data.data.photo.status;
                     });
                 }

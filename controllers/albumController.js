@@ -1,5 +1,6 @@
 var Album = require('../models/album');
 var User = require('../models/user');
+var Likes = require('../models/likes');
 var path = require('path');
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -13,7 +14,7 @@ var albumController = function () {
         next();
     };
 
-    var getPhotoArrayByParam = function(req, param, cb) {
+    var getPhotoArrayByParam = function (req, param, cb) {
         if (!req.query.loadMore) {
             seenPhotosCount = 0;
         }
@@ -21,24 +22,26 @@ var albumController = function () {
         Album.aggregate([
             {$unwind: '$photos'},
             {$match: param},
-            {$project: {
-                album_id: '$_id',
-                _id: '$photos._id',
-                filename: '$photos.filename',
-                uploaded: '$photos.uploaded',
-                view_count: '$photos.view_count',
-                status: '$photos.status',
-                postedBy: '$postedBy'
-            }},
-            {$sort: {uploaded : -1}},
+            {
+                $project: {
+                    album_id: '$_id',
+                    _id: '$photos._id',
+                    filename: '$photos.filename',
+                    uploaded: '$photos.uploaded',
+                    view_count: '$photos.view_count',
+                    status: '$photos.status',
+                    postedBy: '$postedBy'
+                }
+            },
+            {$sort: {uploaded: -1}},
             {$skip: seenPhotosCount},
             {$limit: amountOfPhotosPerRequest}
-        ], function(err, result) {
+        ], function (err, result) {
             if (err) {
                 return cb(err);
             }
 
-            Album.populate(result, 'postedBy', function(err, photos) {
+            Album.populate(result, 'postedBy', function (err, photos) {
                 if (err) {
                     return cb(err);
                 }
@@ -72,13 +75,13 @@ var albumController = function () {
         getPhotoArrayByParam(req, {
             _id: ObjectId(req.params.id),
             'photos.status': {$ne: 'private'}
-        }, function(err, photos){
+        }, function (err, photos) {
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)})
         })
     };
 
     var getOwnById = function (req, res) {
-        getPhotoArrayByParam(req, {_id: ObjectId(req.params.id)}, function(err, photos){
+        getPhotoArrayByParam(req, {_id: ObjectId(req.params.id)}, function (err, photos) {
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)})
         })
     };
@@ -97,7 +100,7 @@ var albumController = function () {
                 },
                 {$inc: {'photos.$.view_count': 1}},
                 {new: true},
-                function (err, data) {
+                function () {
                     Album.findOne(
                         {_id: albumId},
                         {'photos': {$elemMatch: {_id: photoId}}},
@@ -148,19 +151,20 @@ var albumController = function () {
         getPhotoArrayByParam(req, {
             $and: [
                 {isProfileAlbum: {$eq: true}},
-                {'photos.status': {$ne: 'private'}}]}, function(err, photos) {
+                {'photos.status': {$ne: 'private'}}]
+        }, function (err, photos) {
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
         })
     };
 
-    var getProfileAlbum = function(req, res, next) {
-        User.findOne({username: req.params.username}, function(err, user) {
+    var getProfileAlbum = function (req, res, next) {
+        User.findOne({username: req.params.username}, function (err, user) {
             getPhotoArrayByParam(req, {
-                postedBy: user._id,
-                isProfileAlbum: true,
-                'photos.status': {$ne: 'private'}
-            },
-                function(err, photos) {
+                    postedBy: user._id,
+                    isProfileAlbum: true,
+                    'photos.status': {$ne: 'private'}
+                },
+                function (err, photos) {
                     res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});
                 }
             )
@@ -236,18 +240,18 @@ var albumController = function () {
         res.end();
     };
 
-    var updatePhoto = function (req, res, next) {
+    var updatePhotoPrivacy = function (req, res, next) {
         var photo = req.body.photo;
 
         Album.update(
             {
-                '_id': "" + photo.albumId,
+                '_id': "" + photo.album_id,
                 'photos._id': "" + photo._id
             },
             {$set: {'photos.$.status': photo.status}},
             function () {
                 Album.findOne(
-                    {_id: photo.albumId},
+                    {_id: photo.album_id},
                     {'photos': {$elemMatch: {_id: photo._id}}},
                     function (err, data) {
                         res.send({photo: data.photos[0]});
@@ -258,6 +262,7 @@ var albumController = function () {
     };
 
     return {
+        middleware: middleware,
         getAllByUsername: getAllByUsername,
         getById: getById,
         getOwnById: getOwnById,
@@ -265,12 +270,11 @@ var albumController = function () {
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         getProfileAlbum: getProfileAlbum,
-        middleware: middleware,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         removeAlbum: removeAlbum,
         editAlbum: editAlbum,
-        updatePhoto: updatePhoto
+        updatePhotoPrivacy: updatePhotoPrivacy
     };
 };
 

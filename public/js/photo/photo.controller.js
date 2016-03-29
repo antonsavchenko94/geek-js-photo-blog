@@ -14,7 +14,6 @@
         getPhotoById();
 
         function getPhotoById() {
-            console.log();
             $http.get('/api/album/' + $routeParams.album_id + '/' + $routeParams.photo_id, {params: {user: vm.currentUser}})
                 .then(function(res) {
                 vm.photo = res.data.photo;
