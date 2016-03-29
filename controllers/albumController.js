@@ -236,7 +236,7 @@ var albumController = function () {
             user.avatar = path.sep + url.substring(url.indexOf(path.sep) + 1);
             user.save();
         });
-
+        res.status = 200;
         res.end();
     };
 

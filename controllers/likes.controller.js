@@ -33,7 +33,7 @@ var likesController = function () {
             {'to': photo_id + ''},
             {'by': {$elemMatch: {user: user._id + ''}}},
             function (err, likes) {
-                if (likes.by.length != 0) {
+                if (likes && likes.by.length != 0) {
                     query({$pull: {by: {user: user._id + ''}}}, function (likes) {
                         res.send({likes: likes, liked: false})
                     })
@@ -60,7 +60,7 @@ var likesController = function () {
                     console.log(err);
                 }
 
-                if (likes.by.length != 0) {
+                if (likes && likes.by.length) {
                     res.send({likes: likes, liked: true})
                 } else {
                     res.send({likes: likes, liked: false})
