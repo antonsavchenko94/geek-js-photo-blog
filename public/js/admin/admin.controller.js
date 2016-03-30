@@ -12,11 +12,18 @@
          * @param id
          */
         vm.delete = function (id) {
-            User.delete({id: id}, function () {
-                getUsers().$promise.then(function () {
-                    showFlashMessage('success', 'User (id = ' + id + ') was successfully deleted.')
-                });
-            })
+            vm.dialog = {
+                title: 'Deleting user',
+                body: '<h1>User with  ID \''+ id +'\' will be deleted</h1>',
+                onConfirm: function () {
+                    User.delete({id: id}, function () {
+                        getUsers().$promise.then(function () {
+                            showFlashMessage('success', 'User (id = ' + id + ') was successfully deleted.')
+                        });
+                    })
+                }
+            };
+            vm.dialogVisible = true;
         };
         /**
          * Ban and unban User by id

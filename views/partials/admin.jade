@@ -7,13 +7,14 @@ div
     flash-message
 
     div(ng-if="active == 'user'")
-        div(ng-controller='AdminController')
         div
             label
                 | Search:
             br
             input(ng-model="searchUser")
-            table.usertable
+        panel.panel-default
+            .panel-heading Users
+            table.table
                 tr
                     th
                         a Username
@@ -35,7 +36,6 @@ div
                         img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(user._id)")
 
     div(ng-if="active == 'complaints'")
-        div(ng-controller='AdminController')
         .panel.panel-default
             .panel-heading Complain photo
             table.table
@@ -62,3 +62,5 @@ div
                             img(src="/images/line.png")
                             img(ng-if="album.postedBy.status=='active'" src="/images/ban.png" title="ban user" ng-click="vm.ban(album.postedBy._id)")
                             img(ng-if="album.postedBy.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(album.postedBy._id)")
+
+    pop-up-dialog(dialog-show='vm.dialogVisible', dialog-title='vm.dialog.title', dialog-body='vm.dialog.body', dialog-ok='vm.dialog.onConfirm')

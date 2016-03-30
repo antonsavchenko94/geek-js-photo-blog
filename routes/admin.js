@@ -25,9 +25,20 @@ router.get('/users/:id', function (req, res) {
 });
 router.delete('/users/:id', function (req, res) {
     var id = req.params.id;
-    User.findByIdAndRemove(id, function (err, offer) {
+    User.findById(id, function (err, user) {
         if (err) throw err;
         else
+            albumService.removeUserDir(user);
+            user.remove(function(err,res){
+                if(err){
+                    res.status(500).send(err);
+                }
+            });
+            Album.remove({postedBy: id}, function(err, res){
+                if(err){
+                    res.status(500).send(err);
+                }
+            });
             res.sendStatus(200);
     })
 });

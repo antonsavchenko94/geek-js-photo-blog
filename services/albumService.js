@@ -59,6 +59,15 @@ var albumService = function () {
         );
     };
 
+    var getUserPath = function (user) {
+        var s = path.sep;
+        return path.normalize(
+            'public' + s
+            + 'assets' + s
+            + user.username
+        );
+    };
+
     var createAlbumDirectory = function (album) {
         mkdirPath(getAlbumPath(album));
     };
@@ -92,6 +101,14 @@ var albumService = function () {
     var removeAlbum = function (album) {
         try {
             remdirPath(getAlbumPath(album));
+        }catch (err){
+            throw err;
+        }
+    };
+
+    var removeUserDir = function (userDir) {
+        try {
+            remdirPath(getUserPath(userDir));
         }catch (err){
             throw err;
         }
@@ -152,6 +169,7 @@ var albumService = function () {
         getAlbumPath: getAlbumPath,
         createAlbumDirectory: createAlbumDirectory,
         uploadParams: uploadParams,
+        removeUserDir:removeUserDir,
         removeAlbum:removeAlbum,
         removePhoto:removePhoto
     };
