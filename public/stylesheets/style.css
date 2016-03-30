@@ -229,3 +229,9 @@ photo-upload .well {
     cursor: pointer;
     color: #e9ecec;
 }
+
+.delete-img {
+    float: right;
+    margin-right: 5px;
+    margin-left: 5px;
+}

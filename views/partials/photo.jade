@@ -3,8 +3,11 @@ div.panel.panel-default.center-block
         img.center-block.img-responsive(src="{{vm.photo.url}}")
     div.panel-footer
         span.badge Views: {{ vm.photo.view_count }}
+        img.delete-img(src="/images/circle.png" title="Delete photo" ng-if="vm.canDelete" ng-click="vm.deletePhoto()")
         span.label.label-danger(ng-click="vm.complain()")
             a {{vm.complainText}}
 flash-message
 
 show-comments( comments-to='vm.photo' ng-if="vm.photo")
+
+pop-up-dialog(dialog-show='vm.dialogVisible', dialog-title='vm.dialog.title', dialog-body='vm.dialog.body', dialog-ok='vm.dialog.onConfirm')

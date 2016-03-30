@@ -41,4 +41,7 @@ router.route('/uploadAvatar')
 router.route('/complain/:album_id/:photo_id')
     .get(albumController.complainPhoto);
 
+router.route('/delete/:username/:album/:photo')
+    .delete(albumController.deletePhoto);
+
 module.exports = router;

@@ -190,6 +190,29 @@ var albumController = function () {
             });
     };
 
+    var deletePhoto =  function (req, res) {
+        Album.update({_id:req.params.album}, {
+                $pull: {
+                    photos: {
+                        filename:req.params.photo
+                    }
+                }
+            },
+            function (err, data){
+                albumService.removePhoto(
+                    {
+                        postedBy: req.params.username,
+                        album: req.params.album,
+                        photoName: req.params.photo
+                    }
+                );
+                if(!err){
+                    res.send({res: data});
+                }else
+                    res.status(400).send(err);
+            })
+    };
+
     return {
         complainPhoto:complainPhoto,
         getAllByUsername: getAllByUsername,
@@ -201,6 +224,7 @@ var albumController = function () {
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         removeAlbum: removeAlbum,
+        deletePhoto: deletePhoto,
         editAlbum: editAlbum
     };
 };

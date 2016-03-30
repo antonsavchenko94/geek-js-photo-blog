@@ -3,12 +3,13 @@
         .module('blog')
         .controller('PhotoController', PhotoController);
 
-    PhotoController.$inject = ['AlbumsService', '$routeParams', '$rootScope', '$http'];
+    PhotoController.$inject = ['AlbumsService', '$routeParams', '$rootScope', '$http', '$location'];
 
-    function PhotoController(AlbumsService, $routeParams, $rootScope, $http) {
+    function PhotoController(AlbumsService, $routeParams, $rootScope, $http, $location) {
         var vm = this;
         vm.photo = null;
         vm.complainText = 'Complain';
+        vm.canDelete = $rootScope.user.username === $routeParams.username || $rootScope.user.isAdmin;
 
         getPhotoById();
 
@@ -23,6 +24,23 @@
             $http.get('/api/album/complain/' + $routeParams.album_id + '/' + $routeParams.photo_id).then(function(res) {
                 vm.complainText = res.data;
             })
+        };
+
+        vm.deletePhoto = function () {
+            vm.dialog = {
+                title: 'Delete photo',
+                body: '<h1>Photo with  \''+ vm.photo.filename +'\' will be deleted</h1>',
+                onConfirm: function () {
+                    $http.delete('/api/album/delete/'
+                        + $routeParams.username + '/'
+                        + $routeParams.album_id + '/'
+                        + vm.photo.filename)
+                        .then(function(res) {
+                            $location.path('/user/'+ $routeParams.username + '/' + $routeParams.album_id);
+                    })
+                }
+            };
+            vm.dialogVisible = true;
         }
     }
 })();
