@@ -261,7 +261,45 @@ var albumController = function () {
 
     };
 
+    var complainPhoto = function(req, res, next) {
+        var albumId = req.params.album_id;
+        var photoId = req.params.photo_id;
+        Album.update(
+            {
+                '_id': ""+albumId,
+                'photos._id': ""+photoId
+            },
+            {$inc: {'photos.$.complain': 1}},
+            function () {
+                res.status(200).send('Your complaint is accepted');
+            });
+    };
+
+    var deletePhoto =  function (req, res) {
+        Album.update({_id:req.params.album}, {
+                $pull: {
+                    photos: {
+                        filename:req.params.photo
+                    }
+                }
+            },
+            function (err, data){
+                albumService.removePhoto(
+                    {
+                        postedBy: req.params.username,
+                        album: req.params.album,
+                        photoName: req.params.photo
+                    }
+                );
+                if(!err){
+                    res.send({res: data});
+                }else
+                    res.status(400).send(err);
+            })
+    };
+
     return {
+        complainPhoto:complainPhoto,
         middleware: middleware,
         getAllByUsername: getAllByUsername,
         getById: getById,
@@ -274,7 +312,8 @@ var albumController = function () {
         uploadAvatar: uploadAvatar,
         removeAlbum: removeAlbum,
         editAlbum: editAlbum,
-        updatePhotoPrivacy: updatePhotoPrivacy
+        updatePhotoPrivacy: updatePhotoPrivacy,
+        deletePhoto: deletePhoto
     };
 };
 

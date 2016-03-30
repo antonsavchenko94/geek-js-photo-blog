@@ -226,3 +226,21 @@ photo-upload .well {
 .dropdown {
     cursor: pointer;
 }
+
+.label-danger {
+    float: right;
+    color: #e9ecec;
+}
+.label-danger a{
+    color: #e9ecec;
+}
+.label-danger a:hover{
+    cursor: pointer;
+    color: #e9ecec;
+}
+
+.delete-img {
+    float: right;
+    margin-right: 5px;
+    margin-left: 5px;
+}
