@@ -66,7 +66,9 @@
                 controllerAs: 'vm'
             })
             .when('/admin', {
-                templateUrl: 'partials/admin'
+                templateUrl: 'partials/admin',
+                controller: "AdminController",
+                controllerAs: 'vm'
             })
             .otherwise({
                 redirectTo: '/'
