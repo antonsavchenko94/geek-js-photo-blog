@@ -150,7 +150,7 @@ var albumController = function () {
     var getAllProfileAlbums = function (req, res, next) {
         getPhotoArrayByParam(req, {
             $and: [
-                {isProfileAlbum: {$eq: true}},
+                {isProfileAlbum: true},
                 {'photos.status': {$ne: 'private'}}]
         }, function (err, photos) {
             res.send({album: photos, noMoreData: (photos.length < amountOfPhotosPerRequest)});

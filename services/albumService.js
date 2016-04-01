@@ -34,7 +34,7 @@ var albumService = function () {
         return path.normalize(
             __dirname + s
             + '..' + s
-            + 'public' + s
+           // + 'public' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id
@@ -61,7 +61,7 @@ var albumService = function () {
             },
             avatar: {
                 destination: function (req, file, cb) {
-                    cb(null, './public/assets/' + req.body.user.username);
+                    cb(null, './assets/' + req.body.user.username);
                 },
                 filename: function (req, file, cb) {
                     var extension = "." + file.originalname.split('.').pop();

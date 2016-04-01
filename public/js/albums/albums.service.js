@@ -139,13 +139,13 @@
                 var user = album.postedBy && album.postedBy.username
                     ? album.postedBy.username
                     : photo.postedBy.username;
-                photo.imageUrl = "/assets/"
-                    + user + "/"
-                    + photo.album_id + "/"
+                photo.imageUrl = '/'
+                    + user + '/'
+                    + photo.album_id + '/'
                     + photo.filename;
-                photo.pageUrl = "/user/"
-                    + user + "/"
-                    + photo.album_id + "/"
+                photo.pageUrl = '/user/'
+                    + user + '/'
+                    + photo.album_id + '/'
                     + photo._id;
 
                 return photo;
