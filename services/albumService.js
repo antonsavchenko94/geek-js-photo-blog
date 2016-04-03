@@ -32,9 +32,7 @@ var albumService = function () {
         var s = path.sep;
 
         return path.normalize(
-            __dirname + s
-            + '..' + s
-           // + 'public' + s
+            '.' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id

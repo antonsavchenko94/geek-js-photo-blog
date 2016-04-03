@@ -10,7 +10,6 @@ pids
 *.txt
 
 #custom directories
-/public/assets/
 /public/lib/
 /public/libs/
 /dist/

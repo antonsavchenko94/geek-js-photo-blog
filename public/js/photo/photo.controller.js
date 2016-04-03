@@ -17,7 +17,7 @@
             $http.get('/api/album/' + $routeParams.album_id + '/' + $routeParams.photo_id, {params: {user: vm.currentUser}})
                 .then(function(res) {
                 vm.photo = res.data.photo;
-                vm.photo.url = '/assets/' + $routeParams.username + '/' + $routeParams.album_id + '/' + vm.photo.filename;
+                vm.photo.url = '/' + $routeParams.username + '/' + $routeParams.album_id + '/' + vm.photo.filename;
             })
         }
     }

@@ -1,5 +1,9 @@
 angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload'])
-    .factory("User", function ($resource) {
+    .factory("User", User);
+
+    User.$inject = ['$resource'];
+
+    function User($resource) {
         return $resource("/api/admin/users/:id", {id: '@_id'},
             {
                 update: {method: 'PUT'},
@@ -8,4 +12,4 @@ angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload'])
                 getOne: {method: 'GET', isArray: false}
             }
         );
-    });
+    }

@@ -2,7 +2,7 @@
     angular
         .module('blog')
         .service('CommentsService', CommentsService)
-        .directive('showComments', ['CommentsService', '$rootScope', showComments]);
+        .directive('showComments', showComments);
     
 
     CommentsService.$inject = ['$http'];

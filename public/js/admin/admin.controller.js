@@ -3,6 +3,8 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
+    AdminController.$inject = ['$scope', 'User', '$rootScope'];
+
     function AdminController($scope, User, $rootScope) {
         getUsers();
         /**

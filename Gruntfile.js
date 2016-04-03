@@ -42,25 +42,31 @@ module.exports = function(grunt) {
                 flatten: true,
                 expand: true
             },
-            img: {
+            images: {
                 cwd: 'public/images/',
                 src: '**',
-                dest: 'dist/img/',
+                dest: 'dist/images/',
                 expand: true
             }
         },
 
         concat: {
             app: {
-                src: ['public/js/app/app.module.js', 'public/js/app/app.config.js', 'public/js/app/app.run.js',
-                    'public/js/app/app.controller.js', 'public/js/**/*.js'],
+                src: ['public/js/app/app.module.js', 'public/js/**/*.js'],
                 dest: 'dist/js/app.min.js'
             }
         },
 
-        // TODO: $injector/modulerr
         uglify: {
             app: {
+                files: {
+                    'dist/js/app.min.js': ['dist/js/app.min.js']
+                }
+            },
+            dev: {
+                options: {
+                    beautify: true
+                },
                 files: {
                     'dist/js/app.min.js': ['dist/js/app.min.js']
                 }
@@ -79,6 +85,18 @@ module.exports = function(grunt) {
                     'views/layout.jade': 'views/layout.jade'
                 }
             }
+        },
+
+        clean: {
+            dist: ['dist']
+        },
+
+        ngAnnotate: {
+            app:{
+                files: {
+                    'dist/js/app.min.js': ['dist/js/app.min.js']
+                }
+            }
         }
 
     });
@@ -90,12 +108,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-include-source');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-ng-annotate');
 
-    // load dependencies from package.json and bower.json
-    grunt.registerTask('load-dep', ['npm-install', 'bower:install']);
+    // load dependencies from package.json and bower.json, copy bower packages to lib folder
+    grunt.registerTask('load-dep', ['npm-install', 'bower:install', 'bowercopy']);
 
     // move files to dist, minify and include them to layout
-    grunt.registerTask('build', ['bowercopy', 'concat', 'copy', 'includeSource']);
+    grunt.registerTask('build', [
+        'concat',
+        'ngAnnotate',
+        'uglify',
+        'copy',
+        'includeSource'
+    ]);
 
     grunt.registerTask('default', ['load-dep', 'build']);
 };
