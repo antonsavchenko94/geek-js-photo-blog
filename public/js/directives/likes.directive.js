@@ -49,11 +49,7 @@
                     })
                 }
             },
-            template: '' +
-            '   <button id="like-button" ng-click="vm.toggleLikes()" class="btn btn-primary" type="button">' +
-            '       <span class="glyphicon glyphicon-heart"></span>' +
-            '       <span class="badge">{{vm.likedCount}}</span>' +
-            '   </button>'
+            templateUrl: 'template/likes.html'
         }
     }
 })();

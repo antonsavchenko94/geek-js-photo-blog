@@ -3,7 +3,7 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$scope', 'User', '$rootScope'];
+    AdminController.$inject = ['User', '$rootScope', '$http'];
 
     function AdminController(User, $rootScope, $http) {
         var vm = this;

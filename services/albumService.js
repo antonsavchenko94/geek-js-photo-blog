@@ -51,8 +51,7 @@ var albumService = function () {
     var getPhotoPath = function (photo) {
         var s = path.sep;
         return path.normalize(
-            'public' + s
-            + 'assets' + s
+            'assets' + s
             + photo.postedBy + s
             + photo.album + s
             + photo.photoName
@@ -62,8 +61,7 @@ var albumService = function () {
     var getUserPath = function (user) {
         var s = path.sep;
         return path.normalize(
-            'public' + s
-            + 'assets' + s
+            'assets' + s
             + user.username
         );
     };

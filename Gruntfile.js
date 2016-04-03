@@ -30,18 +30,6 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            template: {
-                cwd: 'public/template/',
-                src: '**',
-                dest: 'dist/template/',
-                expand: true
-            },
-            css: {
-                src: 'public/stylesheets/style.css',
-                dest: 'dist/css/',
-                flatten: true,
-                expand: true
-            },
             images: {
                 cwd: 'public/images/',
                 src: '**',
@@ -52,7 +40,7 @@ module.exports = function(grunt) {
 
         concat: {
             app: {
-                src: ['public/js/app/app.module.js', 'public/js/**/*.js'],
+                src: ['public/js/app/app.module.js', 'public/template/template.min.js', 'public/js/**/*.js'],
                 dest: 'dist/js/app.min.js'
             }
         },
@@ -82,7 +70,7 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    'views/layout.jade': 'views/layout.jade'
+                    'views/layout.jade': 'views/layout.tpl.jade'
                 }
             }
         },
@@ -97,8 +85,48 @@ module.exports = function(grunt) {
                     'dist/js/app.min.js': ['dist/js/app.min.js']
                 }
             }
-        }
+        },
 
+        cssmin: {
+            app: {
+                files: {
+                    'dist/css/style.min.css': ['public/stylesheets/**/*.css']
+                }
+            }
+        },
+
+        ngtemplates:  {
+            blog: {
+                cwd: 'public/',
+                src: 'template/*.html',
+                dest: 'public/template/template.min.js',
+                options: {
+                    htmlmin: {
+                        collapseBooleanAttributes: true,
+                        collapseWhitespace: true
+                    }
+                }
+            }
+        },
+
+        watch: {
+            js: {
+                files: ['public/js/*'],
+                tasks: ['minify-app']
+            },
+            css: {
+                files: ['public/stylesheets/*'],
+                tasks: ['cssmin']
+            },
+            images: {
+                files: ['public/images/*'],
+                tasks: ['copy:images']
+            },
+            template: {
+                files: ['public/template/**/*.html'],
+                tasks: ['ngtemplates', 'minify-app']
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-npm-install');
@@ -110,17 +138,28 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-include-source');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-angular-templates');
 
     // load dependencies from package.json and bower.json, copy bower packages to lib folder
     grunt.registerTask('load-dep', ['npm-install', 'bower:install', 'bowercopy']);
 
-    // move files to dist, minify and include them to layout
-    grunt.registerTask('build', [
+    // concat and minify public/js/ files
+    grunt.registerTask('minify-app', [
         'concat',
         'ngAnnotate',
-        'uglify',
+        'uglify:app'
+    ]);
+
+    // move files to dist, minify and include them to layout
+    grunt.registerTask('build', [
+        'ngtemplates',
+        'minify-app',
+        'cssmin',
         'copy',
-        'includeSource'
+        'includeSource',
+        'watch'
     ]);
 
     grunt.registerTask('default', ['load-dep', 'build']);

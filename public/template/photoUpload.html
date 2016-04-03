@@ -1,0 +1,14 @@
+<div class="form-inline upload-form">
+    <select ng-if="vm._albums" class="form-control" ng-options="album._id as album.title for album in vm._albums track by album._id" ng-model="vm.albumId">
+        <option value=""> Profile Album </option>
+    </select>
+    <button class="btn btn-success" ngf-select="vm.openPhotos($files, $invalidFiles)" ngf-multiple="true" accept="image/*" ngf-max-height="6000" ngf-max-size="10MB">
+        Select {{ vm.btnText }}
+    </button>
+    <button class="btn btn-success" ng-click="vm.uploadPhotos(vm.photos, vm.albumId)">
+        Upload {{ vm.btnText }}
+    </button>
+    <div class="well" ng-if="vm.photos.length > 0">
+        <img ngf-src="vm.photos[id]" ng-repeat="(id, photo) in vm.photos"/>
+    </div>
+</div>

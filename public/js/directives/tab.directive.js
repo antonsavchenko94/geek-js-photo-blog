@@ -36,15 +36,7 @@
                     vm.onTabSelect();
                 }
             },
-            template:
-            '<div class="well">' +
-            '   <ul class="nav nav-tabs" ng-click="$event.preventDefault()">' +
-            '       <li ng-repeat="tab in container.tabs" ng-class="{\'active\': tab.active}">' +
-            '           <a href="#" ng-click="container.select(tab)"> {{ tab.title }}</a>' +
-            '       </li>' +
-            '   </ul>' +
-            '   <div class="tab-content" ng-transclude></div>' +
-            '</div>'
+            templateUrl: 'template/tabContainer.html'
         }
     }
 
