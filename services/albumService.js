@@ -27,6 +27,15 @@ var albumService = function () {
         })
     };
 
+    var remPhotoPath = function (photoPath) {
+        try {
+            fs.unlinkSync(photoPath);
+        }catch (err){
+            throw err;
+        }
+
+    };
+
     var getAlbumPath = function (album) {
 
         var s = path.sep;
@@ -36,6 +45,26 @@ var albumService = function () {
             + 'assets' + s
             + album.postedBy.username + s
             + album._id
+        );
+    };
+
+    var getPhotoPath = function (photo) {
+        var s = path.sep;
+        return path.normalize(
+            'public' + s
+            + 'assets' + s
+            + photo.postedBy + s
+            + photo.album + s
+            + photo.photoName
+        );
+    };
+
+    var getUserPath = function (user) {
+        var s = path.sep;
+        return path.normalize(
+            'public' + s
+            + 'assets' + s
+            + user.username
         );
     };
 
@@ -76,6 +105,22 @@ var albumService = function () {
             throw err;
         }
     };
+
+    var removeUserDir = function (userDir) {
+        try {
+            remdirPath(getUserPath(userDir));
+        }catch (err){
+            throw err;
+        }
+    };
+
+    var removePhoto = function (photo) {
+            try {
+                remPhotoPath(getPhotoPath(photo));
+            }catch (err){
+                throw err;
+            }
+        };
 
     var rmdirAsync = function(path, callback) {
         fs.readdir(path, function(err, files) {
@@ -124,7 +169,9 @@ var albumService = function () {
         getAlbumPath: getAlbumPath,
         createAlbumDirectory: createAlbumDirectory,
         uploadParams: uploadParams,
-        removeAlbum:removeAlbum
+        removeUserDir:removeUserDir,
+        removeAlbum:removeAlbum,
+        removePhoto:removePhoto
     };
 };
 

@@ -10,7 +10,6 @@ var likesController = function () {
 
         var photo_id = req.body.photo_id;
         var user = req.body.currentUser;
-        var liked = false;
 
         var query = function (param, cb) {
             Likes.findOneAndUpdate(
@@ -43,14 +42,13 @@ var likesController = function () {
                     })
                 }
             });
-
-
     };
 
     var getLikes = function (req, res, next) {
 
         var photo_id = req.body.params.id;
         var user_id = req.body.params.user_id;
+        var liked = false;
 
         Likes.findOne(
             {'to': photo_id + ''},
@@ -60,11 +58,17 @@ var likesController = function () {
                     console.log(err);
                 }
 
-                if (likes && likes.by.length) {
-                    res.send({likes: likes, liked: true})
-                } else {
-                    res.send({likes: likes, liked: false})
-                }
+                liked = !!(likes && likes.by.length);
+
+                Likes.findOne(
+                    {'to': photo_id + ''},
+                    function (err, likes) {
+                        if(err){
+                            console.log(err);
+                        }
+                        res.send({likes: likes, liked: liked})
+                    }
+                );
             });
 
     };

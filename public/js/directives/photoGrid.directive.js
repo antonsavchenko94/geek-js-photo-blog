@@ -67,20 +67,6 @@
                         }
                     };
                     vm.dialogVisible = true;
-                    /*vm.dialog = {
-                     title: 'Edit album\'s title',
-                     body: '' +
-                     '<p>Old title: '+ data.title +' </p> ' +
-                     '<span ng-init="newTitle=0">{{ newTitle }}</span>' +
-                     '<br>' +
-                     '<input id="new-title" value="000" type="text" placeholder="Enter new title..." ' +
-                     'ng-model="newTitle">',
-                     onConfirm: function (body) {
-                     console.log(body);
-                     //console.log('editing album: ' + data.title + '\nnew title: ' + newTitle)
-                     }
-                     };
-                     vm.dialogVisible = true;*/
                 }
 
                 function isVisible(){
