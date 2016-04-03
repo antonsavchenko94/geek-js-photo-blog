@@ -82,24 +82,7 @@
                     }
                 }
             },
-            template: '' +
-            '<div class="modal fade">' +
-            '   <div class="modal-dialog">' +
-            '       <div class="modal-content">' +
-            '           <div  class="modal-header">' +
-            '               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-            '               <h4 id="dialog-title" class="modal-title">{{ vm.title }}</h4>' +
-            '           </div>' +
-            '           <div id="dialog-body" class="modal-body">' +
-            '               <p>{{ vm.body }}</p>' +
-            '           </div>' +
-            '           <div class="modal-footer">' +
-            '               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
-            '               <button type="button" class="btn btn-primary" ng-click="vm.onConfirm()">Confirm</button>' +
-            '           </div>' +
-            '       </div>' +
-            '   </div>' +
-            '</div>'
+            templateUrl: 'template/popUpDialog.html'
         }
     }
 })();

@@ -41,18 +41,7 @@
                 }
 
             },
-            template: '' +
-            '<div class="dropdown" ng-if="vm.privacyEditable">' +
-            '   <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
-            '    {{vm.currentStatus}}' +
-            '   <span class="caret"></span>' +
-            '   </button>' +
-            '   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">' +
-            '       <li><a ng-click="vm.setPrivacy(vm.status.publ)">Public</a></li>' +
-            '       <li><a ng-click="vm.setPrivacy(vm.status.priv)">Private</a></li>' +
-            '       <li><a ng-click="vm.setPrivacy(vm.status.nocom)">Off comments</a></li>' +
-            '   </ul>' +
-            '</div>'
+            templateUrl: 'template/privacySelect.html'
         }
     }
 })();

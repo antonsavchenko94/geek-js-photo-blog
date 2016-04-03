@@ -46,7 +46,7 @@
                 };
 
                 album.cover.imageUrl = (album.photos.length > 0)
-                    ? '/assets/' + vm.user.username + "/" + album._id + "/" + album.photos.pop().filename
+                    ? '/' + vm.user.username + "/" + album._id + "/" + album.photos.pop().filename
                     : '/images/no-image.jpg';
                 album.cover.editable = !album.isProfileAlbum && isMyProfile();
                 album.cover.newTitle = '';

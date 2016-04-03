@@ -11,10 +11,7 @@
                 album: '=',
                 photos: '='
             },
-            scope: {
-                select: '=',
-                orderBy: '='
-            },
+            scope: {},
             controllerAs: "vm",
             controller: function (AlbumsService) {
                 var vm = this;
@@ -73,34 +70,7 @@
                     return false;
                 }
             },
-            template: '' +
-            '<div class="photogrid-item col-sm-6 col-xs-12 col-md-4 col-lg-3" ng-class="{hasTitle: photo.title}" ng-repeat="photo in vm.photos">' +
-            '   <div class="input-group" ng-if="photo.editable "> ' +
-            '       <input type="text" class="form-control" placeholder="Enter {{photo.title}}\'s new title..." ng-model="photo.newTitle"> ' +
-            '       <div class="input-group-btn"> ' +
-            '           <button type="button" class="btn btn-default" ng-click="vm.editTitle(photo)">' +
-            '               <span class="glyphicon glyphicon-pencil"></span>' +
-            '           </button> ' +
-            '           <button type="button" class="btn btn-primary" ng-click="vm.removeAlbum(photo)">' +
-            '               <span class="glyphicon glyphicon-remove"></span>' +
-            '           </button> ' +
-            '       </div> ' +
-            '   </div>' +
-            '   <privacy-select photo="photo" ng-if="photo.status"></privacy-select>' +
-            '   <a class="thumbnail" href="{{photo.pageUrl}}">' +
-            '       <h2 ng-if="photo.title" class="text-center">{{photo.title}}</h2>' +
-            '       <div class="img-container">' +
-            '           <img class="img-responsive" src="{{photo.imageUrl}}"/>' +
-
-            '       </div>' +
-            '   </a>' +
-            '</div>' +
-            '<pop-up-dialog dialog-show="vm.dialogVisible" ' +
-            '               dialog-title="vm.dialog.title" ' +
-            '               dialog-body="vm.dialog.body" ' +
-            '               dialog-ok="vm.dialog.onConfirm">' +
-            '</pop-up-dialog>'
-
+            templateUrl: 'template/photoGrid.html'
         };
     }
 })();

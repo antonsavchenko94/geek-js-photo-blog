@@ -3,8 +3,11 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
+    AdminController.$inject = ['User', '$rootScope', '$http'];
+
     function AdminController(User, $rootScope, $http) {
         var vm = this;
+
         getUsers();
         getComplainPhotos();
         /**
