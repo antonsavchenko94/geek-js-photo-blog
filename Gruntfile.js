@@ -1,5 +1,10 @@
 module.exports = function(grunt) {
     grunt.initConfig({
+        bower: {
+            install: {
+            }
+        },
+
         bowercopy: {
             options: {
                 srcPrefix: 'bower_components'
@@ -129,8 +134,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-npm-install');
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-bowercopy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -141,9 +144,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-angular-templates');
-
-    // load dependencies from package.json and bower.json, copy bower packages to lib folder
-    grunt.registerTask('load-dep', ['npm-install', 'bower:install', 'bowercopy']);
 
     // concat and minify public/js/ files
     grunt.registerTask('minify-app', [
@@ -158,9 +158,8 @@ module.exports = function(grunt) {
         'minify-app',
         'cssmin',
         'copy',
-        'includeSource',
-        'watch'
+        'includeSource'
     ]);
 
-    grunt.registerTask('default', ['load-dep', 'build']);
+    grunt.registerTask('default', ['bowercopy', 'build']);
 };
