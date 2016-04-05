@@ -9,30 +9,49 @@
         var vm = this;
 
         var albumId = $routeParams.album_id;
+        var noMoreData = false;
 
         vm.isMyProfile = false;
-        vm.album = {};
+        vm.album = [];
         vm.reloadAlbum = reloadAlbum;
+        vm.loadMore = loadMore;
 
         reloadAlbum();
 
         function isMyProfile() {
-            var authorizedProfile = $rootScope.user._id;
-            var requestedProfile = vm.album.postedBy._id;
+            var authorizedProfile = $rootScope.user.username;
+            var requestedProfile = $routeParams.username;
             return authorizedProfile == requestedProfile;
         }
 
         function reloadAlbum() {
-            vm.album = getAlbumById(albumId);
+            vm.album = [];
+            noMoreData = false;
+            getAlbumById();
         }
 
-        function getAlbumById(id) {
-            vm.album = AlbumsService.getAlbumById(id);
-            vm.album.then(function (a) {
-                vm.album = AlbumsService.generatePhotoUrls(a);
-                vm.isMyProfile = isMyProfile() || false;
-            });
-            return vm.album;
+        function getAlbumById(param) {
+            vm.isMyProfile = isMyProfile() || false;
+            if (vm.isMyProfile) {
+                AlbumsService.getOwnAlbumById(albumId, param).then(function (res) {
+                    generateUrls(res);
+                });
+            } else {
+                AlbumsService.getAlbumById(albumId, param).then(function (res) {
+                    generateUrls(res);
+                });
+            }
+        }
+
+        function loadMore() {
+            if (!noMoreData) {
+                getAlbumById('more');
+            }
+        }
+
+        function generateUrls(res) {
+            vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(res.album));
+            noMoreData = res.noMoreData;
         }
     }
 })();

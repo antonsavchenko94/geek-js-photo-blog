@@ -7,10 +7,14 @@ div.container-fluid.profile-info
       h3 {{ vm.user.first_name }} {{ vm.user.last_name }}
       h3 Email: {{ vm.user.email }}
       h3 Total photo views: {{vm.user.globalViews}}
+      h3 Followers: {{vm.user.followers.length}}
+      h3 Following: {{vm.user.following.length}}
 
       a.btn.btn-primary(href="/user/{{ vm.user.username }}/albums")
         h3 Albums
       a.btn.btn-primary(href="/settings" ng-if="vm.myProfile")
         h3 Settings
+      button#follow-button.btn.btn-primary(ng-click='vm.toggleFollow()' ng-if="!vm.myProfile")
+        | Follow
 
-photo-grid(photos="vm.profileAlbum.photos")
+photo-grid(photos="vm.profileAlbum" lazy-load="vm.loadMore()")

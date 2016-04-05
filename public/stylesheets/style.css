@@ -93,6 +93,11 @@ p b {
     padding-top: 20px;
 }
 
+photo-grid {
+    display: block;
+    overflow: hidden;
+}
+
 .photogrid-item {
     height: 300px;
     margin-bottom: 20px;
@@ -234,4 +239,9 @@ photo-upload .well {
     float: right;
     margin-right: 5px;
     margin-left: 5px;
+}
+
+.dropdown {
+    cursor: pointer;
+
 }

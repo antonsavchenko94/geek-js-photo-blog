@@ -4,12 +4,10 @@ var fs = require('fs');
 var albumService = function () {
 
     var mkdir = function (path) {
-
         try {
             fs.mkdirSync(path);
-
         } catch (e) {
-            if (e.code != 'EEXIST') throw e;
+            if (e.code != 'EEXIST' && e.code != 'EPERM') throw e;
         }
     };
 
@@ -39,9 +37,13 @@ var albumService = function () {
     };
 
     var getAlbumPath = function (album) {
+
         var s = path.sep;
+
         return path.normalize(
-            'public' + s
+            __dirname + s
+            + '..' + s
+            + 'public' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id

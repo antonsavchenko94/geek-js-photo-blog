@@ -16,13 +16,24 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:username', function(req, res, next) {
-  User.findOne({username: req.params.username}, function(err, user) {
+  var visitorId = req.query.visitorId;
+
+    User.findOne({username: req.params.username}, function(err, user) {
     if (err) {
       console.log(err);
       next(err);
     }
+    User.findOne(
+        //{username: req.params.username},
+        {'followers.user': visitorId + ''},
+        function (err, follower) {
+            if (err) {
+                console.log(err);
+                next(err);
+            }
+            res.send({user: user, followedByVisitor: !!follower});
+        });
 
-    res.send({user: user});
   });
 });
 
@@ -37,6 +48,67 @@ router.put('/', function(req, res, next) {
     })
   });
 });
+
+router.put('/toggleFollow/:username', function (req, res, next) {
+
+    var follower = req.body.follower;
+    var followedName = req.params.username;
+
+    User.findOne(
+      {'username': followedName},
+      {'followers.user': follower._id},
+      function (err, followed) {
+          if(followed.followers.length != 0){
+              unfollow(followed, follower, res);
+          }
+          else {
+              follow(followed, follower, res);
+          }
+      }
+  );
+});
+
+function unfollow(followed, follower, res) {
+    User.findOneAndUpdate(
+        {'_id': followed._id},
+        {$pull: {followers: {user: follower._id + ''}}},
+        {new: true},
+
+        function (err, followedUser) {
+            User.findOneAndUpdate(
+                {'_id': follower._id + ''},
+                {$pull: {following: {user: followed._id + ''}}},
+                {new: true},
+
+                function (err, followingUser) {
+                    res.status(200);
+                    res.end();
+                }
+            );
+        }
+    );
+}
+
+function follow(followed, follower, res) {
+    User.findOneAndUpdate(
+        {'_id': followed._id},
+        {$push: {followers: {user: follower._id + ''}}},
+        {new: true},
+
+        function (err, followedUser) {
+            User.findOneAndUpdate(
+                {'_id': follower._id + ''},
+                {$push: {following: {user: followed._id + ''}}},
+                {new: true},
+
+                function (err, followingUser) {
+                    res.status(200);
+                    res.end();
+                }
+            );
+        }
+    );
+}
 
 function parseInfo(req, cb) {
   var info = req.body;
