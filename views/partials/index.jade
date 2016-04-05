@@ -1,3 +1,7 @@
+.jumbotron(ng-if="vm.baned")
+    h1 {{user.first_name}}, you are baned!
+    p Your activity on the site suspended for 24 hours
+
 div.text-center(ng-if='user')
     photo-upload(albums="vm.userAlbums" after-upload="vm.refresh")
 

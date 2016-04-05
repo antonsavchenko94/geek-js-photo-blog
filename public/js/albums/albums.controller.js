@@ -13,6 +13,7 @@
         vm.user = {username: $routeParams.username || $rootScope.user};
         vm.myProfile = isMyProfile();
         vm.albumCovers = [];
+        vm.baned = $rootScope.user.status == 'baned';
 
         vm.createAlbum = createAlbum;
         vm.reloadAlbumsList = reloadAlbumsList;

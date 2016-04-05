@@ -38,6 +38,7 @@
             controller: function(CommentsService, $rootScope) {
                 var vm = this;
                 vm.comments = null;
+                vm.baned = $rootScope.user.status == 'baned';
 
                 vm.viewComments = function () {
                     CommentsService.getComments(vm.commentsTo._id, function(res){

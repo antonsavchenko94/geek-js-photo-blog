@@ -26,11 +26,12 @@
                     ctrl.setAlbums(newValue);
                 });
             },
-            controller: function(AlbumsService, $routeParams) {
+            controller: function(AlbumsService, $routeParams, $rootScope) {
                 var vm = this;
                 vm.photos = [];
                 vm.albumId = null;
                 vm.btnText = vm.btnText || 'images';
+                vm.baned = $rootScope.user.status == 'baned';
 
                 vm.setAlbums = function(albums) {
                     if (albums) {
