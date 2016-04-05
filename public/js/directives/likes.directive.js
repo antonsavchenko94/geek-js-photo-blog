@@ -26,11 +26,12 @@
                 });
 
             },
-            controller: function (AlbumsService, $routeParams) {
+            controller: function (AlbumsService, $routeParams, $rootScope) {
                 var vm = this;
 
                 vm.liked = false;
                 vm.likedCount = 0;
+                vm.baned = $rootScope.user.status == 'baned';
 
                 vm.toggleLikes = toggleLikes;
                 vm.getLikes = getLikes;
@@ -50,7 +51,7 @@
                 }
             },
             template: '' +
-            '   <button id="like-button" ng-click="vm.toggleLikes()" class="btn btn-primary" type="button">' +
+            '   <button id="like-button" ng-disabled="vm.baned" ng-click="vm.toggleLikes()" class="btn btn-primary" type="button">' +
             '       <span class="glyphicon glyphicon-heart"></span>' +
             '       <span class="badge">{{vm.likedCount}}</span>' +
             '   </button>'
