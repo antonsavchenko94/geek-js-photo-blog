@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var config = JSON.parse(JSON.stringify(require('./config')));
+var checkBanList = require('./controllers/banList.controller');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
