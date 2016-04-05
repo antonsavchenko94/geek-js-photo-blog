@@ -18,8 +18,11 @@ module.exports = function(grunt) {
 
                     // Angular
                     'angular.min.js': 'angular/angular.min.js',
+                    'angular.min.js.map': 'angular/angular.min.js.map',
                     'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
+                    'angular/angular-route.min.js.map': 'angular-route/angular-route.min.js.map',
                     'angular/angular-resource.min.js': 'angular-resource/angular-resource.min.js',
+                    'angular/angular-resource.min.js.map': 'angular-resource/angular-resource.min.js.map',
                     'angular/ng-file-upload-all.min.js': 'ng-file-upload/ng-file-upload-all.min.js',
 
                     // Bootstrap
@@ -27,6 +30,7 @@ module.exports = function(grunt) {
                     'bootstrap/bootstrap.min.css': 'bootstrap/dist/css/bootstrap.min.css',
                     'fonts/glyphicons-halflings-regular.woff': 'bootstrap/fonts/glyphicons-halflings-regular.woff',
                     'fonts/glyphicons-halflings-regular.woff2': 'bootstrap/fonts/glyphicons-halflings-regular.woff2',
+                    'bootstrap/bootstrap.min.css.map': 'bootstrap/dist/css/bootstrap.min.css.map',
 
                     // Jquery
                     'jquery.min.js': 'jquery/dist/jquery.min.js'
