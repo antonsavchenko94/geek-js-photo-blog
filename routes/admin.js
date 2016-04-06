@@ -1,6 +1,8 @@
 var express = require('express');
 var User = require('../models/user');
 var Album = require('../models/album');
+var BanList = require('../models/banList');
+var sendEmail = require('../controllers/email.controller.js');
 var router = express.Router();
 
 var albumService = require('../services/albumService.js')();
@@ -44,14 +46,48 @@ router.delete('/users/:id', function (req, res) {
 });
 
 router.put('/users/:id', function (req, res) {
-    var status = {status: req.body.status};
+    var newStatus = {status: req.body.status};
     var id = req.params.id;
-    User.findByIdAndUpdate(id, status, function (err, offer) {
+    User.findById(id, function (err, user) {
         if (err) throw err;
-        else
-            res.sendStatus(200);
+        else {
+            user.status = newStatus.status;
+            user.save(function (err, user){
+                if(user.status == 'baned'){
+                    addToBanList(user, res)
+                    sendEmail.sendInfoForBanedUser(user, function (err) {
+                        if (err) {
+                            res.status(500).send(err);
+                        } else {
+                            res.sendStatus(200);
+                        }
+                    });
+                }else if(user.status == 'active'){
+                    deleteFromBanList(user, res);
+                    sendEmail.sendInfoForUnbanedUser(user, function (err) {
+                        if (err) {
+                            res.status(500).send(err);
+                        } else {
+                            res.sendStatus(200);
+                        }
+                    });
+                }
+            });
+        }
     })
 });
+
+var addToBanList = function (user,res) {
+    BanList.create({user:user._id }, function(err, item){
+        if(err) res.status(500).send(err);
+    });
+};
+
+var deleteFromBanList = function (user,res) {
+    BanList.remove({user:user._id }, function(err, item){
+        if(err) res.status(500).send(err);
+    });
+};
 
 router.get('/complain/photos', function (req, res) {
     Album.aggregate([
@@ -71,7 +107,7 @@ router.get('/complain/photos', function (req, res) {
     ], function(err, result) {
         Album.populate(result, 'postedBy', function(err, complain) {
             for(var i = 0; i<complain.length; i++){
-                if(complain[i].complain === 0 || typeof complain[i].complain == 'undefined'){
+                if(complain[i].complain === 0 || typeof complain[i].complain == 'undefined' || complain[i].complain <= 5 ){
                     complain.splice(i,1);
                     i-=1;
                 }

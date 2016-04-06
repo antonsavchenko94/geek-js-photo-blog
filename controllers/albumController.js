@@ -299,8 +299,8 @@ var albumController = function () {
     };
 
     return {
-        complainPhoto:complainPhoto,
         middleware: middleware,
+        complainPhoto:complainPhoto,
         getAllByUsername: getAllByUsername,
         getById: getById,
         getOwnById: getOwnById,

@@ -26,11 +26,12 @@
                 });
 
             },
-            controller: function (AlbumsService, $routeParams) {
+            controller: function (AlbumsService, $routeParams, $rootScope) {
                 var vm = this;
 
                 vm.liked = false;
                 vm.likedCount = 0;
+                vm.baned = $rootScope.user.status == 'baned';
 
                 vm.toggleLikes = toggleLikes;
                 vm.getLikes = getLikes;

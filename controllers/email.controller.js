@@ -12,25 +12,37 @@ var transporter = nodemailer.createTransport(smtpTransport({
 
 var Option = {
     registerMail: function (email, token) {
-        var options =
-        {
+        return {
             from: "Sender Name <de45458725-cacd67@inbox.mailtrap.io>",
             to: "Receiver Name <" + email + ">",
             subject: "Confirm email",
-            html: "To continue registering on the blog you will need to click the link <a href='http://localhost:3000/register?token="+ token +"'>http://localhost:3000/register?token=" + token + "</a>"
+            html: "To continue registering on the blog you will need to click the link <a href='http://localhost:3000/register?token=" + token + "'>http://localhost:3000/register?token=" + token + "</a>"
         };
-        return options;
     },
     recoveryPasswordMail: function (user, token) {
-        var options =
-        {
+        return {
             from: "Sender Name <de45458725-cacd67@inbox.mailtrap.io>",
             to: user.first_name + " " + user.last_name + "<" + user.email + ">",
             subject: "New password",
             html: "It`s your new password: " + user.password +
-            "</br> To comfirm password click link <a href='http:/localhost:3000/api/auth/active/"+token+"'>http:/localhost:3000/api/auth/active/" + token + "</a>"
+            "</br> To comfirm password click link <a href='http:/localhost:3000/api/auth/active/" + token + "'>http:/localhost:3000/api/auth/active/" + token + "</a>"
         };
-        return options;
+    },
+    infoBanedUser: function (user) {
+        return {
+            from: "Sender Name <de45458725-cacd67@inbox.mailtrap.io>",
+            to: user.first_name + " " + user.last_name + "<" + user.email + ">",
+            subject: "Baned",
+            html: "Dear " + user.first_name + ", you were banned because a large number complaints to your account"
+        };
+    },
+    infoUnbanedUser: function (user) {
+        return {
+            from: "Sender Name <de45458725-cacd67@inbox.mailtrap.io>",
+            to: user.first_name + " " + user.last_name + "<" + user.email + ">",
+            subject: "Unbaned",
+            html: "Dear " + user.first_name + ", your account is active now"
+        };
     }
 };
 
@@ -47,6 +59,20 @@ var SendMail = {
     },
     sendRecoveryPassword: function (user, token, done) {
         var options = Option.recoveryPasswordMail(user, token);
+        transporter.sendMail(options, function (error, response) {
+            done(error);
+            transporter.close();
+        });
+    },
+    sendInfoForBanedUser: function (user, done) {
+        var options = Option.infoBanedUser(user);
+        transporter.sendMail(options, function (error, response) {
+            done(error);
+            transporter.close();
+        });
+    },
+    sendInfoForUnbanedUser: function (user, done) {
+        var options = Option.infoUnbanedUser(user);
         transporter.sendMail(options, function (error, response) {
             done(error);
             transporter.close();

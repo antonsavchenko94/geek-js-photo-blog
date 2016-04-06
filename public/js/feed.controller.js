@@ -10,6 +10,9 @@
         var noMoreData = false;
 
         vm.feedPhotos = [];
+        if($rootScope.user){
+            vm.baned = $rootScope.user.status =='baned';
+        }
         vm.albums = [];
         vm.getAllProfileAlbums = getAllProfileAlbums;
         vm.loadMore = loadMore;
