@@ -3,42 +3,35 @@
         .module('blog')
         .controller('FeedController', FeedController);
 
-    FeedController.$inject = ['AlbumsService', '$rootScope'];
+    FeedController.$inject = ['AlbumsService', 'LazyLoadService', '$rootScope'];
 
-    function FeedController(AlbumsService, $rootScope) {
+    function FeedController(AlbumsService, LazyLoadService, $rootScope) {
         var vm = this;
-        var noMoreData = false;
 
         vm.feedPhotos = [];
-        if($rootScope.user){
+        if ($rootScope.user) {
             vm.baned = $rootScope.user.status =='baned';
         }
         vm.albums = [];
         vm.getAllProfileAlbums = getAllProfileAlbums;
-        vm.loadMore = loadMore;
         vm.refresh = refresh;
 
         getUserAlbumsList();
         getAllProfileAlbums();
 
-        function loadMore() {
-            if (!noMoreData) {
-                getAllProfileAlbums('more');
-            }
-        }
-
         function getAllProfileAlbums(param) {
-            AlbumsService.getAllProfileAlbums(param)
+            return AlbumsService.getAllProfileAlbums(param)
                 .then(function (res) {
                     var photos = AlbumsService.generatePhotoUrls(res.album);
                     vm.feedPhotos = vm.feedPhotos.concat(photos);
-                    noMoreData = res.noMoreData;
+
+                    return res;
                 })
         }
 
         function refresh() {
             vm.feedPhotos = [];
-            noMoreData = false;
+            LazyLoadService.refresh();
             getAllProfileAlbums();
         }
 

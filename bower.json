@@ -18,7 +18,6 @@
     "angular": "^1.5.0",
     "angular-route": "^1.5.0",
     "bootstrap": "~3.3.6",
-    "ng-file-upload": "^12.0.1",
-    "ng-file-upload-shim": "^12.0.1"
+    "ng-file-upload": "^12.0.1"
   }
 }

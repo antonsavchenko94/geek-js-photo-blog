@@ -3,15 +3,16 @@
         .module('blog')
         .directive('lazyLoad', LazyLoad);
 
-    LazyLoad.$inject = ['$parse', '$timeout'];
+    LazyLoad.$inject = ['$parse', '$timeout', 'LazyLoadService'];
 
-    function LazyLoad($parse, $timeout) {
+    function LazyLoad($parse, $timeout, LazyLoadService) {
         return {
             restrict: 'A',
             link: function($scope, $elem, $attr) {
-                var loadHandler = $parse($attr.lazyLoad);
+                var loadHandler = $parse($attr.lazyLoad)($scope);
                 var padding = 100;
                 var timer = null;
+                LazyLoadService.refresh();
 
                 function handleTimer() {
                     if (timer) {
@@ -24,7 +25,7 @@
                     timer = null;
                     var rectObject = $elem[0].getBoundingClientRect();
                     if (rectObject.bottom && rectObject.bottom - window.innerHeight <= padding) {
-                        $scope.$apply(loadHandler($scope));
+                        $scope.$apply(LazyLoadService.load(loadHandler));
                     }
                 }
 

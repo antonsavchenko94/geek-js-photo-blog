@@ -7,7 +7,6 @@
 
     function ProfileController($http, $routeParams, $rootScope, AlbumsService) {
         var vm = this;
-        var noMoreData = false;
 
         vm.user = {};
         vm.myProfile = false;
@@ -16,11 +15,9 @@
 
         vm.toggleFollow = toggleFollow;
         vm.updateUserInfo = updateUserInfo;
-        vm.loadMore = loadMore;
+        vm.getProfileAlbum = getProfileAlbum;
 
         getUserData();
-
-        angular.element(document.querySelector('#follow-button'));
 
         // reload list of albums and photos
         getProfileAlbum();
@@ -28,6 +25,7 @@
         // get user info to fill profile and check if it is profile of current user
         function getUserData() {
             if (!$routeParams.username) return;
+
             $http.get('/api/users/' + $routeParams.username, {params: {visitorId: $rootScope.user._id}})
                 .then(function (data) {
                     vm.user = data.data.user;
@@ -50,18 +48,15 @@
 
         function getProfileAlbum(param) {
             if (!$routeParams.username) return;
-            AlbumsService.getProfileAlbum($routeParams.username, param).then(function (res) {
-                var photos = AlbumsService.generatePhotoUrls(res.album);
-                vm.profileAlbum = vm.profileAlbum.concat(photos);
-                noMoreData = res.noMoreData;
-                //vm.user.globalViews = AlbumsService.getGlobalViews(a);
-            });
-        }
 
-        function loadMore() {
-            if (!noMoreData) {
-                getProfileAlbum('more');
-            }
+            return AlbumsService.getProfileAlbum($routeParams.username, param)
+                .then(function (res) {
+                    var photos = AlbumsService.generatePhotoUrls(res.album);
+                    vm.profileAlbum = vm.profileAlbum.concat(photos);
+
+                    return res;
+                    //vm.user.globalViews = AlbumsService.getGlobalViews(a);
+                });
         }
 
         function toggleFollow() {

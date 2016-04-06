@@ -17,4 +17,4 @@ div.container-fluid.profile-info
       button#follow-button.btn.btn-primary(ng-click='vm.toggleFollow()' ng-if="!vm.myProfile")
         | Follow
 
-photo-grid(photos="vm.profileAlbum" lazy-load="vm.loadMore()")
+photo-grid(photos="vm.profileAlbum" lazy-load="vm.getProfileAlbum")

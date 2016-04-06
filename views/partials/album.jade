@@ -2,4 +2,4 @@ div.text-center
     h1 {{ vm.album.title }}
     photo-upload(ng-if="vm.isMyProfile" after-upload="vm.reloadAlbum")
 
-photo-grid(photos="vm.album" lazy-load="vm.loadMore()")
+photo-grid(photos="vm.album" lazy-load="vm.getAlbumById")
