@@ -9,6 +9,6 @@ div.panel.panel-default.center-block
             a {{vm.complainText}}
 flash-message
 
-show-comments( comments-to='vm.photo' ng-if="vm.photo")
+show-comments( comments-to='vm.photo' ng-if="vm.photo && vm.photo.status != 'no-comment'")
 
 pop-up-dialog(dialog-show='vm.dialogVisible', dialog-title='vm.dialog.title', dialog-body='vm.dialog.body', dialog-ok='vm.dialog.onConfirm')
