@@ -306,14 +306,14 @@ var albumController = function () {
         getAllProfileAlbums: getAllProfileAlbums,
         getProfileAlbum: getProfileAlbum,
         removeAlbum: removeAlbum,
-        editAlbum: editAlbum,
+        editAlbum: editAlbum/*,
 
         complainPhoto:complainPhoto,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         updatePhotoPrivacy: updatePhotoPrivacy,
         deletePhoto: deletePhoto,
-        getPhotoById: getPhotoById
+        getPhotoById: getPhotoById*/
     };
 };
 

@@ -1,14 +1,9 @@
 var Album = require('../models/album');
 var User = require('../models/user');
-var Likes = require('../models/likes');
-var path = require('path');
-var ObjectId = require('mongoose').Types.ObjectId;
 
-var albumService = require('../services/albumService')();
-var amountOfPhotosPerRequest = 12;
+var path = require('path');
 
 var photoController = function () {
-    var seenPhotosCount = 0;
 
     var middleware = function (req, res, next) {
         next();
@@ -28,7 +23,22 @@ var photoController = function () {
                 },
                 {$inc: {'photos.$.view_count': 1}},
                 {new: true},
-                function () {
+
+                function (err, updatedAlbum) {
+
+                    if (updatedAlbum){
+                        User.findOneAndUpdate(
+                            {_id: "" + updatedAlbum.postedBy},
+                            {$inc: {global_views: 1}},
+                            {new: true},
+                            function (err, user){
+                                if (err){
+                                    console.log(err);
+                                }
+                            }
+                        );
+                    }
+
                     Album.findOne(
                         {_id: albumId},
                         {'photos': {$elemMatch: {_id: photoId}}},
@@ -37,6 +47,8 @@ var photoController = function () {
                         }
                     )
                 });
+
+
     };
 
     var uploadPhotos = function (req, res, next) {
@@ -93,13 +105,13 @@ var photoController = function () {
             });
     };
 
-    var complainPhoto = function(req, res, next) {
+    var complainPhoto = function (req, res, next) {
         var albumId = req.params.album_id;
         var photoId = req.params.photo_id;
         Album.update(
             {
-                '_id': ""+albumId,
-                'photos._id': ""+photoId
+                '_id': "" + albumId,
+                'photos._id': "" + photoId
             },
             {$inc: {'photos.$.complain': 1}},
             function () {
@@ -107,15 +119,15 @@ var photoController = function () {
             });
     };
 
-    var deletePhoto =  function (req, res) {
-        Album.update({_id:req.params.album}, {
+    var deletePhoto = function (req, res) {
+        Album.update({_id: req.params.album}, {
                 $pull: {
                     photos: {
-                        filename:req.params.photo
+                        filename: req.params.photo
                     }
                 }
             },
-            function (err, data){
+            function (err, data) {
                 albumService.removePhoto(
                     {
                         postedBy: req.params.username,
@@ -123,25 +135,16 @@ var photoController = function () {
                         photoName: req.params.photo
                     }
                 );
-                if(!err){
+                if (!err) {
                     res.send({res: data});
-                }else
+                } else
                     res.status(400).send(err);
             })
     };
 
     return {
-       /* middleware: middleware,
-        getAllByUsername: getAllByUsername,
-        getById: getById,
-        getOwnById: getOwnById,
-        createNewAlbum: createNewAlbum,
-        getAllProfileAlbums: getAllProfileAlbums,
-        getProfileAlbum: getProfileAlbum,
-        removeAlbum: removeAlbum,
-        editAlbum: editAlbum,
-*/
-        complainPhoto:complainPhoto,
+
+        complainPhoto: complainPhoto,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         updatePhotoPrivacy: updatePhotoPrivacy,

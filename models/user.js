@@ -10,6 +10,7 @@ var user = new Schema({
     avatar:     { type: String, required: false },
     isAdmin:    { type: Boolean, required: false },
     status:     { type: String, default: 'active', enum:['baned', 'active', 'notActive']},
+    global_views: { type: Number, required: false, default: 0},
     following:  [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}],
     followers:  [{user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}]
 });
