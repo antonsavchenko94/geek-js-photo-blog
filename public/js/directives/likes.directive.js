@@ -26,7 +26,7 @@
                 });
 
             },
-            controller: function (AlbumsService, $routeParams, $rootScope) {
+            controller: function (PhotoService, $routeParams, $rootScope) {
                 var vm = this;
 
                 vm.liked = false;
@@ -37,16 +37,16 @@
                 vm.getLikes = getLikes;
 
                 function toggleLikes() {
-                    AlbumsService.toggleLikes(vm.photo._id, $routeParams.album_id).then(function (qLikes) {
+                    PhotoService.toggleLikes(vm.photo._id, $routeParams.album_id).then(function (qLikes) {
                         vm.liked = qLikes.liked;
                         vm.likedCount = qLikes.likes.by.length;
                     });
                 }
 
                 function getLikes(photo_id) {
-                    AlbumsService.getLikes(photo_id).then(function (likes) {
+                    PhotoService.getLikes(photo_id).then(function (likes) {
                         vm.liked = likes.liked;
-                        vm.likedCount = likes.likes.by.length || 0;
+                        vm.likedCount = likes.likes.by ? likes.likes.by.length  : 0 ;
                     })
                 }
             },

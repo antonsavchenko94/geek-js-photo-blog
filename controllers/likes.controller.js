@@ -48,7 +48,6 @@ var likesController = function () {
 
         var photo_id = req.body.params.id;
         var user_id = req.body.params.user_id;
-        var liked = false;
 
         Likes.findOne(
             {'to': photo_id + ''},
@@ -58,7 +57,7 @@ var likesController = function () {
                     console.log(err);
                 }
 
-                liked = !!(likes && likes.by.length);
+                var liked = !!(likes && likes.by.length);
 
                 Likes.findOne(
                     {'to': photo_id + ''},
@@ -66,7 +65,10 @@ var likesController = function () {
                         if(err){
                             console.log(err);
                         }
-                        res.send({likes: likes, liked: liked})
+                        res.send({
+                            likes: likes || [],
+                            liked: liked || false
+                        })
                     }
                 );
             });

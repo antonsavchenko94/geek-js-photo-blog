@@ -26,7 +26,7 @@
                     ctrl.setAlbums(newValue);
                 });
             },
-            controller: function(AlbumsService, $routeParams, $rootScope) {
+            controller: function(UploadService, $routeParams, $rootScope) {
                 var vm = this;
                 vm.photos = [];
                 vm.albumId = null;
@@ -43,7 +43,7 @@
                 };
 
                 vm.openPhotos = function(photos, errFiles) {
-                    vm.photos = AlbumsService.openPhotos(photos, errFiles);
+                    vm.photos = UploadService.openPhotos(photos, errFiles);
 
                     if (vm.isAvatar) {
                         vm.photos = [].concat(vm.photos[0]);
@@ -56,7 +56,7 @@
                         albumId = vm.profileAlbumId || $routeParams.album_id || null;
                     }
 
-                    AlbumsService.uploadPhotos(photos, albumId).then(function(){
+                    UploadService.uploadPhotos(photos, albumId).then(function(){
                         if (vm.afterUpload && typeof vm.afterUpload == 'function') {
                             vm.afterUpload();
                         }

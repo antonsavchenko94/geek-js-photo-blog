@@ -11,31 +11,40 @@
             editTitle: editTitle,
             createAlbum: createAlbum,
             getAlbumsList: getAlbumsList,
-            uploadPhotos: uploadPhotos,
             getAlbumById: getAlbumById,
             getOwnAlbumById: getOwnAlbumById,
-            openPhotos: openPhotos,
             generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
             getAllProfileAlbums: getAllProfileAlbums,
             getProfileAlbum: getProfileAlbum,
-            getGlobalViews: getGlobalViews,
-            toggleLikes: toggleLikes,
-            getLikes: getLikes
+            getGlobalViews: getGlobalViews
         };
-
+        /**
+         * edits album's title
+         * @param album
+         * @returns promise
+         */
         function editTitle(album) {
-            return $http.post('/api/album/edit', {album: album}).then(function (data) {
+            return $http.put('/api/album/edit', {album: album}).then(function (data) {
                 return data.data.album;
             });
         }
 
+        /**
+         * removes album by id
+         * @param id
+         * @returns promise
+         */
         function removeAlbum(id) {
-            return $http.post('/api/album/remove', {id: id}).then(function () {
+            return $http.delete('/api/album/remove/' + id/*, {id: id}*/).then(function () {
                 return true;
             });
         }
 
+        /**
+         * creates new album
+         * @param album
+         */
         function createAlbum(album) {
             var url = album.isProfileAlbum
                 ? '/api/shared/createProfileAlbum'
@@ -44,6 +53,10 @@
             $http.post(url, album);
         }
 
+        /**
+         * creates main album of the profile
+         * @param user
+         */
         function createProfileAlbum(user) {
             var album = {
                 title: 'Profile Album',
@@ -53,73 +66,46 @@
             createAlbum(album);
         }
 
+        /**
+         * returns promise with the list of all profile's albums
+         * @param username
+         * @returns promise
+         */
         function getAlbumsList(username) {
             return $http.get('/api/album/getAll/' + username).then(function (data) {
                 return data.data.albums;
             });
         }
 
+        /**
+         * returns promise with album by id
+         * @param id
+         * @param param
+         * @returns promise
+         */
         function getAlbumById(id, param) {
             return $http.get('/api/album/' + id, {params: {loadMore: param}}).then(function (data) {
                 return data.data;
             });
         }
 
+        /**
+         * returns promise with the album with private photos
+         * @param id
+         * @param param
+         * @returns promise
+         */
         function getOwnAlbumById(id, param) {
             return $http.get('/api/album/getOwnById/' + id, {params: {loadMore: param}}).then(function (data) {
                 return data.data;
             });
         }
 
-        function uploadPhotos(photos, albumId) {
-            if (!albumId) {
-                albumId = $rootScope.user._id;
-            }
-            if (photos && photos.length && albumId) {
-                var resolvedPromises = $q.all(photos.map(function (file) {
-                    if (!file.$error) {
-                        var url = file.isAvatar
-                            ? '/api/album/uploadAvatar'
-                            : '/api/album/uploadPhotos';
-                        return Upload.upload({
-                            url: url,
-                            method: 'POST',
-                            data: {
-                                albumId: albumId,
-                                user: $rootScope.user,
-                                file: file
-                            }
-                        }).then(function (resp) {
-                            $timeout(function () {
-                                /*$scope.log = 'file: ' +
-                                 resp.config.data.file.name +
-                                 ', Response: ' + JSON.stringify(resp.data) +
-                                 '\n' + $scope.log;*/
-
-                            });
-                        }, null, function (evt) {
-                            /*var progressPercentage = parseInt(100.0 *
-                             evt.loaded / evt.total);
-                             $scope.log = 'progress: ' + progressPercentage +
-                             '% ' + evt.config.data.file.name + '\n' +
-                             $scope.log;*/
-                        });
-                    }
-                }))
-            }
-
-            return resolvedPromises;
-        }
-
-        function openPhotos(photos, errFiles) {
-
-            if (photos && !photos.length) {
-                return [photos];
-            } else {
-                return photos;
-            }
-        }
-
+        /**
+         * returns promise with all user's profile albums
+         * @param param
+         * @returns promise
+         */
         function getAllProfileAlbums(param) {
             return $http.get('/api/shared/getAllProfileAlbums', {params: {loadMore: param}})
                 .then(function (data) {
@@ -127,6 +113,12 @@
                 });
         }
 
+        /**
+         * returns promise with profile album by username
+         * @param username
+         * @param param
+         * @returns promise
+         */
         function getProfileAlbum(username, param) {
             return $http.get('/api/album/getProfileAlbum/' + username, {params: {loadMore: param}})
                 .then(function (data) {
@@ -134,6 +126,11 @@
                 });
         }
 
+        /**
+         * returns album with generated urls to photos
+         * @param album
+         * @returns album
+         */
         function generatePhotoUrls(album) {
             album.map(function (photo) {
                 var user = album.postedBy && album.postedBy.username
@@ -154,27 +151,11 @@
             return album;
         }
 
-        function toggleLikes(photo_id, album_id) {
-            return $http.put('/api/album/togglePhotoLikes', {
-                photo_id: photo_id,
-                album_id: album_id,
-                currentUser: $rootScope.user
-            }).then(function (data) {
-                return data.data;
-            });
-        }
-
-        function getLikes(id) {
-            return $http.post('/api/album/getLikes', {
-                    params: {
-                        id: id,
-                        user_id: $rootScope.user._id
-                    }
-                }).then(function (data) {
-                    return data.data;
-                });
-        }
-
+        /**
+         * returns number of all views of user's photos
+         * @param albums
+         * @returns {*}
+         */
         function getGlobalViews(albums) {
             return albums.reduce(function (sum, album) {
                 return sum + album.photos.reduce(function (sum, photo) {
