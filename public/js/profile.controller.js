@@ -3,9 +3,9 @@
         .module('blog')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = ['$http', '$routeParams', '$rootScope', 'AlbumsService'];
+    ProfileController.$inject = ['$http', '$routeParams', '$rootScope', 'AlbumsService', 'AuthService'];
 
-    function ProfileController($http, $routeParams, $rootScope, AlbumsService) {
+    function ProfileController($http, $routeParams, $rootScope, AlbumsService, AuthService) {
         var vm = this;
 
         vm.user = {};
@@ -33,10 +33,7 @@
 
                     toggleFollowButton(data.data.followedByVisitor);
 
-                    if ($rootScope.user && vm.user.username === $rootScope.user.username) {
-                        vm.myProfile = true;
-                        $rootScope.user = vm.user;
-                    }
+                    vm.myProfile = AuthService.isMyProfile(vm.user);
                 });
         }
 

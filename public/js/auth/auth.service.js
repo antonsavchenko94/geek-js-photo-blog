@@ -11,6 +11,7 @@
             login: login,
             logout: logout,
             isLogged: isLogged,
+            isMyProfile: isMyProfile,
             sendToken: sendToken,
             checkToken: checkToken,
             newPassword: newPassword,
@@ -64,6 +65,17 @@
             return isLogged().then(function (res) {
                 return res.data.user && res.data.user.isAdmin;
             })
+        }
+
+        function isMyProfile(user) {
+            if (!$rootScope.user) return false;
+
+            if (user instanceof Object) {
+                return (user.username === $rootScope.user.username) ||
+                        ((user._id || user.id) === $rootScope.user._id)
+            } else {
+                return user === $rootScope.user.username;
+            }
         }
 
         function sendToken(email, successCb, failureCb) {

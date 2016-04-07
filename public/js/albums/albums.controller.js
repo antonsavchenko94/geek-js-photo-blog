@@ -3,15 +3,15 @@
         .module('blog')
         .controller('AlbumsController', AlbumsController);
 
-    AlbumsController.$inject = ['AlbumsService', '$rootScope', '$routeParams'];
+    AlbumsController.$inject = ['AlbumsService', 'AuthService', '$rootScope', '$routeParams'];
 
-    function AlbumsController(AlbumsService, $rootScope, $routeParams) {
+    function AlbumsController(AlbumsService, AuthService, $rootScope, $routeParams) {
         var vm = this;
 
         vm.title = '';
         vm.newAlbum = {};
-        vm.user = {username: $routeParams.username || $rootScope.user};
-        vm.myProfile = isMyProfile();
+        vm.user = {username: $routeParams.username || $rootScope.user.username};
+        vm.myProfile = AuthService.isMyProfile(vm.user);
         vm.albumCovers = [];
         vm.baned = $rootScope.user.status == 'baned';
 
@@ -49,15 +49,10 @@
                 album.cover.imageUrl = (album.photos.length > 0)
                     ? '/' + vm.user.username + "/" + album._id + "/" + album.photos.pop().filename
                     : '/images/no-image.jpg';
-                album.cover.editable = !album.isProfileAlbum && isMyProfile();
-                album.cover.newTitle = '';
+                album.cover.editable = !album.isProfileAlbum && vm.myProfile;
 
                 vm.albumCovers.push(album.cover);
             });
-        }
-
-        function isMyProfile(){
-            return vm.user.username === $rootScope.user.username;
         }
     }
 })();

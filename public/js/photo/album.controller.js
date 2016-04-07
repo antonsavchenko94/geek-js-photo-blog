@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AlbumController', AlbumController);
 
-    AlbumController.$inject = ['AlbumsService', 'LazyLoadService', '$routeParams', '$rootScope'];
+    AlbumController.$inject = ['AlbumsService', 'AuthService', 'LazyLoadService', '$routeParams'];
 
-    function AlbumController(AlbumsService, LazyLoadService, $routeParams, $rootScope) {
+    function AlbumController(AlbumsService, AuthService, LazyLoadService, $routeParams) {
         var vm = this;
 
         var albumId = $routeParams.album_id;
@@ -17,12 +17,6 @@
 
         reloadAlbum();
 
-        function isMyProfile() {
-            var authorizedProfile = $rootScope.user.username;
-            var requestedProfile = $routeParams.username;
-            return authorizedProfile == requestedProfile;
-        }
-
         function reloadAlbum() {
             vm.album = [];
             LazyLoadService.refresh();
@@ -30,7 +24,7 @@
         }
 
         function getAlbumById(param) {
-            vm.isMyProfile = isMyProfile();
+            vm.isMyProfile = AuthService.isMyProfile($routeParams.username);
             var func = vm.isMyProfile ? 'getOwnAlbumById' : 'getAlbumById';
 
             return AlbumsService[func](albumId, param).then(function (res) {

@@ -1,7 +1,7 @@
 (function() {
     angular
         .module('blog')
-        .factory('AccessService', AccessService);
+        .service('AccessService', AccessService);
 
     /**
      * set access restrictions(filters) for urls
