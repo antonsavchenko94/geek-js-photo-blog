@@ -47,8 +47,6 @@ var photoController = function () {
                         }
                     )
                 });
-
-
     };
 
     var uploadPhotos = function (req, res, next) {
