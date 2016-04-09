@@ -17,7 +17,7 @@
                 onTabSelect: "&"
             },
             controllerAs: 'container',
-            controller: function($rootScope) {
+            controller: function(FlashMessage) {
                 var vm = this;
                 vm.tabs = [];
 
@@ -32,7 +32,7 @@
                     });
 
                     selectedTab.active = true;
-                    $rootScope.message = null;
+                    FlashMessage.remove();
                     vm.onTabSelect();
                 }
             },

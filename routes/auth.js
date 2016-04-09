@@ -114,7 +114,9 @@ router.post('/recovery', function (req, res, next) {
                     if (err) {
                         return next(err);
                     } else {
-                        res.status(200).send();
+                        res.status(200).send(
+                            {message: 'New password was sent to ' + user.email + '. Check Your email box.'}
+                        );
                     }
                 });
             }

@@ -7,18 +7,18 @@ var User = require('../models/user');
 
 router.post('/new', function (req, res, next) {
     User.findOne({'email': req.body.email}, function(err, user){
-        if(user) {
-            res.status(409).send('User with this email is exist');
+        if (user) {
+            res.status(409).send({message: 'User with this email already exists'});
         } else {
             var tn = token.create(req.body);
             if (!tn) {
-                res.status(500).send('token doest create');
+                res.status(500).send({message: 'Token was not created'});
             } else {
                 mail.sendRegistration(req.body.email, tn, function (result, err) {
                     if (result)
-                        res.status(200).send("Registration mail send to your email address");
+                        res.status(200).send({message: "Registration mail was sent to your email address"});
                     else
-                        res.status(500).send("email with token doesn't send");
+                        res.status(500).send({message: "Email with token wasn't sent"});
                 })
 
             }

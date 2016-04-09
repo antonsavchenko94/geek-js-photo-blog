@@ -7,19 +7,19 @@ tab-container.col-md-8.col-md-offset-2(on-tab-select="vm.info = {}")
         div.input-group
           span.input-group-addon
             i.glyphicon.glyphicon-user
-          input.form-control(ng-model="vm.info.first_name" id="first_name" value="{{user.first_name}}")
+          input.form-control(ng-model="vm.info.first_name" id="first_name" placeholder="{{user.first_name}}")
       div.form-group
         label(for="last_name") Last name:
         div.input-group
           span.input-group-addon
             i.glyphicon.glyphicon-user
-          input.form-control(type="text" ng-model="vm.info.last_name" id="last_name" value="{{user.last_name}}")
+          input.form-control(type="text" ng-model="vm.info.last_name" id="last_name" placeholder="{{user.last_name}}")
       div.form-group
         label(for="email") Email:
         div.input-group
           span.input-group-addon
             i.glyphicon.glyphicon-envelope
-          input.form-control(type="email" ng-model="vm.info.email" id="email" valuer="{{user.email}}")
+          input.form-control(type="email" ng-model="vm.info.email" id="email" placeholder="{{user.email}}")
       button.btn.btn-success(ng-click="vm.update()") Update
 
   tab(title="Password")

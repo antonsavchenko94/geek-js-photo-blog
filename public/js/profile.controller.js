@@ -14,7 +14,7 @@
         vm.profileAlbum = [];
 
         vm.toggleFollow = toggleFollow;
-        vm.updateUserInfo = updateUserInfo;
+        vm.update = updateUserInfo;
         vm.getProfileAlbum = getProfileAlbum;
 
         getUserData();

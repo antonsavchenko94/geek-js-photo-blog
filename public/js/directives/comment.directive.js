@@ -35,7 +35,7 @@
                 commentsTo: '='
             },
             controllerAs: 'vm',
-            controller: function(CommentsService, $rootScope) {
+            controller: function(CommentsService, FlashMessage, $rootScope) {
                 var vm = this;
                 vm.comments = null;
                 vm.baned = $rootScope.user.status == 'baned';
@@ -55,14 +55,8 @@
                         "postedBy":$rootScope.user._id
                     };
                     vm.comment = '';
-                    CommentsService.saveComments(newComment, function(res){
-                        if(res.status === 200){
-                            $rootScope.message = {type: 'success', text: res.data};
-                            vm.viewComments();
-                        }else if(res.status === 400){
-                            $rootScope.message = {type: 'warning', text: res.data};
-                        }
-
+                    CommentsService.saveComments(newComment, function(res) {
+                        vm.viewComments();
                     })
                 }
             },

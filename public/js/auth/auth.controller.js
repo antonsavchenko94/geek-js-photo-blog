@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['AuthService', '$location', '$rootScope', '$routeParams', 'AlbumsService'];
+    AuthController.$inject = ['AuthService', '$location', '$rootScope', '$routeParams', 'AlbumsService', 'FlashMessage'];
 
-    function AuthController(AuthService, $location, $rootScope, $routeParams, AlbumsService) {
+    function AuthController(AuthService, $location, $rootScope, $routeParams, AlbumsService, FlashMessage) {
         var vm = this;
 
         vm.login = login;
@@ -41,12 +41,9 @@
         }
 
         function sendToken() {
-            AuthService.sendToken(vm.newUser.email, function (res) {
-                showFlashMessage('info', res.data);
-            },
-                function (res) {
+            AuthService.sendToken(vm.newUser.email)
+                .catch(function(err) {
                     vm.newUser.email = '';
-                    showFlashMessage('warning', res.data);
                 })
         }
 
@@ -55,25 +52,13 @@
                 function (res) {
                     vm.newUser.email = res.data.email;
                     vm.token = true;
-                },
-
-                function (res) {
-                    showFlashMessage('warning', res.data);
                 })
         }
 
         function newPassword() {
             AuthService.newPassword(vm.temp.email, function (res) {
-                console.log(res);
-                if (res.status === 200) {
-                    showFlashMessage('info', 'New password sent to ' + vm.temp.email + '. Check Your email box !!!');
-                }
                 $location.path('/login');
             });
-        }
-
-        function showFlashMessage(type, text) {
-            $rootScope.message = {type: type, text: text};
         }
     }
 })();

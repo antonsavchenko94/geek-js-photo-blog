@@ -3,9 +3,9 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['User', '$rootScope', '$http'];
+    AdminController.$inject = ['User', 'FlashMessage', '$http'];
 
-    function AdminController(User, $rootScope, $http) {
+    function AdminController(User, FlashMessage, $http) {
         var vm = this;
 
         vm.delete = _delete;
@@ -26,7 +26,7 @@
                 onConfirm: function () {
                     User.delete({id: id}, function () {
                         getUsers().$promise.then(function () {
-                            showFlashMessage('success', 'User (id = ' + id + ') was successfully deleted.')
+                            FlashMessage.create(FlashMessage.TYPE.SUCCESS, 'User (id = ' + id + ') was successfully deleted.')
                         });
                     })
                 }
@@ -45,7 +45,7 @@
                     : user.status = 'active';
                 User.update({id: user._id}, {status: user.status}, function () {
                     getUsers().$promise.then(function () {
-                        showFlashMessage('info', 'User ' + user.username + ' status: ' + user.status);
+                        FlashMessage.create(FlashMessage.TYPE.INFO, 'User ' + user.username + ' status: ' + user.status);
                     })
                 });
             });
@@ -61,25 +61,17 @@
         }
 
         function deletePhoto(photo) {
-            $http.delete('/api/admin/delete/'+photo.postedBy.username +'/'+ photo.album_id+'/'+photo.filename).then(function(res){
-                getComplainPhotos();
-                showFlashMessage('success', 'PHOTO DELETED' );
-            })
+            $http.delete('/api/admin/delete/'+photo.postedBy.username +'/'+ photo.album_id+'/'+photo.filename)
+                .then(function() {
+                    getComplainPhotos();
+                    FlashMessage.create(FlashMessage.TYPE.SUCCESS, 'PHOTO DELETED' );
+                })
         }
 
         function getComplainPhotos() {
             return $http.get('/api/admin/complain/photos').then(function(res) {
                vm.albums = res.data.complain;
             })
-        }
-
-        /**
-         * Show message on server response
-         * @param type ['success', 'info', 'warning', 'danger']
-         * @param text
-         */
-        function showFlashMessage(type, text) {
-            $rootScope.message = {type: type, text: text};
         }
     }
 })();
