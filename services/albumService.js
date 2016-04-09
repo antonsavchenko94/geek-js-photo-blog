@@ -41,7 +41,8 @@ var albumService = function () {
         var s = path.sep;
 
         return path.normalize(
-            '.' + s
+            __dirname + s
+            + '..' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id
@@ -50,8 +51,11 @@ var albumService = function () {
 
     var getPhotoPath = function (photo) {
         var s = path.sep;
+        console.log(__dirname);
         return path.normalize(
-            'assets' + s
+            __dirname + s
+            + '..' + s
+            + 'assets' + s
             + photo.postedBy + s
             + photo.album + s
             + photo.photoName
@@ -61,7 +65,9 @@ var albumService = function () {
     var getUserPath = function (user) {
         var s = path.sep;
         return path.normalize(
-            'assets' + s
+            __dirname + s
+            + '..' + s
+            + 'assets' + s
             + user.username
         );
     };
@@ -71,6 +77,7 @@ var albumService = function () {
     };
 
     var uploadParams = function() {
+        var s = path.sep;
         return {
             photos: {
                 destination: function (req, file, cb) {
@@ -86,7 +93,7 @@ var albumService = function () {
             },
             avatar: {
                 destination: function (req, file, cb) {
-                    cb(null, './assets/' + req.body.user.username);
+                    cb(null, __dirname + s + '..' + s +'assets' + s + req.body.user.username);
                 },
                 filename: function (req, file, cb) {
                     var extension = "." + file.originalname.split('.').pop();

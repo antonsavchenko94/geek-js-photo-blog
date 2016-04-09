@@ -4,6 +4,7 @@ var router = express.Router();
 var auth = require('./auth');
 var users = require('./users');
 var album = require('./album');
+var photo = require('./photo');
 var admin = require('./admin');
 var shared = require('./shared');
 var token = require('./token');
@@ -23,6 +24,8 @@ router.use(function(req, res, next) {
 });
 router.use('/users', users);
 router.use('/album', album);
+router.use('/photo', photo);
+
 
 //require admin
 router.use(function(req, res, next) {

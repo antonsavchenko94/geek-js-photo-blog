@@ -109,7 +109,6 @@ var albumController = function () {
                         }
                     )
                 });
-
     };
 
     var createNewAlbum = function (req, res, next) {
@@ -196,7 +195,7 @@ var albumController = function () {
     };
 
     var removeAlbum = function (req, res, next) {
-        var id = req.body.id;
+        var id = req.params.id;
         Album.findOne({_id: id})
             .populate('postedBy')
             .exec(function (error, album) {
@@ -257,7 +256,6 @@ var albumController = function () {
                     }
                 )
             });
-
     };
 
     var complainPhoto = function(req, res, next) {
@@ -299,20 +297,22 @@ var albumController = function () {
 
     return {
         middleware: middleware,
-        complainPhoto:complainPhoto,
+
         getAllByUsername: getAllByUsername,
         getById: getById,
         getOwnById: getOwnById,
-        getPhotoById: getPhotoById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         getProfileAlbum: getProfileAlbum,
+        removeAlbum: removeAlbum,
+        editAlbum: editAlbum/*,
+
+        complainPhoto:complainPhoto,
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
-        removeAlbum: removeAlbum,
-        editAlbum: editAlbum,
         updatePhotoPrivacy: updatePhotoPrivacy,
-        deletePhoto: deletePhoto
+        deletePhoto: deletePhoto,
+        getPhotoById: getPhotoById*/
     };
 };
 

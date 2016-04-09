@@ -24,17 +24,3 @@ div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.
       ul.pagination
          li(ng-repeat='page in vm.paginationList' ng-click='vm.getPage(page.link)' ng-class="{'active': vm.currentPage == page.link}")
             a(href='' ng-bind-html='page.name')
-   //<div class="pagination-wrap">
-   //<ul class="pagination">
-   //<li ng-repeat="page in paginationList" ng-click="showPage(page.link)" ng-class="{'active': currentPageNum() == page.link}"><a ng-bind-html="page.name"></a></li>
-   //</ul>
-   //</div>
-   //div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.col-xs-12
-      //div.btn-toolbar
-      //   div.btn-group
-      //      button.btn.btn-default(ng-click="vm.getFirst()")
-      //         span.glyphicon.glyphicon-chevron-left
-      //      button.btn.btn-default(ng-repeat='n in vm.buttons' ng-click='vm.getPage(n)') {{n}}
-      //      button.btn.btn-default(ng-click="vm.getLast()")
-      //         span.glyphicon.glyphicon-chevron-right
-      //
