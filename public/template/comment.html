@@ -22,6 +22,9 @@
                             <a href="/user/{{comment.postedBy.username}}">
                                 {{comment.postedBy.username}}
                             </a>
+                            <span class="comment-date">
+                                {{comment.datePosted | timeAgo}}
+                            </span>
                         </h4>
                         {{comment.value}}
                     </div>

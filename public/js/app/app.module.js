@@ -1,4 +1,4 @@
-angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload'])
+angular.module('blog', ['ngRoute', 'ngResource', 'ngFileUpload', 'yaru22.angular-timeago'])
     .factory("User", function ($resource) {
         return $resource("/api/admin/users/:id", {id: '@_id'},
             {
