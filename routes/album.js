@@ -2,32 +2,20 @@ var express = require('express');
 
 var albumController = require('../controllers/albumController')();
 
-var albumService = require('../services/albumService')();
-
 var router = express.Router();
 
-router.route('/getAllProfileAlbums')
-    .get(albumController.getAllProfileAlbums);
-
-router.route('/getProfileAlbum/:username')
+router.route('/profileAlbum/:username')
     .get(albumController.getProfileAlbum);
 
-router.route('/getAll/:username')
+router.route('/:username')
     .get(albumController.getAllByUsername);
 
-router.route('/:id')
-    .get(albumController.getById);
-
-router.route('/getOwnById/:id')
-    .get(albumController.getOwnById);
-
-router.route('/createNew')
-    .post(albumController.createNewAlbum);
-
-router.route('/remove/:id')
+router.route('/:username/:id')
+    .get(albumController.getById)
     .delete(albumController.removeAlbum);
 
-router.route('/edit')
+router.route('/')
+    .post(albumController.createNewAlbum)
     .put(albumController.editAlbum);
 
 module.exports = router;

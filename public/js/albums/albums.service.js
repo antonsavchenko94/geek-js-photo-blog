@@ -3,16 +3,15 @@
         .module('blog')
         .service('AlbumsService', AlbumsService);
 
-    AlbumsService.$inject = ['$http', '$rootScope', '$timeout', 'Upload', '$q'];
+    AlbumsService.$inject = ['$http', '$rootScope'];
 
-    function AlbumsService($http, $rootScope, $timeout, Upload, $q) {
+    function AlbumsService($http, $rootScope) {
         return {
             removeAlbum: removeAlbum,
             editTitle: editTitle,
             createAlbum: createAlbum,
             getAlbumsList: getAlbumsList,
             getAlbumById: getAlbumById,
-            getOwnAlbumById: getOwnAlbumById,
             generatePhotoUrls: generatePhotoUrls,
             createProfileAlbum: createProfileAlbum,
             getAllProfileAlbums: getAllProfileAlbums,
@@ -25,7 +24,7 @@
          * @returns promise
          */
         function editTitle(album) {
-            return $http.put('/api/album/edit', {album: album}).then(function (data) {
+            return $http.put('/api/album/', {album: album}).then(function (data) {
                 return data.data.album;
             });
         }
@@ -33,12 +32,10 @@
         /**
          * removes album by id
          * @param id
-         * @returns promise
+         * @returns HttpPromise
          */
         function removeAlbum(id) {
-            return $http.delete('/api/album/remove/' + id/*, {id: id}*/).then(function () {
-                return true;
-            });
+            return $http.delete('/api/album/' + $rootScope.user.username + '/' + id);
         }
 
         /**
@@ -47,8 +44,8 @@
          */
         function createAlbum(album) {
             var url = album.isProfileAlbum
-                ? '/api/shared/createProfileAlbum'
-                : '/api/album/createNew';
+                ? '/api/shared/profileAlbum'
+                : '/api/album/';
             album.postedBy = album.postedBy || $rootScope.user;
             $http.post(url, album);
         }
@@ -72,33 +69,23 @@
          * @returns promise
          */
         function getAlbumsList(username) {
-            return $http.get('/api/album/getAll/' + username).then(function (data) {
+            return $http.get('/api/album/' + username).then(function (data) {
                 return data.data.albums;
             });
         }
 
         /**
          * returns promise with album by id
+         * @param username
          * @param id
          * @param param
          * @returns promise
          */
-        function getAlbumById(id, param) {
-            return $http.get('/api/album/' + id, {params: {loadMore: param}}).then(function (data) {
-                return data.data;
-            });
-        }
-
-        /**
-         * returns promise with the album with private photos
-         * @param id
-         * @param param
-         * @returns promise
-         */
-        function getOwnAlbumById(id, param) {
-            return $http.get('/api/album/getOwnById/' + id, {params: {loadMore: param}}).then(function (data) {
-                return data.data;
-            });
+        function getAlbumById(username, id, param) {
+            return $http.get('/api/album/' + username + '/' + id, {params: {loadMore: param}})
+                .then(function (data) {
+                    return data.data;
+                });
         }
 
         /**
@@ -107,7 +94,7 @@
          * @returns promise
          */
         function getAllProfileAlbums(param) {
-            return $http.get('/api/shared/getAllProfileAlbums', {params: {loadMore: param}})
+            return $http.get('/api/shared/profileAlbum', {params: {loadMore: param}})
                 .then(function (data) {
                     return data.data;
                 });
@@ -120,7 +107,7 @@
          * @returns promise
          */
         function getProfileAlbum(username, param) {
-            return $http.get('/api/album/getProfileAlbum/' + username, {params: {loadMore: param}})
+            return $http.get('/api/album/profileAlbum/' + username, {params: {loadMore: param}})
                 .then(function (data) {
                     return data.data;
                 });

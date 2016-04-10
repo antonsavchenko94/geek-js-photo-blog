@@ -3,9 +3,8 @@ var albumController = require('../controllers/albumController')();
 
 var router = express.Router();
 
-router.route('/getAllProfileAlbums')
-    .get(albumController.getAllProfileAlbums);
-router.route('/createProfileAlbum')
+router.route('/profileAlbum')
+    .get(albumController.getAllProfileAlbums)
     .post(albumController.createNewAlbum);
 
 module.exports = router;

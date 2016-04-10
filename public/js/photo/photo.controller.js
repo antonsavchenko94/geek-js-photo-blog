@@ -3,9 +3,9 @@
         .module('blog')
         .controller('PhotoController', PhotoController);
 
-    PhotoController.$inject = ['AlbumsService', 'PhotoService', '$routeParams', '$rootScope', '$http', '$location'];
+    PhotoController.$inject = ['PhotoService', '$routeParams', '$rootScope', '$http', '$location'];
 
-    function PhotoController(AlbumsService, PhotoService, $routeParams, $rootScope, $http, $location) {
+    function PhotoController(PhotoService, $routeParams, $rootScope, $http, $location) {
         var vm = this;
 
         vm.photo = null;
@@ -16,8 +16,7 @@
         getPhotoById();
 
         function getPhotoById() {
-            PhotoService.getPhotoById()
-                .then(function(photo) {
+            PhotoService.getPhotoById().then(function(photo) {
                 vm.photo = photo;
             })
         }
@@ -33,7 +32,7 @@
                 title: 'Delete photo',
                 body: '<h1>Photo with  \''+ vm.photo.filename +'\' will be deleted</h1>',
                 onConfirm: function () {
-                    $http.delete('/api/photo/delete/'
+                    $http.delete('/api/photo/'
                         + $routeParams.username + '/'
                         + $routeParams.album_id + '/'
                         + vm.photo.filename)

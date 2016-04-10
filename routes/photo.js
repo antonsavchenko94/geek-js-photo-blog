@@ -13,28 +13,24 @@ var router = express.Router();
 var uploadPhotos = multer({storage: multer.diskStorage(uploadParams.photos)});
 var uploadAvatar = multer({storage: multer.diskStorage(uploadParams.avatar)});
 
-router.route('/:album_id/:photo_id')
-    .get(photoController.getPhotoById);
-
 router.route('/complain/:album_id/:photo_id')
     .get(photoController.complainPhoto);
 
-router.route('/delete/:username/:album/:photo')
-    .delete(photoController.deletePhoto);
-
-router.route('/toggleLikes')
+router.route('/likes/:photo_id')
+    .get(likesController.getLikes)
     .put(likesController.togglePhotoLikes);
 
-router.route('/getLikes')
-    .post(likesController.getLikes);
+router.route('/:username/:album_id/:photo_id')
+    .get(photoController.getPhotoById)
+    .delete(photoController.deletePhoto);
 
-router.route('/updatePrivacy')
+router.route('/privacy')
     .put(photoController.updatePhotoPrivacy);
 
-router.route('/upload')
+router.route('/')
     .post(uploadPhotos.single('file'), photoController.uploadPhotos);
 
-router.route('/uploadAvatar')
+router.route('/avatar')
     .post(uploadAvatar.single('file'), photoController.uploadAvatar);
 
 module.exports = router;

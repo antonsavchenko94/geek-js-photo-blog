@@ -41,8 +41,9 @@ var albumService = function () {
         var s = path.sep;
 
         return path.normalize(
-            __dirname + s
-            + '..' + s
+            //__dirname + s
+            //+ '..' + s
+            '.' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id
@@ -53,8 +54,9 @@ var albumService = function () {
         var s = path.sep;
         console.log(__dirname);
         return path.normalize(
-            __dirname + s
-            + '..' + s
+            //__dirname + s
+            //+ '..' + s
+            '.' + s
             + 'assets' + s
             + photo.postedBy + s
             + photo.album + s
@@ -65,8 +67,9 @@ var albumService = function () {
     var getUserPath = function (user) {
         var s = path.sep;
         return path.normalize(
-            __dirname + s
-            + '..' + s
+            //__dirname + s
+            //+ '..' + s
+            '.' + s
             + 'assets' + s
             + user.username
         );

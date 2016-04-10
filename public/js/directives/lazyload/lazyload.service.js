@@ -21,7 +21,6 @@
         }
 
         function load(cb) {
-            console.log(noMoreData);
             if (!noMoreData) {
                 return cb(requestParam).then(function(res) {
                     noMoreData = res.noMoreData;

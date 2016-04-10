@@ -25,9 +25,8 @@
 
         function getAlbumById(param) {
             vm.isMyProfile = AuthService.isMyProfile($routeParams.username);
-            var func = vm.isMyProfile ? 'getOwnAlbumById' : 'getAlbumById';
 
-            return AlbumsService[func](albumId, param).then(function (res) {
+            return AlbumsService.getAlbumById($routeParams.username, albumId, param).then(function (res) {
                 vm.album = vm.album.concat(AlbumsService.generatePhotoUrls(res.album));
 
                 return res;

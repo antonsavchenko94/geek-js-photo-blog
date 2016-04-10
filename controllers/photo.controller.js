@@ -2,6 +2,7 @@ var Album = require('../models/album');
 var User = require('../models/user');
 
 var path = require('path');
+var albumService = require('../services/albumService')();
 
 var photoController = function () {
 

@@ -3,9 +3,9 @@
         .module('blog')
         .service('PhotoService', PhotoService);
 
-    PhotoService.$inject = ['$http', '$rootScope', '$routeParams'];
+    PhotoService.$inject = ['$http', '$routeParams'];
 
-    function PhotoService($http, $rootScope, $routeParams) {
+    function PhotoService($http, $routeParams) {
         return {
 
             toggleLikes: toggleLikes,
@@ -15,30 +15,23 @@
             setPrivacy: setPrivacy
         };
 
-        function toggleLikes(photo_id, album_id) {
-            return $http.put('/api/photo/toggleLikes', {
-                photo_id: photo_id,
-                album_id: album_id,
-                currentUser: $rootScope.user
-            }).then(function (data) {
+        function toggleLikes(photo_id) {
+            return $http.put('/api/photo/likes/' + photo_id, null).then(function (data) {
                 return data.data;
             });
         }
 
-        function getLikes(id) {
-            return $http.post('/api/photo/getLikes', {
-                params: {
-                    id: id,
-                    user_id: $rootScope.user._id
-                }
-            }).then(function (data) {
+        function getLikes(photo_id) {
+            return $http.get('/api/photo/likes/' + photo_id).then(function (data) {
                 return data.data;
             });
         }
 
         function getPhotoById() {
-            return $http.get('/api/photo/' + $routeParams.album_id + '/' + $routeParams.photo_id, {params: {user: $rootScope.user}})
-                .then(function(res) {
+            return $http.get('/api/photo/'
+                + $routeParams.username + '/'
+                + $routeParams.album_id + '/'
+                + $routeParams.photo_id).then(function(res) {
                     var photo = res.data.photo;
                     photo.url = '/' + $routeParams.username + '/' + $routeParams.album_id + '/' + photo.filename;
                     return photo;
@@ -52,7 +45,7 @@
         }
 
         function setPrivacy(photo) {
-            return $http.put('/api/photo/updatePrivacy', {photo: photo}).then(function (data) {
+            return $http.put('/api/photo/privacy', {photo: photo}).then(function (data) {
                 return data.data.photo.status;
             });
         }

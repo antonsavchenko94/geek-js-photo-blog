@@ -3,9 +3,9 @@
         .module('blog')
         .service('UploadService', UploadService);
 
-    UploadService.$inject = ['$http', '$rootScope', '$timeout', 'Upload', '$q'];
+    UploadService.$inject = ['$rootScope', 'Upload', '$q'];
 
-    function UploadService($http, $rootScope, $timeout, Upload, $q) {
+    function UploadService($rootScope, Upload, $q) {
         return {
             uploadPhotos: uploadPhotos,
             openPhotos: openPhotos
@@ -19,8 +19,8 @@
                 var resolvedPromises = $q.all(photos.map(function (file) {
                     if (!file.$error) {
                         var url = file.isAvatar
-                            ? '/api/photo/uploadAvatar'
-                            : '/api/photo/upload';
+                            ? '/api/photo/avatar'
+                            : '/api/photo/';
                         return Upload.upload({
                             url: url,
                             method: 'POST',
