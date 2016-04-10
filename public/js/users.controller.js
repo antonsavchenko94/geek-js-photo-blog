@@ -3,17 +3,42 @@
         .module('blog')
         .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$http'];
+    UsersController.$inject = ['$http', 'UsersService', 'Pagination'];
 
-    function UsersController($http) {
+    function UsersController($http, UsersService, Pagination) {
         var vm = this;
-        vm.users = [];
 
-        $http.get('/api/users').then(function(data) {
-            vm.users = data.data.users;
-            vm.users.forEach(function(user) {
-                user.avatar = user.avatar || "/images/no-avatar.png";
-            })
-        });
+        vm.currentPage = 1;
+        vm.users = [];
+        vm.pagesCount = 0;
+        vm.paginationList = [];
+
+        vm.getPage = getPage;
+
+        getPage(vm.currentPage);
+
+        function getPage(pageNum){
+            Pagination.setGetPageFunc(UsersService.getPage);
+            if(pageNum == 'prev'){
+                Pagination.getPrevPage().then(function () {
+                    setPageData();
+                });
+            } else if(pageNum == 'next'){
+                Pagination.getNextPage().then(function () {
+                    setPageData();
+                });
+
+            } else {
+                Pagination.getPage(pageNum).then(function () {
+                    setPageData();
+                });
+            }
+        }
+
+        function setPageData(){
+            vm.users = Pagination.getPageItems();
+            vm.paginationList = Pagination.getPaginationList();
+            vm.currentPage = Pagination.getCurrentPageNum();
+        }
     }
 })();

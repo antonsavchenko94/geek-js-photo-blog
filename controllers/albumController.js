@@ -278,7 +278,6 @@ var albumController = function () {
             })
     };
 
-
     var updatePhotoPrivacy = function (req, res, next) {
         var photo = req.body.photo;
 
@@ -313,9 +312,9 @@ var albumController = function () {
         uploadPhotos: uploadPhotos,
         uploadAvatar: uploadAvatar,
         removeAlbum: removeAlbum,
-        deletePhoto: deletePhoto,
         editAlbum: editAlbum,
-        updatePhotoPrivacy: updatePhotoPrivacy
+        updatePhotoPrivacy: updatePhotoPrivacy,
+        deletePhoto:deletePhoto
     };
 };
 

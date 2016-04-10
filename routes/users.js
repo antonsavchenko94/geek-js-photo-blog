@@ -15,6 +15,37 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/page/:pageNum', function(req, res, next) {
+
+    var pageLimit = 10;
+    var currentPage = req.params.pageNum;
+    var skipValue = pageLimit * (currentPage - 1);
+
+    User.find({}, function (err, users) {
+        if (err) {
+            console.log(err);
+        }
+
+        var usersCount = users.length;
+        var pagesCount = Math.ceil(usersCount / pageLimit);
+
+        User.find()
+            .skip(skipValue)
+            .limit(pageLimit)
+            .exec(function (err, data) {
+                if (err) {
+                    console.log(err);
+                }
+                res.send({
+                    users: data,
+                    usersCount: usersCount,
+                    pagesCount: pagesCount
+                    })
+            });
+    });
+
+});
+
 router.get('/:username', function(req, res, next) {
   var visitorId = req.query.visitorId;
 

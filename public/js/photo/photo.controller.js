@@ -9,11 +9,9 @@
         var vm = this;
 
         vm.photo = null;
-
         vm.complainText = 'Complain';
         vm.canDelete = $rootScope.user.username === $routeParams.username || $rootScope.user.isAdmin;
         vm.currentUser = $rootScope.user;
-
 
         getPhotoById();
 
