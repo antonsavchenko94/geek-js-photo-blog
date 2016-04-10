@@ -37,7 +37,8 @@
 
         function saveUserAndRedirect(res, redirectTo) {
             $rootScope.user = res && res.data.user ? res.data.user : null;
-            $location.path(redirectTo);
+            $location.url($location.path());
+            $location.path(redirectTo)
         }
 
         function sendToken() {

@@ -3,6 +3,7 @@ div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
     div.panel-heading
       h1.panel-title Register
     div.panel-body
+      div(if-loading)
       flash-message
       div(ng-if="vm.token")
         form(role="form")

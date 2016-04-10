@@ -243,5 +243,11 @@ photo-upload .well {
 
 .dropdown {
     cursor: pointer;
+}
 
+.load-status{
+    float: right;
+    margin-top: 10px;
+    width: 64px;
+    height: 64px;
 }
