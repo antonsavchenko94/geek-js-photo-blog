@@ -7,14 +7,6 @@ var router = express.Router();
 
 var albumService = require('../services/albumService.js')();
 
-router.get('/users', function (req, res) {
-    User.find({}, function (err, users) {
-        if (!err)
-            res.send(users);
-        else
-            res.send(err);
-    })
-});
 router.get('/users/:id', function (req, res) {
     var id = req.params.id;
     if (id)
