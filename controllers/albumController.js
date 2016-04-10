@@ -177,16 +177,89 @@ var albumController = function () {
         });
     };
 
+
+    var uploadAvatar = function (req, res, next) {
+        User.findOne({_id: req.user._id}, function (err, user) {
+            var url = req.file.path;
+            user.avatar = path.sep + url.substring(url.indexOf(path.sep) + 1);
+            user.save();
+        });
+        res.status = 200;
+        res.end();
+    };
+
+
+    var complainPhoto = function(req, res, next) {
+        var albumId = req.params.album_id;
+        var photoId = req.params.photo_id;
+        Album.update(
+            {
+                '_id': ""+albumId,
+                'photos._id': ""+photoId
+            },
+            {$inc: {'photos.$.complain': 1}},
+            function () {
+                res.status(200).send('Your complaint is accepted');
+            });
+    };
+
+    var deletePhoto =  function (req, res) {
+        Album.update({_id:req.params.album}, {
+                $pull: {
+                    photos: {
+                        filename:req.params.photo
+                    }
+                }
+            },
+            function (err, data){
+                albumService.removePhoto(
+                    {
+                        postedBy: req.params.username,
+                        album: req.params.album,
+                        photoName: req.params.photo
+                    }
+                );
+                if(!err){
+                    res.send({res: data});
+                }else
+                    res.status(400).send(err);
+            })
+    };
+
+    var updatePhotoPrivacy = function (req, res, next) {
+        var photo = req.body.photo;
+
+        Album.update(
+            {
+                '_id': "" + photo.album_id,
+                'photos._id': "" + photo._id
+            },
+            {$set: {'photos.$.status': photo.status}},
+            function () {
+                Album.findOne(
+                    {_id: photo.album_id},
+                    {'photos': {$elemMatch: {_id: photo._id}}},
+                    function (err, data) {
+                        res.send({photo: data.photos[0]});
+                    }
+                )
+            });
+
+    };
+
     return {
         middleware: middleware,
-
+        complainPhoto:complainPhoto,
         getAllByUsername: getAllByUsername,
         getById: getById,
         createNewAlbum: createNewAlbum,
         getAllProfileAlbums: getAllProfileAlbums,
         getProfileAlbum: getProfileAlbum,
         removeAlbum: removeAlbum,
-        editAlbum: editAlbum
+        editAlbum: editAlbum,
+        updatePhotoPrivacy: updatePhotoPrivacy,
+        deletePhoto:deletePhoto,
+        uploadAvatar:uploadAvatar
     };
 };
 

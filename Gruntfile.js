@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                     'angular/angular-resource.min.js': 'angular-resource/angular-resource.min.js',
                     'angular/angular-resource.min.js.map': 'angular-resource/angular-resource.min.js.map',
                     'angular/ng-file-upload-all.min.js': 'ng-file-upload/ng-file-upload-all.min.js',
+                    'angular/timeAgo.js': 'angular-timeago/src/timeAgo.js',
 
                     // Bootstrap
                     'bootstrap/bootstrap.min.js': 'bootstrap/dist/js/bootstrap.min.js',

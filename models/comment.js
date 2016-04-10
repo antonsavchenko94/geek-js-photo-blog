@@ -4,7 +4,8 @@ var mongoose = require('mongoose'),
 var comment = new Schema({
     value:      { type: String, required: true },
     postedBy:   { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    postedTo:   { type: String, required: true}
+    postedTo:   { type: String, required: true},
+    datePosted: { type: Date, default: Date.now }
 });
 
 comment.set('autoIndex', true);

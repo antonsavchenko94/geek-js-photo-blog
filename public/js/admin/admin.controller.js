@@ -3,17 +3,48 @@
         .module('blog')
         .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['User', 'FlashMessage', '$http'];
+    AdminController.$inject = ['User', 'FlashMessage', '$http', 'UsersService', 'Pagination'];
 
-    function AdminController(User, FlashMessage, $http) {
+    function AdminController(User, $rootScope, $http, UsersService, Pagination) {
         var vm = this;
-
         vm.delete = _delete;
         vm.ban = ban;
         vm.deletePhoto = deletePhoto;
 
-        getUsers();
         getComplainPhotos();
+
+        vm.currentPage = 1;
+        vm.users = [];
+        vm.pagesCount = 0;
+        vm.paginationList = [];
+
+        vm.getPage = getPage;
+
+        getPage(vm.currentPage);
+
+        function getPage(pageNum){
+            Pagination.setGetPageFunc(UsersService.getPage);
+            if(pageNum == 'prev'){
+                Pagination.getPrevPage().then(function () {
+                    setPageData();
+                });
+            } else if(pageNum == 'next'){
+                Pagination.getNextPage().then(function () {
+                    setPageData();
+                });
+
+            } else {
+                Pagination.getPage(pageNum).then(function () {
+                    setPageData();
+                });
+            }
+        }
+
+        function setPageData(){
+            vm.users = Pagination.getPageItems();
+            vm.paginationList = Pagination.getPaginationList();
+            vm.currentPage = Pagination.getCurrentPageNum();
+        }
 
         /**
          * Delete User by id

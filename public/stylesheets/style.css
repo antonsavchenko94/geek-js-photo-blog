@@ -67,7 +67,7 @@ nav a:last-child {
 }
 
 nav.user .user,
-nav.projects .projects,
+nav.complaints .complaints,
 nav.services .services,
 nav.contact .contact {
     background-color: #e35885;
@@ -243,4 +243,16 @@ photo-upload .well {
     float: right;
     margin-right: 5px;
     margin-left: 5px;
+}
+
+
+.load-status{
+    float: right;
+    margin-top: 10px;
+    width: 64px;
+    height: 64px;
+}
+
+.comment-date{
+    font-size: 10px;
 }

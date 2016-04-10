@@ -2,11 +2,12 @@ div
     nav(class='{{active}}', ng-click='$event.preventDefault()')
         // When a link in the menu is clicked, we set the active variable
         a.user(href='#', ng-click="active='user'") User
-        a.projects(href='#', ng-click="active='complaints'") Complaints
+        a.complaints(href='#', ng-click="active='complaints'") Complaints
 
     flash-message
 
     div(ng-if="active == 'user'")
+        div(if-loading)
         div
             label
                 | Search:
@@ -34,6 +35,11 @@ div
                         img(src="/images/line.png")
                         img(ng-if="user.status=='active'" src="/images/ban.png" title="ban user" ng-click="vm.ban(user._id)")
                         img(ng-if="user.status=='baned'" src="/images/unban.png" title="unban user" ng-click="vm.ban(user._id)")
+            div.pagination-wrap
+                ul.pagination
+                    li(ng-repeat='page in vm.paginationList' ng-click='vm.getPage(page.link)' ng-class="{'active': vm.currentPage == page.link}")
+                        a(href='' ng-bind-html='page.name')
+
 
     div(ng-if="active == 'complaints'")
         .panel.panel-default
