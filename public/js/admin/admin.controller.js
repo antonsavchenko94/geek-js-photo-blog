@@ -5,7 +5,7 @@
 
     AdminController.$inject = ['User', 'FlashMessage', '$http', 'UsersService', 'Pagination'];
 
-    function AdminController(User, $rootScope, $http, UsersService, Pagination) {
+    function AdminController(User, FlashMessage, $http, UsersService, Pagination) {
         var vm = this;
         vm.delete = _delete;
         vm.ban = ban;

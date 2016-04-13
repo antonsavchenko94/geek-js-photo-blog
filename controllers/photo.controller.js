@@ -80,8 +80,7 @@ var photoController = function () {
             user.avatar = path.sep + url.substring(url.indexOf(path.sep) + 1);
             user.save();
         });
-        res.status = 200;
-        res.end();
+        res.send({message: 'Your avatar was successfully changed.'});
     };
 
     var updatePhotoPrivacy = function (req, res, next) {

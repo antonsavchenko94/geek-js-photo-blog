@@ -37,13 +37,11 @@ var albumService = function () {
     };
 
     var getAlbumPath = function (album) {
-
         var s = path.sep;
 
         return path.normalize(
-            //__dirname + s
-            //+ '..' + s
-            '.' + s
+            __dirname + s
+            + '..' + s
             + 'assets' + s
             + album.postedBy.username + s
             + album._id
@@ -52,11 +50,10 @@ var albumService = function () {
 
     var getPhotoPath = function (photo) {
         var s = path.sep;
-        console.log(__dirname);
+
         return path.normalize(
-            //__dirname + s
-            //+ '..' + s
-            '.' + s
+            __dirname + s
+            + '..' + s
             + 'assets' + s
             + photo.postedBy + s
             + photo.album + s
@@ -66,10 +63,10 @@ var albumService = function () {
 
     var getUserPath = function (user) {
         var s = path.sep;
+
         return path.normalize(
-            //__dirname + s
-            //+ '..' + s
-            '.' + s
+            __dirname + s
+            + '..' + s
             + 'assets' + s
             + user.username
         );
@@ -96,7 +93,7 @@ var albumService = function () {
             },
             avatar: {
                 destination: function (req, file, cb) {
-                    cb(null, __dirname + s + '..' + s +'assets' + s + req.body.user.username);
+                    cb(null, path.normalize('assets' + path.sep + req.body.user.username));
                 },
                 filename: function (req, file, cb) {
                     var extension = "." + file.originalname.split('.').pop();
