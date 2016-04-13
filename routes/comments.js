@@ -24,12 +24,21 @@ router.get('/:photo', function (req, res) {
 
 router.post('/save', function (req, res) {
     var comment = req.body;
-    Comment.create(comment, function (err, comment) {
-        if (err)
-            res.status(400).send(err);
-        else
-            res.status(200).send('Comment successfully saved !!!');
-    })
+    Album
+        .findOne(
+            {'photos': {$elemMatch: {_id: comment.postedTo}}},
+            function(err, photo){
+                if(!err && photo){
+                   if(photo.status != 'no-comment'){
+                       Comment.create(comment, function (err, comment) {
+                           if (err)
+                               res.status(400).send(err);
+                           else
+                               res.status(200).send('Comment successfully saved !!!');
+                       })
+                   }
+                }
+            });
 });
 
 module.exports = router;

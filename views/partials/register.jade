@@ -24,7 +24,7 @@ div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
             div.input-group
               span.input-group-addon
                 i.glyphicon.glyphicon-envelope
-              input.form-control(type="email" ng-model="vm.newUser.email" id="email" placeholder="Email")
+              input.form-control(type="email" ng-disabled="vm.newUser.email" ng-model="vm.newUser.email" id="email" placeholder="Email")
           div.form-group
             label(for="username") Username:
             div.input-group
@@ -39,11 +39,11 @@ div.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
               input.form-control(type="password" ng-model="vm.newUser.password" id="password" placeholder="Password")
           button.btn.btn-success(ng-click="vm.register()") Register
       div(ng-if="!vm.token")
-        form(role="form")
+        form(role="form" name="tokenForm")
           div.form-group
             label(for="email-first") Email:
             div.input-group
               span.input-group-addon
                 i.glyphicon.glyphicon-envelope
-              input.form-control(type="email" ng-model="vm.newUser.email" id="email-first" placeholder="Email")
-          button.btn.btn-success(ng-click="vm.sendToken()") Send
+              input.form-control(type="email" name="emailToken" ng-model="vm.newUser.email" id="email-first" placeholder="Email")
+          button.btn.btn-success(ng-click="vm.sendToken()" ng-disabled="!tokenForm.emailToken.$valid") Send
