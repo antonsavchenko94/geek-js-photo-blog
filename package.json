@@ -6,7 +6,6 @@
     "start": "node ./bin/www",
     "build": "npm install && bower install && grunt",
     "build-dev": "npm run build && grunt watch",
-//    "postinstall": "bower install; grunt build"
     "heroku-postbuild": "bower install; grunt build"
   },
   "dependencies": {
