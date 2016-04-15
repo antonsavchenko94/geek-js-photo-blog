@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "build": "npm install && bower install && grunt",
-    "build-dev": "npm run build && grunt watch"
+    "build-dev": "npm run build && grunt watch",
+    "postinstall": "bower install; grunt build"
   },
   "dependencies": {
     "bcrypt": "^0.8.5",
@@ -16,6 +17,7 @@
     "express": "~4.13.1",
     "express-session": "^1.13.0",
     "grunt": "^0.4.5",
+    "grunt-cli": "^1.2.0",
     "grunt-angular-templates": "^1.0.3",
     "grunt-bowercopy": "^1.2.4",
     "grunt-contrib-clean": "^1.0.0",
