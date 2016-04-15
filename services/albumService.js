@@ -1,22 +1,16 @@
 var path = require('path');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
+
+var assetsDir = path.normalize(path.join(__dirname, '..', 'assets'));
 
 var albumService = function () {
-
-    var mkdir = function (path) {
-        try {
-            fs.mkdirSync(path);
-        } catch (e) {
-            if (e.code != 'EEXIST' && e.code != 'EPERM') throw e;
-        }
-    };
-
-    var mkdirPath = function (dirPath) {
-        var pathParts = dirPath.split(path.sep);
-
-        for (var i = 1; i <= pathParts.length; i++) {
-            mkdir(path.join.apply(null, pathParts.slice(0, i)));
-        }
+    var mkdirWithParents = function(dirPath) {
+        mkdirp(dirPath, function (err) {
+            if (err) {
+                throw err;
+            }
+        });
     };
 
     var remdirPath = function (dirPath) {
@@ -30,54 +24,29 @@ var albumService = function () {
     var remPhotoPath = function (photoPath) {
         try {
             fs.unlinkSync(photoPath);
-        }catch (err){
+        } catch (err) {
             throw err;
         }
 
     };
 
     var getAlbumPath = function (album) {
-        var s = path.sep;
-
-        return path.normalize(
-            __dirname + s
-            + '..' + s
-            + 'assets' + s
-            + album.postedBy.username + s
-            + album._id
-        );
+        return path.normalize(path.join(assetsDir, album.postedBy.username, album._id.toString()));
     };
 
     var getPhotoPath = function (photo) {
-        var s = path.sep;
-
-        return path.normalize(
-            __dirname + s
-            + '..' + s
-            + 'assets' + s
-            + photo.postedBy + s
-            + photo.album + s
-            + photo.photoName
-        );
+        return path.normalize(path.join(assetsDir, photo.postedBy, photo.album, photo.photoName));
     };
 
     var getUserPath = function (user) {
-        var s = path.sep;
-
-        return path.normalize(
-            __dirname + s
-            + '..' + s
-            + 'assets' + s
-            + user.username
-        );
+        return path.normalize(path.join(assetsDir, user.username));
     };
 
     var createAlbumDirectory = function (album) {
-        mkdirPath(getAlbumPath(album));
+        mkdirWithParents(getAlbumPath(album));
     };
 
     var uploadParams = function() {
-        var s = path.sep;
         return {
             photos: {
                 destination: function (req, file, cb) {
@@ -93,7 +62,7 @@ var albumService = function () {
             },
             avatar: {
                 destination: function (req, file, cb) {
-                    cb(null, path.normalize('assets' + path.sep + req.body.user.username));
+                    cb(null, path.normalize(path.join('assets', req.body.user.username)));
                 },
                 filename: function (req, file, cb) {
                     var extension = "." + file.originalname.split('.').pop();
@@ -106,7 +75,7 @@ var albumService = function () {
     var removeAlbum = function (album) {
         try {
             remdirPath(getAlbumPath(album));
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     };
@@ -114,7 +83,7 @@ var albumService = function () {
     var removeUserDir = function (userDir) {
         try {
             remdirPath(getUserPath(userDir));
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     };
@@ -169,8 +138,6 @@ var albumService = function () {
     };
 
     return {
-        mkdir: mkdir,
-        mkdirPath: mkdirPath,
         getAlbumPath: getAlbumPath,
         createAlbumDirectory: createAlbumDirectory,
         uploadParams: uploadParams,

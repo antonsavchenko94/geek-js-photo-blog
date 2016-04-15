@@ -28,6 +28,7 @@
     "grunt-ng-annotate": "^2.0.1",
     "jade": "~1.11.0",
     "jsonwebtoken": "^5.7.0",
+    "mkdirp": "^0.5.1",
     "mongodb": "^2.1.7",
     "mongoose": "^4.4.3",
     "morgan": "~1.6.1",
