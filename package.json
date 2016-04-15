@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "build": "npm install && bower install && grunt",
     "build-dev": "npm run build && grunt watch",
-    "heroku-postbuild": "bower install; grunt build"
+    "heroku-postbuild": "bower install; grunt build",
+    "heroku-prebuild": "bower install; grunt build"
   },
   "dependencies": {
     "bcrypt": "^0.8.5",
