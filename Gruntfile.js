@@ -149,7 +149,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bowercopy');
-    console.log('HAHAHAHAH');
     grunt.loadNpmTasks('grunt-angular-templates');
 
     // concat and minify public/js/ files
