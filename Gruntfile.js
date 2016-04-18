@@ -160,12 +160,12 @@ module.exports = function(grunt) {
 
     // move files to dist, minify and include them to layout
     grunt.registerTask('build', [
+        'bowercopy',
         'ngtemplates',
         'minify-app',
         'cssmin',
         'copy',
-        'includeSource',
-        'bowercopy'
+        'includeSource'
     ]);
     grunt.registerTask('heroku', [
         'bowercopy',
