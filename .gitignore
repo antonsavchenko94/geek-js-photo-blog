@@ -12,7 +12,6 @@ pids
 #custom directories
 /public/lib/
 /public/libs/
-/dist/
 /assets/
 
 /public/assets
