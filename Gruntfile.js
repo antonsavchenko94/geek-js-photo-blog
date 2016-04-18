@@ -164,15 +164,17 @@ module.exports = function(grunt) {
         'minify-app',
         'cssmin',
         'copy',
-        'includeSource'
+        'includeSource',
+        'bowercopy'
     ]);
     grunt.registerTask('heroku', [
+        'bowercopy',
+        'build',
         'ngtemplates',
         'minify-app',
         'cssmin',
         'copy',
-        'includeSource',
-        'bowercopy'
+        'includeSource'
     ]);
 
     grunt.registerTask('default', ['bowercopy', 'build']);
