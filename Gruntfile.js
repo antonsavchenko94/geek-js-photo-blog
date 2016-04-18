@@ -171,7 +171,8 @@ module.exports = function(grunt) {
         'minify-app',
         'cssmin',
         'copy',
-        'includeSource'
+        'includeSource',
+        'bowercopy'
     ]);
 
     grunt.registerTask('default', ['bowercopy', 'build']);
